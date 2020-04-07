@@ -29,6 +29,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'hallOfFameClient.apps.HallOfFameClientConfig',
     'polls.apps.PollsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -75,13 +76,13 @@ WSGI_APPLICATION = 'HallOfFame.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'mydatabase',
-        'USER': 'mydatabaseuser',
+        'NAME': 'db_hof',
+        'USER': 'db_user',
         'PASSWORD': 'zaq1',
         'HOST': '127.0.0.1',
         'PORT': '5432',
         'TEST': {
-            'NAME': 'mytestdatabase',
+            'NAME': 'db_hof_test',
         },
     }
 }

@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
 
-class HalloffameclientConfig(AppConfig):
+class HallOfFameClientConfig(AppConfig):
     name = 'hallOfFameClient'
