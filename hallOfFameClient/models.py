@@ -5,6 +5,7 @@ from django.utils import timezone
 from django.utils.deconstruct import deconstructible
 from django.utils.translation import gettext_lazy as _
 
+from HallOfFame import settings
 from hallOfFameClient.validators import validate_album_number
 
 
@@ -29,6 +30,9 @@ class Semester(models.Model):
 class Person(Basic):
     name = models.CharField(max_length=50)
     surname = models.CharField(max_length=50)
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE, )
 
     def __str__(self):
         return self.name + " " + self.surname
