@@ -1,0 +1,12 @@
+{% extends 'hallOfFameClient/base.html' %}
+
+{% block content %}
+<h1>Your subjects</h1>
+<ul>
+{% for sub in object_list %}
+    <li>{{ sub.description }} - {{ sub.ects }}</li>
+{% empty %}
+    <li>No subjects yet.</li>
+{% endfor %}
+</ul>
+{% endblock %}
