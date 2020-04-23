@@ -1,0 +1,13 @@
+.inline-related h3 + fieldset{
+    transition-duration: 1s;
+    transition-delay: 1s;
+    max-height:  0;
+    overflow: hidden;
+}
+
+.inline-related:hover h3  + fieldset{
+    transition-duration: 1s;
+    transition-delay: 0s;
+    max-height: 100vh;
+    overflow: hidden;
+}
