@@ -19,10 +19,13 @@
                 {% for sub in object_list %}
                     <div class="columns is-mobile">
                         <div class="column">
+                            <p class="is-info">{{ sub.name }}</p>
+                        </div>
+                        <div class="column">
                             <p class="is-info">{{ sub.description }}</p>
                         </div>
                         <div class="column">
-                            <p class="is-info">{{ sub.ects }}</p>
+                            <p class="is-info">{{ sub.etcs }}</p>
                         </div>
                     </div>
                 {% empty %}
