@@ -16,9 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
+from hallOfFameClient.admin import lecturer_admin_site, default_admin_site
+
 urlpatterns = [
     path('', include('hallOfFameClient.urls')),
     path('polls/', include('polls.urls')),
-    path('accounts/', include('django.contrib.auth.urls')),
-    path('admin/', admin.site.urls),
+    path('admin/', default_admin_site.urls),
+    path('lecturer/', lecturer_admin_site.urls),
 ]

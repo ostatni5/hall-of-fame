@@ -42,7 +42,7 @@ class Student(Person):
     semester = models.ForeignKey(Semester, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.nickname
+        return self.album_number.__str__()
 
 
 class Lecturer(Person):
