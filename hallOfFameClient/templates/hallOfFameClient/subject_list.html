@@ -1,12 +1,39 @@
 {% extends 'hallOfFameClient/base.html' %}
 
 {% block content %}
-<h1>Your subjects</h1>
-<ul>
-{% for sub in object_list %}
-    <li>{{ sub.description }} - {{ sub.ects }}</li>
-{% empty %}
-    <li>No subjects yet.</li>
-{% endfor %}
-</ul>
+    {% include 'hallOfFameClient/hero.html' with username=username %}
+    <section class="section card">
+        <div class="container">
+            <nav class="breadcrumb is-medium" aria-label="breadcrumbs">
+                <ul>
+                    <li><a href="#">dashboard</a></li>
+                    <li class="is-active"><a href="#" aria-current="page">subjects</a></li>
+                </ul>
+            </nav>
+        </div>
+    </section>
+    <section class="section">
+        <div class="columns">
+            <div class="column">
+                <h1>Your subjects</h1>
+                {% for sub in object_list %}
+                    <div class="columns is-mobile">
+                        <div class="column">
+                            <p class="is-info">{{ sub.description }}</p>
+                        </div>
+                        <div class="column">
+                            <p class="is-info">{{ sub.ects }}</p>
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="column">
+                        <p class="is-info">{{ sub.ects }}</p>
+                    </div>
+                    <li>No subjects yet.</li>
+                {% endfor %}
+            </div>
+            <div class="column">
+            </div>
+        </div>
+    </section>
 {% endblock %}
