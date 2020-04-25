@@ -3,12 +3,21 @@ from django.apps import apps
 # Register your models here.
 from django.contrib.admin import AdminSite
 from django.contrib.admin.sites import AlreadyRegistered
+from django.contrib.auth.models import User
 
 from hallOfFameClient.models import Subject, Lecturer, Group, Student, StudentScore, Semester, Exercise
 
 
+class ExerciseInLine(admin.TabularInline):
+    model = Exercise
+    extra = 1
+
+
 class GroupAdmin(admin.ModelAdmin):
     filter_horizontal = ('students', 'lecturers')
+    inlines = [
+        ExerciseInLine,
+    ]
 
 
 class GroupInline(admin.StackedInline):
@@ -20,7 +29,6 @@ class GroupInline(admin.StackedInline):
         css = {
             'all': ('admin/edit_inline/stacked.css',)
         }
-
 
 
 class SubjectAdmin(admin.ModelAdmin):
@@ -42,15 +50,11 @@ class LecturerAdminSite(AdminSite):
         return super().has_permission(request) and flag
 
 
-
-
 lecturer_admin_site = LecturerAdminSite(name='lecturer')
-
 lecturer_admin_site.register(Subject, SubjectAdmin)
 lecturer_admin_site.register(Exercise)
 lecturer_admin_site.register(Group, GroupAdmin)
-
-
+lecturer_admin_site.register(StudentScore)
 
 
 class DefaultAdminSite(AdminSite):
@@ -69,6 +73,8 @@ class DefaultAdminSite(AdminSite):
 default_admin_site = DefaultAdminSite(name='admin')
 
 models = apps.get_app_config('hallOfFameClient').get_models()
+
+default_admin_site.register(User)
 
 for model in models:
     try:

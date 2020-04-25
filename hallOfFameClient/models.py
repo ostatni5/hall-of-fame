@@ -39,7 +39,7 @@ class Person(Basic):
 class Student(Person):
     nickname = models.CharField(max_length=50)
     album_number = models.IntegerField(validators=[validate_album_number])
-    semester = models.ForeignKey(Semester, on_delete=models.CASCADE)
+    semester = models.ForeignKey(Semester, on_delete=models.CASCADE, related_name="students")
 
     def __str__(self):
         return self.album_number.__str__()
@@ -52,14 +52,14 @@ class Lecturer(Person):
 
 class Subject(Basic):
     description = models.CharField(max_length=250)
-    semester = models.ForeignKey(Semester, on_delete=models.CASCADE)
+    semester = models.ForeignKey(Semester, on_delete=models.CASCADE, related_name="subject")
     etcs = models.SmallIntegerField()
 
 
 class Group(Basic):
     students = models.ManyToManyField(Student, related_name="groups")
     lecturers = models.ManyToManyField(Lecturer, related_name="groups")
-    subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name="groups")
 
     def has_student(self, student_pk):
         return self.students.get(pk=student_pk).exist()
@@ -67,14 +67,18 @@ class Group(Basic):
 
 class Exercise(Basic):
     date = models.DateTimeField(default=timezone.now)
-    group = models.ForeignKey(Group, on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="exercises")
     max_score = models.SmallIntegerField()
 
 
 class StudentScore(models.Model):
     value = models.SmallIntegerField()
-    exercise = models.ForeignKey(Exercise, on_delete=models.CASCADE)
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    exercise = models.ForeignKey(Exercise,
+                                 on_delete=models.CASCADE,
+                                 related_name="scores")
+    student = models.ForeignKey(Student,
+                                on_delete=models.CASCADE,
+                                related_name="scores")
     date = models.DateTimeField(default=timezone.now)
 
     def __str__(self):

@@ -1,0 +1,31 @@
+{% extends 'hallOfFameClient/base.html' %}
+{% load hallOfFame_extra %}
+{% block content %}
+    <h1>Your subjects</h1>
+    <table>
+        {% for group in subject.groups.all %}
+            <h2>{{ group.name }}</h2>
+
+            <table>
+                <tr>
+                    <th>Students</th>
+                    {% for exercise in group.exercises.all %}
+                        <th>{{ exercise.name }}</th>
+                    {% endfor %}
+                </tr>
+                {% for student in group.students.all %}
+                    <tr>
+                        <td>{{ student }}</td>
+                        {% for exercise in group.exercises.all %}
+                            <td>{{ exercise.scores |scoreSearch:student }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endfor %}
+    </table>
+
+
+
+
+{% endblock %}
