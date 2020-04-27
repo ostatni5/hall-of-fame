@@ -18,7 +18,18 @@ def percentScore(scores, group):
 
 @register.filter
 def key(h, k):
-    return h[k]
+    try:
+        return h[k]
+    except KeyError:
+        return None
+
+@register.filter
+def keyS(h, k):
+    # silent
+    try:
+        return h[k]
+    except KeyError:
+        return {}
 
 
 @register.filter

@@ -37,8 +37,8 @@ class Person(Basic):
 
 
 class Student(Person):
-    nickname = models.CharField(max_length=50)
-    album_number = models.IntegerField(validators=[validate_album_number])
+    nickname = models.CharField(max_length=50, unique=True)
+    album_number = models.IntegerField(validators=[validate_album_number], unique=True)
     semester = models.ForeignKey(Semester, on_delete=models.CASCADE, related_name="students")
 
     def __str__(self):
@@ -57,6 +57,7 @@ class Subject(Basic):
 
 
 class Group(Basic):
+    name = models.CharField(max_length=100, unique=True)
     students = models.ManyToManyField(Student, related_name="groups")
     lecturers = models.ManyToManyField(Lecturer, related_name="groups")
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name="groups")

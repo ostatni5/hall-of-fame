@@ -1,13 +1,19 @@
 {% extends 'hallOfFameClient/base.html' %}
 {% load hallOfFame_extra %}
 {% block content %}
-    <h1>{{subject.name}}</h1>
+    <h1>{{ subject.name }}</h1>
     <p>{{ subject.description }}</p>
-    <table>
-        {% for k,group in groupsCtx.items %}
-            <h2>{{ group.name }}</h2>
 
-            <table>
+    {% if msg %}
+        <h1>{{msg}}</h1>
+    {% endif %}
+
+    {% for k,group in groupsCtx.items %}
+        <h2>{{ group.name }}</h2>
+        <form id="updateScoresForm" action="/tab/" method="post" autocomplete=off>
+            {% csrf_token %}
+            <input name="change_info" type="hidden">
+            <table class="table is-bordered is-hoverable">
                 <tr>
                     <th>Students</th>
                     {% for exercise in group.exercises %}
@@ -19,16 +25,43 @@
                     <tr>
                         <td>{{ student.name }}</td>
                         {% for exercise in group.exercises %}
-                            <td>{{ group.scores|key:student.id|key:exercise.id }}</td>
+                            {#                                <td>{{ group.scores|key:student.id|key:exercise.id }}</td>#}
+                            <td><input class="score_field" type="number"
+                                       name="ss-{{ group.scores|keyS:student.id|keyS:exercise.id|keyS:"id" }}-{{ student.id }}-{{ exercise.id }}"
+                                       value="{{ group.scores|keyS:student.id|keyS:exercise.id|keyS:"value" }}">
+                            </td>
                         {% endfor %}
-                        <td>{{ group.scores|key:"sum"|key:student.id|percent:group.max_score}}</td>
+                        <td>{{ group.scores|key:"sum"|key:student.id|percent:group.max_score }}</td>
                     </tr>
                 {% endfor %}
             </table>
-        {% endfor %}
-    </table>
+            <button type="submit"> SAVE</button>
+        </form>
+    {% endfor %}
 
 
+    {{ temp }}
 
+
+    <script>
+        const scoreFields = document.querySelectorAll('.score_field');
+        const form = document.querySelector('#updateScoresForm');
+
+        let changes = {};
+
+        scoreFields.forEach(field => {
+            field.addEventListener('change', function (e) {
+                field.classList.add("changed");
+                changes[field.name] = true;
+            });
+        })
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            document.querySelector('input[name="change_info"]').value = JSON.stringify(changes);
+            form.submit();
+
+        });
+    </script>
 
 {% endblock %}
