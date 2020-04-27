@@ -1,24 +1,27 @@
 {% extends 'hallOfFameClient/base.html' %}
 {% load hallOfFame_extra %}
 {% block content %}
-    <h1>Your subjects</h1>
+    <h1>{{subject.name}}</h1>
+    <p>{{ subject.description }}</p>
     <table>
-        {% for group in subject.groups.all %}
+        {% for k,group in groupsCtx.items %}
             <h2>{{ group.name }}</h2>
 
             <table>
                 <tr>
                     <th>Students</th>
-                    {% for exercise in group.exercises.all %}
+                    {% for exercise in group.exercises %}
                         <th>{{ exercise.name }}</th>
                     {% endfor %}
+                    <th>Percent</th>
                 </tr>
-                {% for student in group.students.all %}
+                {% for student in group.students %}
                     <tr>
-                        <td>{{ student }}</td>
-                        {% for exercise in group.exercises.all %}
-                            <td>{{ exercise.scores |scoreSearch:student }}</td>
+                        <td>{{ student.name }}</td>
+                        {% for exercise in group.exercises %}
+                            <td>{{ group.scores|key:student.id|key:exercise.id }}</td>
                         {% endfor %}
+                        <td>{{ group.scores|key:"sum"|key:student.id|percent:group.max_score}}</td>
                     </tr>
                 {% endfor %}
             </table>
