@@ -1,0 +1,39 @@
+<article class="message">
+    <div class="message-body">
+        <h1 class="title has-text-centered">Your subjects</h1>
+        <div class="table-container">
+            <table class="table card is-striped is-hoverable is-fullwidth is-bordered">
+                <thead>
+                <tr class="is-bold has-background-grey-dark">
+                    <th><abbr class="has-text-white" title="Name of the subject">Subject</abbr></th>
+                    <th><abbr class="has-text-white" title="Description of the subject">Description</abbr></th>
+                    <th><abbr class="has-text-white" title="ETCS points value">ETCS</abbr></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for sub in subjects %}
+                    <tr>
+                        <td class="is-paddingless is-fullheight">
+                            <a href="#" style="background: none; border: none;"
+                               class="has-text-left button is-block is-fullheight is-fullwidth is-radiusless">
+                                {{ sub.name }}
+                            </a>
+                        </td>
+                        <td>
+                            <p class="is-info">{{ sub.description }}</p>
+                        </td>
+                        <td>
+                            <p class="is-info">{{ sub.etcs }}</p>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="3">
+                            <h1 class="subtitle">No subjects yet.</h1>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</article>

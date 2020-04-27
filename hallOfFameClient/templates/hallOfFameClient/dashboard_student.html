@@ -1,0 +1,61 @@
+{% extends 'hallOfFameClient/base.html' %}
+{% load static %}
+{% block content %}
+    {% include 'hallOfFameClient/hero.html' with username=username %}
+    <section style="padding: 1rem" class="section card">
+        <div class="container">
+            <nav class="breadcrumb is-medium" aria-label="breadcrumbs">
+                <ul>
+                    <li><a href="#">dashboard</a></li>
+                    <li class="is-active"><a href="#" aria-current="page">subjects</a></li>
+                </ul>
+            </nav>
+        </div>
+    </section>
+    <section
+            style='background-image: url("{% static 'img/spiral.png' %}"); background-position: 25% 130%; background-repeat: no-repeat; background-size:30%;'
+            class="section">
+        <div class="columns">
+            <div class="column is-6 is-offset-1">
+                {% include 'hallOfFameClient/student_subject_table.html' with subjects=object_list %}
+            </div>
+            <div class="column is-4">
+                <article class="message is-primary">
+                    <div class="message-header has-text-centered">
+                        <h1 style="width: 100%; text-align: center;" class="title has-text-light is-inline">Last notes</h1>
+                    </div>
+                    <div class="message-body">
+                        <figure class="image is-3by2">
+                            <img src="{{ diagramUrl }}">
+                        </figure>
+                    </div>
+                </article>
+                <article class="message is-primary">
+                    <div class="message-header">
+                        <h1 style="width: 100%; text-align: center;" class="title has-text-light">Statistics</h1>
+                    </div>
+                    <div class="message-body">
+                        <div class="columns is-centered">
+                            <div class="column is-center
+                            is-three-quarters-desktop is-fullwidth-tablet is-three-fifths-mobile is-offset-one-fifth-mobile
+                            is-vertical">
+                                <div style="padding-left: 0; padding-right: 0;" class="card notification">
+                                    <div class="container has-text-centered ">
+                                        <p style="font-size: 5.2rem;" class="title">{{ myAverage }}%</p>
+                                        <p class="subtitle">My Average</p>
+                                    </div>
+                                </div>
+                                <div style="padding-left: 0; padding-right: 0;" class="card notification">
+                                    <div class="container has-text-centered">
+                                        <p style="font-size: 3.5rem" class="title">{{ semesterAverage }}%</p>
+                                        <p class="subtitle is-6">Overall Average</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+{% endblock %}
