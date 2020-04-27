@@ -50,7 +50,7 @@ class TabView(View):
 
 
 class SubjectListView(ListView):
-    model = Subject
+    model = Subject.objects.filter()
 
     # paginate_by = 100  # if pagination is desired
 
