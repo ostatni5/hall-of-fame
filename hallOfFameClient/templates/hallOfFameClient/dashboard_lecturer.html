@@ -1,0 +1,38 @@
+{% extends 'hallOfFameClient/base.html' %}
+{% load static %}
+{% block content %}
+    {% include 'hallOfFameClient/hero.html' with username=username color="is-info" %}
+    <section style="padding: 1rem" class="section card">
+        <div class="container">
+            <nav class="breadcrumb is-medium" aria-label="breadcrumbs">
+                <ul>
+                    <li><a href="#">dashboard</a></li>
+                    <li class="is-active"><a href="#" aria-current="page">subjects</a></li>
+                </ul>
+            </nav>
+        </div>
+    </section>
+    <section
+            style='min-height: 79vh; background-image: url("{% static 'img/spiral-cut.png' %}"); background-position: bottom; background-repeat: no-repeat; background-size:30%;'
+            class="section">
+        <div class="columns is-centered">
+            <div class="column is-half">
+                {% for sub in subjects %}
+                    <article class="panel is-link">
+                        <p class="panel-heading ">
+                            {{ sub.name }}
+                        </p>
+                        <p class="panel-block subtitle">
+                            {{ sub.description }}
+                        </p>
+                        <div class="panel-block columns is-centered">
+                            <div class="column is-four-fifths">
+                                {% include 'hallOfFameClient/lecturer_groups_table.html' with groups=object_list %}
+                            </div>
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+{% endblock %}

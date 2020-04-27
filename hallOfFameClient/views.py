@@ -8,7 +8,7 @@ from django.views import View, generic
 from django.views.generic.list import ListView
 
 from hallOfFameClient.db_manager import getFullGroupData
-from hallOfFameClient.models import Subject, Student, Group
+from hallOfFameClient.models import Subject, Student, Lecturer, Group
 
 class TabView(View):
     template_name = 'hallOfFameClient/tab.html'
@@ -53,6 +53,24 @@ class DashboardStudentView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['username'] = self.student.name + " " + self.student.surname
+        context[
+            'diagramUrl'] = "https://media.discordapp.net/attachments/689977881535053839/701202475906236456/unknown.png"
+        context['myAverage'] = "88"
+        context['semesterAverage'] = "76"
+        return context
+
+class DashboardLecturerView(ListView):
+    template_name = 'hallOfFameClient/dashboard_lecturer.html'
+    lecturer = Lecturer.objects.filter(name__exact="Szymon").first()
+    model = Group
+    subjects = Subject.objects.all()
+
+    # paginate_by = 100  # if pagination is desired
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['username'] = self.lecturer.name + " " + self.lecturer.surname
+        context['subjects'] = self.subjects
         context[
             'diagramUrl'] = "https://media.discordapp.net/attachments/689977881535053839/701202475906236456/unknown.png"
         context['myAverage'] = "88"

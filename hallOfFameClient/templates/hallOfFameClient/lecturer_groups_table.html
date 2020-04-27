@@ -1,0 +1,23 @@
+<article class="message is-info is">
+    <div class="message-body">
+        {% for gru in groups %}
+            <button style="border: none; border-bottom: 1px solid; margin-bottom: .5rem !important;" class="button card is-fullwidth level is-marginless is-info is-text is-outlined">
+                <div class="level-left">
+                    <span class="icon is-small level-item">
+                        <i class="fas fa-book"></i>
+                    </span>
+                    <span class="level-item">{{ gru.name }}</span>
+                </div>
+                <div class="level-right">
+                    <p class="level-item">{{ groups.size }}os</p>
+                </div>
+            </button>
+        {% empty %}
+            <div class="card is-fullwidth level is-marginless is-warning is-text is-outlined">
+                <div class="card-content">
+                    <p class="subtitle">No groups yet.</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</article>
