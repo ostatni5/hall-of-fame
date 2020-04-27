@@ -1,7 +1,7 @@
 {% extends 'hallOfFameClient/base.html' %}
 {% load static %}
 {% block content %}
-    {% include 'hallOfFameClient/hero.html' with username=username %}
+    {% include 'hallOfFameClient/hero.html' with username=username color="is-primary" %}
     <section style="padding: 1rem" class="section card">
         <div class="container">
             <nav class="breadcrumb is-medium" aria-label="breadcrumbs">
@@ -13,7 +13,7 @@
         </div>
     </section>
     <section
-            style='background-image: url("{% static 'img/spiral.png' %}"); background-position: 25% 130%; background-repeat: no-repeat; background-size:30%;'
+            style='background-image: url("{% static 'img/spiral-cut.png' %}"); background-position: bottom; background-repeat: no-repeat; background-size:30%;'
             class="section">
         <div class="columns">
             <div class="column is-6 is-offset-1">

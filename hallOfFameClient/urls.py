@@ -3,10 +3,11 @@ from django.conf.urls import url
 from django.contrib.auth import views as auth_views
 from . import views
 from .admin import lecturer_admin_site
-from .views import TabView, DashboardStudentView
+from .views import TabView, DashboardStudentView, DashboardLecturerView
 
 app_name = 'hallOfFameClient'
 urlpatterns = [
     path('tab/', TabView.as_view(), name='tab-view'),
     path('dashboard/', DashboardStudentView.as_view(), name='dashboard-student'),
+    path('lecturer/', DashboardLecturerView.as_view(), name='dashboard-lecturer')
 ]
