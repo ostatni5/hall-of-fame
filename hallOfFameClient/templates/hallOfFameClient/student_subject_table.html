@@ -14,7 +14,7 @@
                 {% for sub in subjects %}
                     <tr>
                         <td class="is-paddingless is-fullheight">
-                            <a href="#" style="background: none; border: none;"
+                            <a href="{% url 'student:subject' sub_id %}" style="background: none; border: none;"
                                class="has-text-left button is-block is-fullheight is-fullwidth is-radiusless">
                                 {{ sub.name }}
                             </a>

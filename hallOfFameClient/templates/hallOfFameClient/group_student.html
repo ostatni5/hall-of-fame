@@ -1,0 +1,17 @@
+{% extends 'hallOfFameClient/base.html' %}
+{% load static %}
+{% block content %}
+{#{{ forloop.counter }}#}
+    {% include 'hallOfFameClient/subject_hero.html' with username=username subjectname=subject.name color="is-primary" %}
+    <section style="padding: 1rem" class="section card">
+        <div class="container">
+            <nav class="breadcrumb is-medium" aria-label="breadcrumbs">
+                <ul>
+                    <li><a href="{% url 'student:dashboard' %}" aria-current="page">dashboard</a></li>
+                    <li class="is-active"><a href="#" aria-current="page">{{ subject.name }}</a></li>
+                    <li class="is-active"><a href="#"></a></li>
+                </ul>
+            </nav>
+        </div>
+    </section>
+{% endblock %}

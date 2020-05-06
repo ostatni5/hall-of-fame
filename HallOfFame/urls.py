@@ -19,8 +19,11 @@ from django.urls import include, path
 from hallOfFameClient.admin import lecturer_admin_site, default_admin_site
 
 urlpatterns = [
+    path('', include('hallOfFameWorld.urls')),
     path('', include('hallOfFameClient.urls')),
+    path('student/', include('hallOfFameStudent.urls')),
     path('polls/', include('polls.urls')),
     path('admin/', default_admin_site.urls),
-    path('lel/', lecturer_admin_site.urls),
+    path('lecturer/', lecturer_admin_site.urls),
+    # path('lecturer/', include('hallOfFameClient.urls'))  # Felt cute, might delete later
 ]
