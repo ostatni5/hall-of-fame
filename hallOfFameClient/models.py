@@ -54,6 +54,7 @@ class Subject(Basic):
     description = models.CharField(max_length=250)
     semester = models.ForeignKey(Semester, on_delete=models.CASCADE, related_name="subject")
     etcs = models.SmallIntegerField()
+    lecturers = models.ManyToManyField(Lecturer, related_name="subjects")
 
 
 class Group(Basic):

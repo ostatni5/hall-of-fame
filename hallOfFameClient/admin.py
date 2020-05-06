@@ -6,6 +6,7 @@ from django.contrib.admin.sites import AlreadyRegistered
 from django.contrib.auth.models import User
 
 from hallOfFameClient.models import Subject, Lecturer, Group, Student, StudentScore, Semester, Exercise
+from hallOfFameClient.permissions import isAdmin, isLecturer
 
 
 class ExerciseInLine(admin.TabularInline):
@@ -32,6 +33,7 @@ class GroupInline(admin.StackedInline):
 
 
 class SubjectAdmin(admin.ModelAdmin):
+    filter_horizontal = ('lecturers',)
     inlines = [
         GroupInline,
     ]
@@ -45,7 +47,7 @@ class LecturerAdminSite(AdminSite):
     def has_permission(self, request):
         flag = False
         if not request.user.is_anonymous:
-            flag = request.user.groups.filter(name="lecturers").exists()
+            flag = isLecturer(request.user)
             flag = flag or request.user.is_superuser
         return super().has_permission(request) and flag
 
@@ -65,7 +67,7 @@ class DefaultAdminSite(AdminSite):
     def has_permission(self, request):
         flag = False
         if not request.user.is_anonymous:
-            flag = request.user.groups.filter(name="admins").exists()
+            flag = isAdmin(request.user)
             flag = flag or request.user.is_superuser
         return super().has_permission(request) and flag
 

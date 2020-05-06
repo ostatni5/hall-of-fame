@@ -1,5 +1,6 @@
 import json
 
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core import serializers
 from django.db.models import Sum, F
 from django.forms import model_to_dict
@@ -13,10 +14,20 @@ from hallOfFameClient.db_manager import getFullGroupData
 from hallOfFameClient.models import Subject, Group, StudentScore, Student, Exercise
 
 from hallOfFameClient.models import Subject, Student, Lecturer, Group
+from hallOfFameClient.permissions import isLecturer, canAccessSubject, canUpdateScore, canInsertScore
 
 
-class TabView(View):
+class TabView(LoginRequiredMixin, UserPassesTestMixin, View):
     template_name = 'hallOfFameClient/tab.html'
+
+    def test_func(self):
+        flag = True
+        user = self.request.user
+        subject = Subject.objects.first()
+        flag = flag and isLecturer(user)
+        flag = flag and canAccessSubject(user, subject.pk)
+
+        return flag
 
     def getCtx(self):
         subject = Subject.objects.first()
@@ -67,19 +78,20 @@ class TabView(View):
         return update_scores, create_scores
 
     def post(self, request, *args, **kwargs):
-
         update_scores, create_scores = self.filter_request(request)
 
         for score in update_scores:
             q = StudentScore.objects.get(pk=score["id"])
-            q.value = score.get("value")
-            q.save()
+            if canUpdateScore(request.user, q):
+                q.value = score.get("value")
+                q.save()
 
         for score in create_scores:
             student = Student.objects.get(pk=score.get("student"))
             exercise = Exercise.objects.get(pk=score.get("exercise"))
-            StudentScore.objects.create(student=student, exercise=exercise,
-                                        value=score.get("value"))
+            if canInsertScore(request.user, exercise):
+                StudentScore.objects.create(student=student, exercise=exercise,
+                                            value=score.get("value"))
 
         print(update_scores, create_scores)
         msg = "SAVED"

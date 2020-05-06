@@ -22,5 +22,5 @@ urlpatterns = [
     path('', include('hallOfFameClient.urls')),
     path('polls/', include('polls.urls')),
     path('admin/', default_admin_site.urls),
-    path('lecturer/', lecturer_admin_site.urls),
+    path('lel/', lecturer_admin_site.urls),
 ]
