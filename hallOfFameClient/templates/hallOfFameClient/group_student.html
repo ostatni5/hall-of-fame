@@ -2,7 +2,7 @@
 {% load static %}
 {% block content %}
 {#{{ forloop.counter }}#}
-    {% include 'hallOfFameClient/subject_hero.html' with username=username subjectname=subject.name color="is-primary" %}
+    {% include 'hallOfFameClient/user_hero.html' with username=username color="is-primary" pageName=subject.name %}
     <section style="padding: 1rem" class="section card">
         <div class="container">
             <nav class="breadcrumb is-medium" aria-label="breadcrumbs">
