@@ -18,12 +18,13 @@ from django.urls import include, path
 
 from hallOfFameClient.admin import lecturer_admin_site, default_admin_site
 
+name = "root"
 urlpatterns = [
     path('', include('hallOfFameWorld.urls')),
-    path('', include('hallOfFameClient.urls')),
+    # path('', include('hallOfFameClient.urls')),
     path('student/', include('hallOfFameStudent.urls')),
     path('polls/', include('polls.urls')),
-    path('admin/', default_admin_site.urls),
-    path('lecturer/', lecturer_admin_site.urls),
+    path('admin/', default_admin_site.urls, name="admin"),
+    path('lecturer/', lecturer_admin_site.urls, name="lecturer"),
     # path('lecturer/', include('hallOfFameClient.urls'))  # Felt cute, might delete later
 ]
