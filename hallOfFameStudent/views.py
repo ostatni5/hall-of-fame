@@ -3,6 +3,7 @@ from django.views.generic import ListView
 
 from hallOfFameClient.models import Student, Subject, StudentScore
 
+
 class GroupStudentView(ListView):
     # sub_id = sub_id
     template_name = 'hallOfFameClient/group_student.html'
@@ -19,6 +20,7 @@ class GroupStudentView(ListView):
         context['myRanking'] = "15"
         context['groupStudents'] = self.groupStudents
         return context
+
 
 class DashboardStudentView(ListView):
     template_name = 'hallOfFameClient/dashboard_student.html'
