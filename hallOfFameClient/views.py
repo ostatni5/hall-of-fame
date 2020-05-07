@@ -142,3 +142,13 @@ class DashboardLecturerView(UserLecturerTestMixinView, ListView):
         context['myAverage'] = "88"
         context['semesterAverage'] = "76"
         return context
+    """
+    Potrzeba:
+        User (Prowadzący),
+        Lista przedmiotów w których jest prowadzącym
+                Nazwa przedmiotu
+                Opis krótki
+                Lista grup w których prowadzi ten przedmiot
+                    nazwa grupy
+                    ilość osób
+    """
