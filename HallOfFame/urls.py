@@ -26,5 +26,5 @@ urlpatterns = [
     path('polls/', include('polls.urls')),
     path('admin/', default_admin_site.urls, name="admin"),
     path('lecturer/', lecturer_admin_site.urls, name="lecturer"),
-    # path('lecturer/', include('hallOfFameClient.urls'))  # Felt cute, might delete later
+    path('lecturer/', include('hallOfFameClient.urls'))  # Felt cute, might delete later
 ]

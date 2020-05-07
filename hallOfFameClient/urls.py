@@ -7,7 +7,7 @@ from .views import TabView, DashboardLecturerView,StatView
 
 app_name = 'lecturer'
 urlpatterns = [
-    path('dashboard', DashboardLecturerView.as_view(), name='dashboard'),
+    path('dashboard/', DashboardLecturerView.as_view(), name='dashboard'),
     # path('lecturer/hallOfFameClient/subject/<int:pk>')
 ]
 

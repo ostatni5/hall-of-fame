@@ -10,6 +10,10 @@ def isLecturer(user):
     return isInGroup(user, "lecturers")
 
 
+def isStudent(user):
+    return isInGroup(user, "students")
+
+
 def canAccessSubject(user, subject_pk):
     return user.lecturer.subjects.filter(pk=subject_pk).exists()
 
@@ -20,3 +24,4 @@ def canInsertScore(user, exercise):
 
 def canUpdateScore(user, score):
     return canInsertScore(user, score.exercise)
+
