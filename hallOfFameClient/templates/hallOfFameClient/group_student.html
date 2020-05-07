@@ -1,7 +1,7 @@
 {% extends 'hallOfFameClient/base.html' %}
 {% load static %}
 {% block content %}
-{#{{ forloop.counter }}#}
+    {#{{ forloop.counter }}#}
     {% include 'hallOfFameClient/user_hero.html' with username=username color="is-primary" pageName=subject.name %}
     <section style="padding: 1rem" class="section card">
         <div class="container">
@@ -12,6 +12,18 @@
                     <li class="is-active"><a href="#"></a></li>
                 </ul>
             </nav>
+        </div>
+    </section>
+    <section
+            style='min-height: 79vh; background-image: url("{% static 'img/spiral-cut.png' %}"); background-position: bottom; background-repeat: no-repeat; background-size:30%;'
+            class="section">
+        <div class="columns">
+            <div class="column is-4 is-offset-1">
+                {% include 'hallOfFameClient/student_assignments_panel.html' with groupName="2BC" longDescription="lorem ipsum dużo"  %}
+            </div>
+            <div class="column is-6">
+                {% include 'hallOfFameClient/student_assignments_panel.html' with groupName="2BC" longDescription="lorem ipsum dużo"  %}
+            </div>
         </div>
     </section>
 {% endblock %}
