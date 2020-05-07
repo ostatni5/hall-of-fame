@@ -1,0 +1,30 @@
+{% extends 'hallOfFameClient/base.html' %}
+{% load static %}
+{% block content %}
+    <section class="section is-fullwidth is-overlay has-background-light">
+        <div class="columns is-desktop is-vcentered is-overlay">
+            <div class="column is-offset-2-fullhd is-8-fullhd is-offset-1-tablet is-10-tablet is-12-mobile">
+                <div class="field has-addons has-addons-fullwidth is-gapless field is-horizontal">
+                    <p class="control">
+                        <a href="#" class="button is-info is-fullwidth" style="font-size: 12rem;">
+                            <span>
+                                <i class="fas fa-user-tie"></i>
+                                <br/>
+                                <label class="has-text-light label title">Lecturer</label>
+                            </span>
+                        </a>
+                    </p>
+                    <p class="control">
+                        <a href="{% url "student:dashboard" %}" class="button is-primary is-fullwidth" style="font-size: 12rem;">
+                            <span>
+                                <i class="fas fa-user-graduate"></i>
+                                <br/>
+                                <label class="has-text-light label title">Student</label>
+                            </span>
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
