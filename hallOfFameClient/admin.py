@@ -5,8 +5,8 @@ from django.contrib.admin import AdminSite
 from django.contrib.admin.sites import AlreadyRegistered
 from django.contrib.auth.models import User
 
-from hallOfFameClient.models import Subject, Lecturer, Group, Student, StudentScore, Semester, Exercise
-from hallOfFameClient.permissions import isAdmin, isLecturer
+from hallOfFameClient.models import Subject, Group, StudentScore, Exercise
+from HallOfFame.permissions import isAdmin, isLecturer
 
 
 class ExerciseInLine(admin.TabularInline):

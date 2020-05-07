@@ -1,32 +1,36 @@
 import json
 
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.core import serializers
-from django.db.models import Sum, F
+from django.db.models import Sum
 from django.forms import model_to_dict
 from django.shortcuts import render
-from django.http import HttpResponse
-from django.shortcuts import render
-from django.views import View, generic
+from django.views import View
 from django.views.generic.list import ListView
 
-from hallOfFameClient.db_manager import getFullGroupData
-from hallOfFameClient.models import Subject, Group, StudentScore, Student, Exercise
+from hallOfFameClient.models import StudentScore, Exercise
 
 from hallOfFameClient.models import Subject, Student, Lecturer, Group
-from hallOfFameClient.permissions import isLecturer, canAccessSubject, canUpdateScore, canInsertScore
+from HallOfFame.permissions import isLecturer, canAccessSubject, canUpdateScore, canInsertScore
 
 
-class TabView(LoginRequiredMixin, UserPassesTestMixin, View):
-    template_name = 'hallOfFameClient/tab.html'
+class UserLecturerTestMixinView(LoginRequiredMixin, UserPassesTestMixin, View):
+    login_url = '/lecturer/login/'
 
     def test_func(self):
         flag = True
         user = self.request.user
-        subject = Subject.objects.first()
         flag = flag and isLecturer(user)
-        flag = flag and canAccessSubject(user, subject.pk)
+        return flag
 
+
+class TabView(UserLecturerTestMixinView):
+    template_name = 'hallOfFameClient/tab.html'
+
+    def test_func(self):
+        flag = super().test_func()
+        user = self.request.user
+        subject = Subject.objects.first()
+        flag = flag and canAccessSubject(user, subject.pk)
         return flag
 
     def getCtx(self):
@@ -120,19 +124,18 @@ class StatView(View):
                       {"stat": self.stat, "stat2": self.stat2})
 
 
-
-
-class DashboardLecturerView(ListView):
+class DashboardLecturerView(UserLecturerTestMixinView, ListView):
     template_name = 'hallOfFameClient/dashboard_lecturer.html'
-    lecturer = Lecturer.objects.filter(name__exact="Szymon").first()
+
     model = Group
     subjects = Subject.objects.all()
 
     # paginate_by = 100  # if pagination is desired
 
     def get_context_data(self, **kwargs):
+        lecturer = self.request.user.lecturer
         context = super().get_context_data(**kwargs)
-        context['username'] = self.lecturer.name + " " + self.lecturer.surname
+        context['username'] = lecturer.name + " " + lecturer.surname
         context['subjects'] = self.subjects
         context[
             'diagramUrl'] = "https://media.discordapp.net/attachments/689977881535053839/701202475906236456/unknown.png"

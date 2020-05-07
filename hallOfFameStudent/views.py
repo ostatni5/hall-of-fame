@@ -24,6 +24,7 @@ class RankingStudentView(DetailView):
                 średnia pw danym miesiącu
     """
 
+
 class GroupStudentView(ListView):
     # sub_id = sub_id
     template_name = 'hallOfFameClient/group_student.html'
@@ -58,6 +59,7 @@ class GroupStudentView(ListView):
                 kolejność w rankingu po danym zadaniu
                 średnia po danym zadaniu
     """
+
 
 class DashboardStudentView(ListView):
     template_name = 'hallOfFameClient/dashboard_student.html'
