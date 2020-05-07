@@ -86,4 +86,3 @@ class DashboardStudentView(ListView):
                 opis krótki
                 ECTS
     """
-    """
