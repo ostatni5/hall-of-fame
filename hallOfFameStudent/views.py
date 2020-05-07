@@ -45,7 +45,7 @@ class GroupStudentView(ListView):
     Potrzeba:
         User,
         Grupa o id 'sub_id', <-- nazwę zmienię potem, bo teraz to jest id przedmiotu, ale zmieni się to 
-        Twoja średnia w grupie (z przedmiotu),
+        Twoja średnia w grupie (z przedmiotu), 
         Twój ranking (egzekwo mają to samo miejsce)
         Lista ocen z zadań na zajęciach
                 wszystkie dane z zadania
