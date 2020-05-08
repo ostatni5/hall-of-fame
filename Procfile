@@ -1,0 +1,1 @@
+web: gunicorn HallOfFame.wsgi --log-file -

@@ -86,3 +86,38 @@ class StudentScore(models.Model):
 
     def __str__(self):
         return self.value.__str__()
+
+
+class StatModel(models.Model):
+    mean_value = models.FloatField()
+
+    class Meta:
+        abstract = True
+
+
+class StatGroupScore(StatModel):
+    group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="stat_score")
+    max_score = models.SmallIntegerField()
+
+
+class StatGroupStudentScore(StatModel):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name="stat_groups_score")
+    stat_group = models.ForeignKey(StatGroupScore, on_delete=models.CASCADE, related_name="stat_students_score")
+    value = models.SmallIntegerField()
+
+
+class StatSubjectScore(StatModel):
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name="stat_score")
+
+
+class StatSubjectStudentScore(StatModel):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name="stat_subjects_score")
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name="stat_students_score")
+
+
+class Variable(models.Model):
+    key = models.CharField(max_length=100, unique=True)
+    value = models.TextField()
+
+
+
