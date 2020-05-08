@@ -6,7 +6,7 @@ class HallOfFameClientConfig(AppConfig):
     name = 'hallOfFameClient'
 
     def ready(self):
-        print("HAOFC ready")
+        pass
 
 
 

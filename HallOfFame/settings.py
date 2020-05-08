@@ -97,7 +97,7 @@ WSGI_APPLICATION = 'HallOfFame.wsgi.application'
 #         'PORT': '5432'
 #     }
 # }
-#
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',

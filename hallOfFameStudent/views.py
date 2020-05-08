@@ -27,7 +27,7 @@ class RankingStudentView(DetailView):
 
 class GroupStudentView(ListView):
     pass
-    # # sub_id = sub_id
+    # sub_id = sub_id
     # template_name = 'hallOfFameClient/group_student.html'
     # student = Student.objects.filter(album_number=213700).first()
     # # subject = Subject.objects.filter(name_exact="Elementy statycznego podrywu").first()
