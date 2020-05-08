@@ -26,11 +26,8 @@ class RankingStudentView(DetailView):
 
 
 class GroupStudentView(ListView):
-    pass
-    sub_id = sub_id
     template_name = 'hallOfFameClient/group_student.html'
     student = Student.objects.filter(album_number=213700).first()
-    # subject = Subject.objects.filter(name_exact="Elementy statycznego podrywu").first()
     model = StudentScore
     groupStudents = Student.objects.all()
 
@@ -63,7 +60,6 @@ class GroupStudentView(ListView):
 
 
 class DashboardStudentView(ListView):
-    pass
     template_name = 'hallOfFameClient/dashboard_student.html'
     student = Student.objects.filter(album_number=213700).first()
     scores = StudentScore.objects.order_by('-date')[:5]
