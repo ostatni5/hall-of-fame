@@ -26,21 +26,22 @@ class RankingStudentView(DetailView):
 
 
 class GroupStudentView(ListView):
-    # sub_id = sub_id
-    template_name = 'hallOfFameClient/group_student.html'
-    student = Student.objects.filter(album_number=213700).first()
-    # subject = Subject.objects.filter(name_exact="Elementy statycznego podrywu").first()
-    model = StudentScore
-    groupStudents = Student.objects.all()
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['username'] = self.student.name + " " + self.student.surname
-        context['subject'] = get_object_or_404(Subject, id=self.kwargs.get('sub_id', None))
-        context['myAverage'] = "88"
-        context['myRanking'] = "15"
-        context['groupStudents'] = self.groupStudents
-        return context
+    pass
+    # # sub_id = sub_id
+    # template_name = 'hallOfFameClient/group_student.html'
+    # student = Student.objects.filter(album_number=213700).first()
+    # # subject = Subject.objects.filter(name_exact="Elementy statycznego podrywu").first()
+    # model = StudentScore
+    # groupStudents = Student.objects.all()
+    #
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['username'] = self.student.name + " " + self.student.surname
+    #     context['subject'] = get_object_or_404(Subject, id=self.kwargs.get('sub_id', None))
+    #     context['myAverage'] = "88"
+    #     context['myRanking'] = "15"
+    #     context['groupStudents'] = self.groupStudents
+    #     return context
     """
     Potrzeba:
         User,
@@ -62,22 +63,23 @@ class GroupStudentView(ListView):
 
 
 class DashboardStudentView(ListView):
-    template_name = 'hallOfFameClient/dashboard_student.html'
-    student = Student.objects.filter(album_number=213700).first()
-    scores = StudentScore.objects.order_by('-date')[:5]
-    model = Subject
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['username'] = self.student.name + " " + self.student.surname
-        context['myAverage'] = "88"
-        context['semesterAverage'] = "76"
-        context['diagramLabel'] = []
-        context['diagramData'] = []
-        for score in self.scores:
-            context['diagramLabel'].append(score.exercise.name)
-            context['diagramData'].append(score.value)
-        return context
+    pass
+    # template_name = 'hallOfFameClient/dashboard_student.html'
+    # student = Student.objects.filter(album_number=213700).first()
+    # scores = StudentScore.objects.order_by('-date')[:5]
+    # model = Subject
+    #
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['username'] = self.student.name + " " + self.student.surname
+    #     context['myAverage'] = "88"
+    #     context['semesterAverage'] = "76"
+    #     context['diagramLabel'] = []
+    #     context['diagramData'] = []
+    #     for score in self.scores:
+    #         context['diagramLabel'].append(score.exercise.name)
+    #         context['diagramData'].append(score.value)
+    #     return context
     """
     Potrzeba:
         User,
