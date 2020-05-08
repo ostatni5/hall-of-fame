@@ -128,15 +128,15 @@ class DashboardLecturerView(UserLecturerTestMixinView, ListView):
     template_name = 'hallOfFameClient/dashboard_lecturer.html'
 
     model = Group
-    subjects = Subject.objects.all()
 
     # paginate_by = 100  # if pagination is desired
 
     def get_context_data(self, **kwargs):
         lecturer = self.request.user.lecturer
         context = super().get_context_data(**kwargs)
+        context['lecturer'] = lecturer
         context['username'] = lecturer.name + " " + lecturer.surname
-        context['subjects'] = self.subjects
+        context['subjects'] = lecturer.subjects.all()
         context[
             'diagramUrl'] = "https://media.discordapp.net/attachments/689977881535053839/701202475906236456/unknown.png"
         context['myAverage'] = "88"
