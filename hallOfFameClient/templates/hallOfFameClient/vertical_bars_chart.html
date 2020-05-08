@@ -3,6 +3,7 @@
 {% comment %}https://www.chartjs.org/docs/latest/{% endcomment %}
 <script src="{% static 'js/jsspectrum.min.js' %}"></script>
 {% comment %}https://gist.github.com/ibrechin/2489005#file-jsspectrum-js{% endcomment %}
+<script src="{% static 'js/functions.js' %}"></script>
 <article class="message is-primary">
     <div class="message-header">
         <h1 style="width: 100%; text-align: center;" class="title has-text-light is-inline">{{ chartName }}</h1>
@@ -13,37 +14,86 @@
 </article>
 <script>
 var ctx = document.getElementById('{{ chartID }}').getContext('2d');
+
+var myData = {{ chartData|safe }}
+var myLabel = {{ chartLabel|safe }}
+var subjects = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','r','s','t']
+
+var d = new Date('2010-08-05')
+// convert date to pretty format
+var dateStr = getPrettyDate(d)
+var dates = [dateStr,dateStr,dateStr,dateStr,dateStr]
+
+
+// add random data and labels
+/*
+for(var i=0; i<14; i++) {
+    myData.push(Math.floor(Math.random() * (100 - 1 + 1)) + 1)
+    myLabel.push(Math.floor(Math.random() * (100 - 1 + 1)) + 1)
+}
+ */
+
+
+var colors = getEvenlySpacedColors(myData);
+// shift colors
+for(let i=0; i<parseInt(colors.length/3.5); i++)
+    arrayRotate(colors, true)
+
+for(let i=0; i<parseInt(colors.length)/2 - 1; i++)
+    colors[i] = "rgb(191, 63, 86)"
+
+
+// create array of bars colors
+var colors2 = []
+for(let i=0; i<myData.length; i++){
+    let item = myData[i]
+    colors2.push(colors[item - Math.min.apply(null, myData)])
+}
+
+
 var myChart = new Chart(ctx, {
     type: 'bar',
     data: {
-        labels: {{ chartLabel|safe }},
+        labels: dates,
         datasets: [{
-            label: '# of Votes',
-            data: {{ chartData|safe }},
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-            ],
+            label: false,
+            data: myData,
+            backgroundColor: colors2,
+            borderColor: colors2,
             borderWidth: 1
-        }]
+        }
+        ]
     },
     options: {
+        legend: {
+            display: false
+        },
+        tooltips: {
+            callbacks: {
+                title: function(tooltipItem, data){
+                    return "Subject: " + subjects[tooltipItem[0].index];
+                },
+
+               label: function(tooltipItem, data) {
+                    return "Percentage: " + tooltipItem.yLabel;
+                }
+            }
+
+        },
         scales: {
             yAxes: [{
                 ticks: {
                     beginAtZero: true
+                },
+                scaleLabel: {
+                  display: true,
+                  labelString: 'Percentage'
+                }
+            }],
+            xAxes: [{
+                scaleLabel: {
+                  display: true,
+                  labelString: 'Date'
                 }
             }]
         }
