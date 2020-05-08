@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView
 
-from hallOfFameClient.models import Student, Subject, StudentScore
+from hallOfFameClient.models import Student, Subject, StudentScore, Exercise
 from polls.views import DetailView
 
 
@@ -64,15 +64,19 @@ class GroupStudentView(ListView):
 class DashboardStudentView(ListView):
     template_name = 'hallOfFameClient/dashboard_student.html'
     student = Student.objects.filter(album_number=213700).first()
+    scores = StudentScore.objects.order_by('-date')[:5]
     model = Subject
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['username'] = self.student.name + " " + self.student.surname
-        context[
-            'diagramUrl'] = "https://media.discordapp.net/attachments/689977881535053839/701202475906236456/unknown.png"
         context['myAverage'] = "88"
         context['semesterAverage'] = "76"
+        context['diagramLabel'] = []
+        context['diagramData'] = []
+        for score in self.scores:
+            context['diagramLabel'].append(score.exercise.name)
+            context['diagramData'].append(score.value)
         return context
     """
     Potrzeba:

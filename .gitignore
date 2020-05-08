@@ -20,6 +20,7 @@ media
 *.bak 
 
 # If you are using PyCharm # 
+.idea
 .idea/**/workspace.xml 
 .idea/**/tasks.xml 
 .idea/dictionaries 
@@ -257,3 +258,4 @@ dmypy.json
 bulma-0.8.2.zip
 .idea/HallOfFame.iml
 .idea/misc.xml
+
