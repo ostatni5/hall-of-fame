@@ -75,7 +75,7 @@ class DashboardStudentView(ListView):
         context['diagramLabel'] = []
         context['diagramData'] = []
         for score in self.scores:
-            context['diagramLabel'].append(score.exercise.name + score.group)
+            context['diagramLabel'].append(score.exercise.name)
             context['diagramData'].append(score.value)
         return context
     """
