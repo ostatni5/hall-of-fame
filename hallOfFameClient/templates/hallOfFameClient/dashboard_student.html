@@ -20,16 +20,7 @@
                 {% include 'hallOfFameClient/student_subject_table.html' with subjects=object_list %}
             </div>
             <div class="column is-4">
-                <article class="message is-primary">
-                    <div class="message-header">
-                        <h1 style="width: 100%; text-align: center;" class="title has-text-light is-inline">Last notes</h1>
-                    </div>
-                    <div class="message-body">
-                        <figure class="image is-3by2">
-                            <img src="{{ diagramUrl }}">
-                        </figure>
-                    </div>
-                </article>
+                {% include 'hallOfFameClient/vertical_bars_chart.html' with chartName="Recent Assignments" chartID="notesChart" chartData=diagramData chartLabel=diagramLabel %}
                 <article class="message is-primary">
                     <div class="message-header">
                         <h1 style="width: 100%; text-align: center;" class="title has-text-light">Statistics</h1>
