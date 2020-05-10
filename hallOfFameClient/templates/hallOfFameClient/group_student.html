@@ -1,8 +1,16 @@
 {% extends 'hallOfFameClient/base.html' %}
+{#{{ forloop.counter }}#}
 {% load static %}
-{% block content %}
-    {#{{ forloop.counter }}#}
-    {% include 'hallOfFameClient/user_hero.html' with username=username color="is-primary" pageName=subject.name %}
+{% block title %}{{ subject.name }}{% endblock %}
+{% block brand %}
+    <div class="navbar-brand">
+        <a href="{% url "student:dashboard" %}" class="navbar-item">
+            <img src="{% static 'img/ostatniLearningPrimary.png' %}" alt="Logo">
+        </a>
+    </div>
+{% endblock %}
+{% block herotitle %}{{ subject.name }}{% endblock %}
+{% block breadcrumb %}
     <section style="padding: 1rem" class="section card">
         <div class="container">
             <nav class="breadcrumb is-medium" aria-label="breadcrumbs">
@@ -14,6 +22,8 @@
             </nav>
         </div>
     </section>
+{% endblock %}
+{% block content %}
     <section
             style='min-height: 79vh; background-image: url("{% static 'img/spiral-cut.png' %}"); background-position: bottom; background-repeat: no-repeat; background-size:30%;'
             class="section">

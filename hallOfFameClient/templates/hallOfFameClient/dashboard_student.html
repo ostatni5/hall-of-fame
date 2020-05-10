@@ -1,7 +1,20 @@
 {% extends 'hallOfFameClient/base.html' %}
 {% load static %}
-{% block content %}
-    {% include 'hallOfFameClient/user_hero.html' with username=username color="is-primary" pageName="My Dashboard" %}
+{% block title %}Dashboard{% endblock %}
+{% block brand %}
+    <div class="navbar-brand">
+{#        {% if color == "is-primary" %}#}
+        <a href="{% url "student:dashboard" %}" class="navbar-item">
+            <img src="{% static 'img/ostatniLearningPrimary.png' %}" alt="Logo">
+{#        {% else %}#}
+{#        <a href="#" class="navbar-item">#}
+{#            <img src="{% static 'img/ostatniLearningInfo.png' %}" alt="Logo">#}
+{#        {% endif %}#}
+        </a>
+    </div>
+{% endblock %}
+{% block herotitle %}My Dashboard{% endblock %}
+{% block breadcrumb %}
     <section style="padding: 1rem" class="section card">
         <div class="container">
             <nav class="breadcrumb is-medium" aria-label="breadcrumbs">
@@ -12,6 +25,9 @@
             </nav>
         </div>
     </section>
+{#    {% include 'hallOfFameClient/user_hero.html' with username=username color="is-primary" pageName="My Dashboard" %}#}
+{% endblock %}
+{% block content %}
     <section
             style='background-image: url("{% static 'img/spiral-cut.png' %}"); background-position: bottom; background-repeat: no-repeat; background-size:30%;'
             class="section">
@@ -21,7 +37,7 @@
             </div>
             <div class="column is-4">
                 {% include 'hallOfFameClient/vertical_bars_chart.html' with chartName="Last 5 grades" chartID="notesChart" chartData=diagramData chartLabel=diagramLabel %}
-                <article class="message is-primary">
+                <article class="message is-{{ primaryColor }}">
                     <div class="message-header">
                         <h1 style="width: 100%; text-align: center;" class="title has-text-light">Statistics</h1>
                     </div>

@@ -4,6 +4,8 @@ from django.views.generic import ListView
 from hallOfFameClient.models import Student, Subject, StudentScore, Exercise
 from polls.views import DetailView
 
+color = "primary"
+user_type = "student"
 
 class RankingStudentView(DetailView):
     def get_context_data(self, **kwargs):
@@ -38,6 +40,8 @@ class GroupStudentView(ListView):
         context['myAverage'] = "88"
         context['myRanking'] = "15"
         context['groupStudents'] = self.groupStudents
+        context['userType'] = user_type
+        context['primaryColor'] = color
         return context
     """
     Potrzeba:
@@ -72,6 +76,8 @@ class DashboardStudentView(ListView):
         context['semesterAverage'] = "76"
         context['diagramLabel'] = []
         context['diagramData'] = []
+        context['userType'] = user_type
+        context['primaryColor'] = color
         for score in self.scores:
             context['diagramLabel'].append(score.exercise.name)
             context['diagramData'].append(score.value)
@@ -88,3 +94,12 @@ class DashboardStudentView(ListView):
                 opis krótki
                 ECTS
     """
+
+
+class LoginStudentView(DetailView):
+    template_name = 'hallOfFameClient/login_student.html'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['userType'] = user_type
+        context['primaryColor'] = color
+        return context

@@ -12,7 +12,6 @@ from hallOfFameClient.models import StudentScore, Exercise
 from hallOfFameClient.models import Subject, Student, Lecturer, Group
 from HallOfFame.permissions import isLecturer, canAccessSubject, canUpdateScore, canInsertScore
 
-
 class UserLecturerTestMixinView(LoginRequiredMixin, UserPassesTestMixin, View):
     login_url = '/lecturer/login/'
 
