@@ -3,9 +3,11 @@ from datetime import datetime
 
 from django.core import serializers
 from django.db.models import Sum, Q, F, Avg
+from django.utils import timezone
 
 from hallOfFameClient.models import Subject, Student, Group, StudentScore, StatGroupScore, StatGroupStudentScore, \
-    StatSubjectScore, StatSubjectStudentScore, ArchiveRecord, Variable
+    StatSubjectScore, StatSubjectStudentScore, ArchiveRecord, Variable, ArchiveSubjectStudentScore, \
+    ArchiveGroupStudentScore
 
 Student.objects.values('pk', 'groups__pk', 'groups__stat_score__max_score').annotate(score=Sum('scores__value'), )
 
@@ -16,7 +18,46 @@ Group.objects.values('pk', ).annotate(core=Sum('exercises__scores__value'))
 StudentScore.objects.values('exercise__group__pk').annotate(score=Sum('value'))
 
 
+def archStats(curr_date):
+    arch_record = ArchiveRecord()
+    arch_record.creation_date = curr_date
+    arch_record.save()
+
+    query_group = StatGroupStudentScore.objects.all()
+    objs = []
+    for res in query_group:
+        obj = ArchiveGroupStudentScore()
+        obj.record = arch_record
+        obj.student = res.student
+        obj.group = res.stat_group.group
+        obj.mean_value = res.mean_value
+        objs.append(obj)
+    ArchiveGroupStudentScore.objects.bulk_create(objs)
+
+    query_subject = StatSubjectStudentScore.objects.all()
+    objs = []
+    for res in query_subject:
+        obj = ArchiveSubjectStudentScore()
+        obj.record = arch_record
+        obj.student = res.student
+        obj.subject = res.subject
+        obj.mean_value = res.mean_value
+        objs.append(obj)
+    ArchiveSubjectStudentScore.objects.bulk_create(objs)
+
+
 def calcStatsSubject():
+    curr_date = timezone.now()
+    last_date = ArchiveRecord.objects.all().order_by('-creation_date').first()
+
+    create = True
+    if last_date is not None:
+        diff_hours = (curr_date - last_date.creation_date).total_seconds() / 3600
+        create = (diff_hours > 24)
+
+    if not create:
+        return -1
+
     StatGroupScore.objects.all().delete()
     StatGroupStudentScore.objects.all().delete()
     StatSubjectScore.objects.all().delete()
@@ -76,12 +117,7 @@ def calcStatsSubject():
         objs.append(obj)
     StatSubjectStudentScore.objects.bulk_create(objs)
 
-    arch_record = ArchiveRecord()
-    arch_record.save()
-    jsonDate = arch_record.creation_date.strftime('%Y-%m-%d %H:%M')
-    # last_stats = Variable.objects.get_or_create(key="last_stats", defaults={"value": jsonDate})
-    last_date = datetime.strptime(jsonDate, '%Y-%m-%d %H:%M')
-    print(last_date)
+    archStats(curr_date)
 
 
 def rankingSubject(subject_pk):

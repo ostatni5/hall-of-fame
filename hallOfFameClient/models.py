@@ -121,7 +121,7 @@ class Variable(models.Model):
 
 
 class ArchiveRecord(models.Model):
-    creation_date = models.DateTimeField(auto_now_add=True)
+    creation_date = models.DateTimeField()
 
 
 class ArchiveModel(StatModel):
