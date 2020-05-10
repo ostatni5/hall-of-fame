@@ -33,7 +33,7 @@
             class="section">
         <div class="columns">
             <div class="column is-6 is-offset-1">
-                {% include 'hallOfFameClient/student_subject_table.html' with subjects=object_list %}
+                {% include 'hallOfFameClient/student_subject_panel.html' with subjects=object_list %}
             </div>
             <div class="column is-4">
                 {% include 'hallOfFameClient/vertical_bars_chart.html' with chartName="Last 5 grades" chartID="notesChart" chartData=diagramData chartLabel=diagramLabel %}
