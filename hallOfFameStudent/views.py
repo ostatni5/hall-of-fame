@@ -1,5 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView
+from django.views.generic import TemplateView
+from django.views.generic import View
 
 from hallOfFameClient.models import Student, Subject, StudentScore, Exercise
 from polls.views import DetailView
@@ -7,7 +9,7 @@ from polls.views import DetailView
 color = "primary"
 user_type = "student"
 
-class RankingStudentView(DetailView):
+class RankingStudentView(TemplateView):
     def get_context_data(self, **kwargs):
         return "DETALE BITCH!"
     """
@@ -96,7 +98,7 @@ class DashboardStudentView(ListView):
     """
 
 
-class LoginStudentView(DetailView):
+class LoginStudentView(TemplateView):
     template_name = 'hallOfFameClient/login_student.html'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

@@ -1,66 +1,46 @@
 {% extends 'hallOfFameClient/base.html' %}
-{% load i18n static %}
-
-{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/login.css" %}">
-{{ form.media }}
+{% load static %}
+{% block title %}Student Login{% endblock %}
+{% block hero %}
 {% endblock %}
-
-{% block bodyclass %}{{ block.super }} login{% endblock %}
-
-{% block usertools %}{% endblock %}
-
-{% block nav-global %}{% endblock %}
-
-{% block content_title %}{% endblock %}
-
-{% block breadcrumbs %}{% endblock %}
-
+{% block breadcrumb %}
+{% endblock %}
 {% block content %}
-    {% if form.errors and not form.non_field_errors %}
-        <p class="errornote">
-        {% if form.errors.items|length == 1 %}{% trans "Please correct the error below." %}{% else %}{% trans "Please correct the errors below." %}{% endif %}
-        </p>
-    {% endif %}
+    <section class="is-paddingless is-marginless" style="width: 100vw; height: 100vh;">
+        <div class="columns is-gapless is-overlay is-desktop is-vcentered has-background-light">
+            <div class="column is-5 has-background-{{ primaryColor }}" style="height: 100%; background: rgb(0,82,69);">
 
-    {% if form.non_field_errors %}
-        {% for error in form.non_field_errors %}
-        <p class="errornote">
-            {{ error }}
-        </p>
-        {% endfor %}
-    {% endif %}
-
-    <div id="content-main">
-
-    {% if user.is_authenticated %}
-    <p class="errornote">
-        {% blocktrans trimmed %}
-            You are authenticated as {{ username }}, but are not authorized to
-            access this page. Would you like to login to a different account?
-        {% endblocktrans %}
-    </p>
-    {% endif %}
-
-    <form action="{{ app_path }}" method="post" id="login-form">{% csrf_token %}
-      <div class="form-row">
-        {{ form.username.errors }}
-        {{ form.username.label_tag }} {{ form.username }}
-      </div>
-      <div class="form-row">
-        {{ form.password.errors }}
-        {{ form.password.label_tag }} {{ form.password }}
-        <input type="hidden" name="next" value="{{ next }}">
-      </div>
-      {% url 'admin_password_reset' as password_reset_url %}
-      {% if password_reset_url %}
-      <div class="password-reset-link">
-        <a href="{{ password_reset_url }}">{% trans 'Forgotten your password or username?' %}</a>
-      </div>
-      {% endif %}
-      <div class="submit-row">
-        <label>&nbsp;</label><input type="submit" value="{% trans 'Log in' %}">
-      </div>
-    </form>
-
-    </div>
+            </div>
+            <div class="column is-7 has-text-centered"/>
+                <form action="{{ app_path }}" method="post" id="login-form" class="is-inline-block" style="min-width: 40%;">
+                    <div class="field">
+                        <p class="control has-icons-left has-icons-right">
+                            <input class="input" type="text" placeholder="Email"/>
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-user"></i>
+                            </span>
+                            <span class="icon is-small is-right">
+                                <i class="fas fa-check"></i>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="field">
+                        <p class="control has-icons-left">
+                            <input class="input" type="password" placeholder="Password"/>
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-lock"></i>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="field">
+                        <p class="control">
+                            <button href="{% url "student:dashboard" %}" class="button is-{{ primaryColor }}">
+                                Login
+                            </button>
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
 {% endblock %}
