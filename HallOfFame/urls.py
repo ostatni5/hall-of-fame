@@ -18,7 +18,6 @@ from django.urls import include, path
 
 from hallOfFameClient.admin import lecturer_admin_site, default_admin_site
 
-name = "root"
 urlpatterns = [
     path('', include('hallOfFameWorld.urls')),
     # path('', include('hallOfFameClient.urls')),
