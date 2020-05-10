@@ -37,31 +37,7 @@
             </div>
             <div class="column is-4">
                 {% include 'hallOfFameClient/vertical_bars_chart.html' with chartName="Last 5 grades" chartID="notesChart" chartData=diagramData chartLabel=diagramLabel %}
-                <article class="message is-{{ primaryColor }}">
-                    <div class="message-header">
-                        <h1 style="width: 100%; text-align: center;" class="title has-text-light">Statistics</h1>
-                    </div>
-                    <div class="message-body">
-                        <div class="columns is-centered">
-                            <div class="column is-center
-                            is-three-quarters-desktop is-fullwidth-tablet is-three-fifths-mobile is-offset-one-fifth-mobile
-                            is-vertical">
-                                <div style="padding-left: 0; padding-right: 0;" class="card notification">
-                                    <div class="container has-text-centered ">
-                                        <p style="font-size: 5.2rem;" class="title">{{ myAverage }}%</p>
-                                        <p class="subtitle">My Average</p>
-                                    </div>
-                                </div>
-                                <div style="padding-left: 0; padding-right: 0;" class="card notification">
-                                    <div class="container has-text-centered">
-                                        <p style="font-size: 3.5rem" class="title">{{ semesterAverage }}%</p>
-                                        <p class="subtitle is-6">Overall Average</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </article>
+                {% include 'hallOfFameClient/student_statistics_panel.html' %}
             </div>
         </div>
     </section>

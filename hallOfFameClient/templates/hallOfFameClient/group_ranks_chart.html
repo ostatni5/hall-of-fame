@@ -3,11 +3,27 @@
 {% comment %}https://www.chartjs.org/docs/latest/{% endcomment %}
 <script src="{% static 'js/jsspectrum.min.js' %}"></script>
 {% comment %}https://gist.github.com/ibrechin/2489005#file-jsspectrum-js{% endcomment %}
-<article class="message is-dark">
-    <div class="message-header">
-        <h1 style="width: 100%; text-align: center;" class="title has-text-light is-inline">{{ chartName }}</h1>
+<article class="panel is-dark" style="height: 100%; background: #ebfffc;">
+    <div class="panel-heading is-size-3 has-text-centered has-text-light" style="border-bottom: 4px solid #00D1B2; background: rgb(0,82,69);">
+        <p class="has-text-centered">
+            {{ chartName }}
+        </p>
     </div>
-    <div class="message-body">
+    <div class="panel-block has-text-light is-block" style="border-bottom: 2px solid #f5f5f5; background: rgb(0,82,69);">
+        <nav class="level is-fullwidth is-mobile">
+            <div class="level-item has-text-centered has-text-light">
+                <div>
+                    <p class="heading">Last Update</p>
+                    <a class="title has-text-light is-size-1">
+                        {{ updatetime|default:"10.05.2020" }}
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <div class="panel-block has-text-light" style="background: rgb(0,82,69);">
+    </div>
+    <div class="panel-block is-block">
         <canvas id="{{ chartID }}" width="400" height="300"></canvas>
     </div>
 </article>

@@ -1,11 +1,11 @@
-<article class="panel is-dark">
+<article class="panel is-dark" style="height: 100%;">
     <div class="panel-heading is-size-3 has-text-centered has-text-light" style="border-bottom: 4px solid #ffdd57">
         <p class="has-text-centered">
             Rankings
         </p>
     </div>
     <div class="panel-block has-text-light has-background-dark is-block" style="border-bottom: 2px solid #f5f5f5">
-        <nav class="level is-fullwidth">
+        <nav class="level is-fullwidth is-mobile">
             <div class="level-item has-text-centered has-text-light">
                 <div>
                     <p class="heading">My Average</p>
@@ -14,7 +14,7 @@
                     </a>
                 </div>
             </div>
-            <div>
+            <div class="is-hidden-mobile">
                 <span class="icon is-large is-size-4 has-text-warning">
                     <i class="fas fa-4x fa-trophy"></i>
                 </span>
@@ -31,132 +31,134 @@
     </div>
     <p class="panel-block has-text-light has-background-dark">
     </p>
-    <div class="panel-block is-block is-paddingless table-container">
-        <table class="table is-fullwidth is-size-5 is-hoverable is-striped">
-            <thead>
-            <tr class="is-bold" style="background: #fffbeb">
-                <th></th>
-                <th><abbr title="Student on this rank">Student</abbr></th>
-                <th><abbr title="Rank difference from last update">Difference</abbr></th>
-                <th><abbr title="Average from this course">Average</abbr></th>
-            </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th>#1</th>
-                    <td>
-                        <span>Michał Krawczyk</span>
-                        <span class="is-icon is-medium has-text-warning">
-                            <i class="fas fa-fw fa-lg fa-medal"></i>
-                        </span>
-                    </td>
-                    <td>
-                        <p class="has-text-success">
-                            <span class="is-icon is-medium is-pulled-left">
-                                <i class="fas fa-fg fa-caret-square-up"></i>
+    <div class="panel-block is-block is-paddingless">
+        <div class="table-container" >
+            <table class="table is-fullwidth is-size-5 is-hoverable is-striped">
+                <thead>
+                    <tr class="is-bold" style="background: #fffbeb">
+                        <th></th>
+                        <th><abbr title="Student on this rank">Student</abbr></th>
+                        <th><abbr title="Rank difference from last update">Difference</abbr></th>
+                        <th><abbr title="Average from this course">Average</abbr></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th>#1</th>
+                        <td>
+                            <span>Michał Krawczyk</span>
+                            <span class="is-icon is-medium has-text-warning">
+                                <i class="fas fa-fw fa-lg fa-medal"></i>
                             </span>
-                            <span>(+1)</span>
-                        </p>
-                    </td>
-                    <td>96%</td>
-                </tr>
-                <tr>
-                    <th>#2</th>
-                    <td>
-                        <span>Michał Krawczyk</span>
-                        <span class="is-icon is-medium has-text-grey-light">
-                            <i class="fas fa-fw fa-lg fa-medal"></i>
-                        </span>
-                    </td>
-                    <td>
-                        <p class="has-text-success">
-                            <span class="is-icon is-medium is-pulled-left">
-                                <i class="fas fa-fg fa-caret-square-up"></i>
+                        </td>
+                        <td>
+                            <p class="has-text-success">
+                                <span class="is-icon is-medium is-pulled-left">
+                                    <i class="fas fa-fg fa-caret-square-up"></i>
+                                </span>
+                                <span>(+1)</span>
+                            </p>
+                        </td>
+                        <td>96%</td>
+                    </tr>
+                    <tr>
+                        <th>#2</th>
+                        <td>
+                            <span>Michał Krawczyk</span>
+                            <span class="is-icon is-medium has-text-grey-light">
+                                <i class="fas fa-fw fa-lg fa-medal"></i>
                             </span>
-                            <span>(+1)</span>
-                        </p>
-                    </td>
-                    <td>93%</td>
-                </tr>
-                <tr>
-                    <th>#3</th>
-                    <td>
-                        <span>Michał Krawczyk</span>
-                        <span class="is-icon is-medium" style="color: #CD7F32">
-                            <i class="fas fa-fw fa-lg fa-medal"></i>
-                        </span>
-                    </td>
-                    <td>
-                        <p class="has-text-danger">
-                            <span class="is-icon is-medium is-pulled-left">
-                                <i class="fas fa-fg fa-caret-square-down"></i>
+                        </td>
+                        <td>
+                            <p class="has-text-success">
+                                <span class="is-icon is-medium is-pulled-left">
+                                    <i class="fas fa-fg fa-caret-square-up"></i>
+                                </span>
+                                <span>(+1)</span>
+                            </p>
+                        </td>
+                        <td>93%</td>
+                    </tr>
+                    <tr>
+                        <th>#3</th>
+                        <td>
+                            <span>Michał Krawczyk</span>
+                            <span class="is-icon is-medium" style="color: #CD7F32">
+                                <i class="fas fa-fw fa-lg fa-medal"></i>
                             </span>
-                            <span>(- 2)</span>
-                        </p>
-                    </td>
-                    <td>89%</td>
-                </tr>
-                <tr>
-                    <th>#4</th>
-                    <td>
-                        <span>Michał Krawczyk</span>
-                    </td>
-                    <td>
-                        <p class="has-text-danger">
-                            <span class="is-icon is-medium is-pulled-left">
-                                <i class="fas fa-fg fa-caret-square-down"></i>
-                            </span>
-                            <span>(- 2)</span>
-                        </p>
-                    </td>
-                    <td>88%</td>
-                </tr>
-                <tr>
-                    <th>#5</th>
-                    <td>
-                        <span>Michał Krawczyk</span>
-                    </td>
-                    <td>
-                        <p class="has-text-success">
-                            <span class="is-icon is-medium is-pulled-left">
-                                <i class="fas fa-fg fa-caret-square-up"></i>
-                            </span>
-                            <span>(+2)</span>
-                        </p>
-                    </td>
-                    <td>87%</td>
-                </tr>
-                <tr>
-                    <th>#6</th>
-                    <td>
-                        <span>Michał Krawczyk</span>
-                    </td>
-                    <td>
-                        <p class="has-text-danger">
-                            <span class="is-icon is-medium is-pulled-left">
-                                <i class="fas fa-fg fa-caret-square-down"></i>
-                            </span>
-                            <span>(- 1)</span>
-                        </p>
-                    </td>
-                    <td>84%</td>
-                </tr>
-                <tr>
-                    <th>#7</th>
-                    <td>
-                        <span>Michał Krawczyk</span>
-                    </td>
-                    <td>
-                        <p class="has-text-danger">
-                            <span class="is-icon is-medium is-pulled-left">
-                                <i class="fas fa-fg fa-caret-square-down"></i>
-                            </span>
-                            <span>(- 1)</span>
-                        </p>
-                    </td>
-                    <td>82%</td>
-                </tr>
-            </tbody>
-        </table>
+                        </td>
+                        <td>
+                            <p class="has-text-danger">
+                                <span class="is-icon is-medium is-pulled-left">
+                                    <i class="fas fa-fg fa-caret-square-down"></i>
+                                </span>
+                                <span>(- 2)</span>
+                            </p>
+                        </td>
+                        <td>89%</td>
+                    </tr>
+                    <tr>
+                        <th>#4</th>
+                        <td>
+                            <span>Michał Krawczyk</span>
+                        </td>
+                        <td>
+                            <p class="has-text-danger">
+                                <span class="is-icon is-medium is-pulled-left">
+                                    <i class="fas fa-fg fa-caret-square-down"></i>
+                                </span>
+                                <span>(- 2)</span>
+                            </p>
+                        </td>
+                        <td>88%</td>
+                    </tr>
+                    <tr>
+                        <th>#5</th>
+                        <td>
+                            <span>Michał Krawczyk</span>
+                        </td>
+                        <td>
+                            <p class="has-text-success">
+                                <span class="is-icon is-medium is-pulled-left">
+                                    <i class="fas fa-fg fa-caret-square-up"></i>
+                                </span>
+                                <span>(+2)</span>
+                            </p>
+                        </td>
+                        <td>87%</td>
+                    </tr>
+                    <tr>
+                        <th>#6</th>
+                        <td>
+                            <span>Michał Krawczyk</span>
+                        </td>
+                        <td>
+                            <p class="has-text-danger">
+                                <span class="is-icon is-medium is-pulled-left">
+                                    <i class="fas fa-fg fa-caret-square-down"></i>
+                                </span>
+                                <span>(- 1)</span>
+                            </p>
+                        </td>
+                        <td>84%</td>
+                    </tr>
+                    <tr>
+                        <th>#7</th>
+                        <td>
+                            <span>Michał Krawczyk</span>
+                        </td>
+                        <td>
+                            <p class="has-text-danger">
+                                <span class="is-icon is-medium is-pulled-left">
+                                    <i class="fas fa-fg fa-caret-square-down"></i>
+                                </span>
+                                <span>(- 1)</span>
+                            </p>
+                        </td>
+                        <td>82%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </article>

@@ -4,7 +4,7 @@
 <script src="{% static 'js/jsspectrum.min.js' %}"></script>
 {% comment %}https://gist.github.com/ibrechin/2489005#file-jsspectrum-js{% endcomment %}
 <script src="{% static 'js/functions.js' %}"></script>
-<article class="panel is-dark">
+<article class="panel is-dark" style="background: #f5f5f5;">
     <div class="panel-heading is-size-3 has-background-grey-dark" style="border-bottom: 2px solid #f5f5f5;">
         <p class="has-text-centered">
             {{ chartName }}
@@ -12,7 +12,7 @@
     </div>
     <p class="panel-block has-text-light has-background-grey-dark">
     </p>
-    <p class="panel-block is-block" style="background: #f5f5f5;">
+    <p class="panel-block is-block" style="padding-right: 8%">
         <canvas id="{{ chartID }}" width="400" height="300"></canvas>
     </p>
 </article>
