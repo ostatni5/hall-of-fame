@@ -37,29 +37,29 @@ class TabView(UserLecturerTestMixinView):
 
         groups = subject.groups.all()
 
-        groupsCtx = {}
+        groups_ctx = {}
         for group in groups:
-            groupsCtx[group.pk] = {}
-            groupsCtx[group.pk]["name"] = group.name
-            groupsCtx[group.pk]["scores"] = {}
+            groups_ctx[group.pk] = {}
+            groups_ctx[group.pk]["name"] = group.name
+            groups_ctx[group.pk]["scores"] = {}
 
             exercises = group.exercises.all()
             students = group.students.all()
-            groupsCtx[group.pk]["exercises"] = exercises.values()
-            groupsCtx[group.pk]["students"] = students.values()
+            groups_ctx[group.pk]["exercises"] = exercises.values()
+            groups_ctx[group.pk]["students"] = students.values()
 
-            groupsCtx[group.pk]["scores"]["sum"] = {}
+            groups_ctx[group.pk]["scores"]["sum"] = {}
             for student in group.students.all():
-                groupsCtx[group.pk]["scores"][student.pk] = {}
-                groupsCtx[group.pk]["scores"]["sum"][student.pk] = 0
+                groups_ctx[group.pk]["scores"][student.pk] = {}
+                groups_ctx[group.pk]["scores"]["sum"][student.pk] = 0
 
-            groupsCtx[group.pk]["max_score"] = 0
+            groups_ctx[group.pk]["max_score"] = 0
             for exercise in exercises:
-                groupsCtx[group.pk]["max_score"] += exercise.max_score
+                groups_ctx[group.pk]["max_score"] += exercise.max_score
                 for score in exercise.scores.all():
-                    groupsCtx[group.pk]["scores"][score.student.pk][score.exercise.pk] = model_to_dict(score)
-                    groupsCtx[group.pk]["scores"]["sum"][score.student.pk] += score.value
-        return subject, groupsCtx
+                    groups_ctx[group.pk]["scores"][score.student.pk][score.exercise.pk] = model_to_dict(score)
+                    groups_ctx[group.pk]["scores"]["sum"][score.student.pk] += score.value
+        return subject, groups_ctx
 
     def parse_score_name(self, score, value):
         (n, pk, s_id, e_id) = score.split('-')
@@ -98,14 +98,14 @@ class TabView(UserLecturerTestMixinView):
 
         print(update_scores, create_scores)
         msg = "SAVED"
-        subject, groupsCtx = self.getCtx()
+        subject, groups_ctx = self.getCtx()
         return render(request, self.template_name,
-                      {'groupsCtx': groupsCtx, "subject": subject, "msg": msg})
+                      {'groupsCtx': groups_ctx, "subject": subject, "msg": msg})
 
     def get(self, request, *args, **kwargs):
-        subject, groupsCtx = self.getCtx()
+        subject, groups_ctx = self.getCtx()
         return render(request, self.template_name,
-                      {'groupsCtx': groupsCtx, "subject": subject})
+                      {'groupsCtx': groups_ctx, "subject": subject})
 
 
 class StatView(View):
