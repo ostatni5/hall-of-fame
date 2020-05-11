@@ -1,17 +1,20 @@
+from django.db.models import Avg
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView
 from django.views.generic import TemplateView
 from django.views.generic import View
 
-from hallOfFameClient.models import Student, Subject, StudentScore, Exercise
+from hallOfFameClient.models import Student, Subject, StudentScore, Exercise, StatSubjectStudentScore
 from polls.views import DetailView
 
 color = "primary"
 user_type = "student"
 
+
 class RankingStudentView(TemplateView):
     def get_context_data(self, **kwargs):
         return "DETALE BITCH!"
+
     """
     Potrzeba:   <-- do tego trzeba ogarnąć Chart.js albo coś podobnego, więc to można później
         User,
@@ -36,15 +39,18 @@ class GroupStudentView(ListView):
     groupStudents = Student.objects.all()
 
     def get_context_data(self, **kwargs):
+        student = self.student
         context = super().get_context_data(**kwargs)
         context['username'] = self.student.name + " " + self.student.surname
         context['subject'] = get_object_or_404(Subject, id=self.kwargs.get('sub_id', None))
-        context['myAverage'] = "88"
+        context['myAverage'] = StatSubjectStudentScore.objects.filter(student=student). \
+            agreggate(avg=Avg('mean_value'))['avg']
         context['myRanking'] = "15"
         context['groupStudents'] = self.groupStudents
         context['userType'] = user_type
         context['primaryColor'] = color
         return context
+
     """
     Potrzeba:
         User,
@@ -84,6 +90,7 @@ class DashboardStudentView(ListView):
             context['diagramLabel'].append(score.exercise.name)
             context['diagramData'].append(score.value)
         return context
+
     """
     Potrzeba:
         User,
@@ -100,6 +107,7 @@ class DashboardStudentView(ListView):
 
 class LoginStudentView(TemplateView):
     template_name = 'hallOfFameClient/login_student.html'
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['userType'] = user_type

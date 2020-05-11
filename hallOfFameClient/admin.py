@@ -27,6 +27,11 @@ class GroupAdmin(admin.ModelAdmin):
             return super().get_queryset(request)
         return request.user.lecturer.groups
 
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "subject":
+            kwargs["queryset"] = request.user.lecturer.subjects
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
 
 class GroupInline(admin.StackedInline):
     filter_horizontal = ('students', 'lecturers')
