@@ -16,14 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
-from hallOfFameClient.admin import lecturer_admin_site, default_admin_site
+from HallOfFame.admin import default_admin_site
+from hallOfFameClient.admin import lecturer_admin_site
 
 urlpatterns = [
     path('', include('hallOfFameWorld.urls')),
-    # path('', include('hallOfFameClient.urls')),
     path('student/', include('hallOfFameStudent.urls')),
     path('polls/', include('polls.urls')),
     path('admin/', default_admin_site.urls, name="admin"),
-    path('lecturer/', lecturer_admin_site.urls, name="lecturer"),
-    path('lecturer/', include('hallOfFameClient.urls'))  # Felt cute, might delete later
+    path('lecturer/', lecturer_admin_site.urls, name="lecturer")
 ]

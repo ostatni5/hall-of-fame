@@ -12,6 +12,7 @@ from hallOfFameClient.models import StudentScore, Exercise
 from hallOfFameClient.models import Subject, Student, Lecturer, Group
 from HallOfFame.permissions import isLecturer, canAccessSubject, canUpdateScore, canInsertScore
 
+
 class UserLecturerTestMixinView(LoginRequiredMixin, UserPassesTestMixin, View):
     login_url = '/lecturer/login/'
 
@@ -26,14 +27,14 @@ class TabView(UserLecturerTestMixinView):
     template_name = 'hallOfFameClient/tab.html'
 
     def test_func(self):
-        flag = super().test_func()
         user = self.request.user
-        subject = Subject.objects.first()
-        flag = flag and canAccessSubject(user, subject.pk)
-        return flag
+        subject = Subject.objects.filter(pk=self.kwargs['pk']).first()
+        if subject is None:
+            return False
+        return super().test_func() and canAccessSubject(user, subject.pk)
 
-    def getCtx(self):
-        subject = Subject.objects.first()
+    def get_ctx(self):
+        subject = Subject.objects.get(pk=self.kwargs['pk'])
 
         groups = subject.groups.all()
 
@@ -98,12 +99,12 @@ class TabView(UserLecturerTestMixinView):
 
         print(update_scores, create_scores)
         msg = "SAVED"
-        subject, groups_ctx = self.getCtx()
+        subject, groups_ctx = self.get_ctx()
         return render(request, self.template_name,
                       {'groupsCtx': groups_ctx, "subject": subject, "msg": msg})
 
     def get(self, request, *args, **kwargs):
-        subject, groups_ctx = self.getCtx()
+        subject, groups_ctx = self.get_ctx()
         return render(request, self.template_name,
                       {'groupsCtx': groups_ctx, "subject": subject})
 
@@ -123,24 +124,35 @@ class StatView(View):
                       {"stat": self.stat, "stat2": self.stat2})
 
 
-class DashboardLecturerView(UserLecturerTestMixinView, ListView):
+class DashboardLecturerView(UserLecturerTestMixinView, View):
     template_name = 'hallOfFameClient/dashboard_lecturer.html'
-
-    model = Group
 
     # paginate_by = 100  # if pagination is desired
 
     def get_context_data(self, **kwargs):
         lecturer = self.request.user.lecturer
-        context = super().get_context_data(**kwargs)
+        context = {}
         context['lecturer'] = lecturer
         context['username'] = lecturer.name + " " + lecturer.surname
         context['subjects'] = lecturer.subjects.all()
+        context['groups'] = lecturer.groups.all()
         context[
             'diagramUrl'] = "https://media.discordapp.net/attachments/689977881535053839/701202475906236456/unknown.png"
-        context['myAverage'] = "88"
-        context['semesterAverage'] = "76"
+
+        groups_by_sub = {}
+
+        for g in context['groups']:
+            if g.subject.pk in groups_by_sub:
+                groups_by_sub[g.subject.pk].append(g)
+            else:
+                groups_by_sub[g.subject.pk] = [g]
+
+        context['groups_by_sub'] = groups_by_sub
+        print(context)
         return context
+
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name, self.get_context_data())
 
 
 """

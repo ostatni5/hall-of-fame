@@ -1,5 +1,5 @@
 {% extends 'hallOfFameClient/base.html' %}
-{% load static %}
+{% load static hallOfFame_extra %}
 {% block title %}Dashboard{% endblock %}
 {% block brand %}
     <div class="navbar-brand">
@@ -32,12 +32,13 @@
                         <p class="panel-heading ">
                             {{ sub.name }}
                         </p>
+                        <a href=" {% url "lecturer:hallOfFameClient_subject_change" sub.pk %}">Edit</a>
                         <p class="panel-block subtitle">
                             {{ sub.description }}
                         </p>
                         <div class="panel-block columns is-centered">
                             <div class="column is-four-fifths">
-                                {% include 'hallOfFameClient/lecturer_groups_panel.html' with groups=object_list %}
+                                {% include 'hallOfFameClient/lecturer_groups_panel.html' with groups=groups_by_sub|key:sub.pk %}
                             </div>
                         </div>
                     </article>
