@@ -1,12 +1,71 @@
 {% extends "admin/base.html" %}
 {% load static %}
-{% block extrastyle %}{{ block.super }}
-    <link rel="stylesheet" type="text/css" href="{% static "admin/LecturerStyle.css" %}"/>{% endblock %}
+{#{% load define_action %}#}
+{#{% define "info" as primaryColor %}#}
+{#{% block extrastyle %}{{ block.super }}#}
+{#    <link rel="stylesheet" type="text/css" href="{% static "admin/LecturerStyle.css" %}"/>{% endblock %}#}
 
 {% block title %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+{% block herotitle %}{{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block hero %}
+  {% with 'info' as primaryColor %}
+  {{block.super}}
+  {% endwith %}
+{% endblock %}
 
 {% block branding %}
-    <h1 id="site-name"><a href="{% url 'admin:index' %}">{{ site_header|default:_('Django administration') }}</a></h1>
+    <div class="navbar-brand">
+        <a href="#" class="navbar-item">
+            <img src="{% static 'img/ostatniLearningInfo.png' %}" alt="Logo">
+        </a>
+    </div>
+{% endblock %}
+
+{% block usertools %}
+    {% if has_permission %}
+    <div class="navbar-menu">
+        <div class="navbar-end">
+            <div class="navbar-item has-text-light">
+                <span class="is-size-5" style="margin-right: .5rem">
+                    <span>Welcome,</span>
+                    <strong>{% firstof user.get_short_name user.get_username %}</strong>
+                </span>
+            </div>
+            {% if user.has_usable_password %}
+            <a href="{% url 'admin:password_change' %}" class="navbar-item has-text-light">
+                <span class="is-size-5" style="margin-right: .5rem">
+                    Change password
+                </span>
+                <span class="icon">
+                    <i class="fas fa-lg fa-user-cog"></i>
+                </span>
+            </a>
+            {% endif %}
+            <span class="navbar-item">
+                <a href="{% url 'admin:logout' %}" class="button is-{{ primaryColor }} is-inverted">
+                    <span class="icon">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </span>
+                    <span>Sign out</span>
+                </a>
+            </span>
+        </div>
+    </div>
+    {% endif %}
 {% endblock %}
 
 {% block nav-global %}{% endblock %}
+
+{% block breadcrumbs %}
+    <section style="padding: 1rem" class="section card">
+        <div class="container">
+            <nav class="breadcrumb is-medium" aria-label="breadcrumbs">
+                <ul>
+                    <li class=""><a href="{% url 'admin:index' %}" aria-current="page">Home</a></li>
+                    {% if title %}<li class="is-active"><a>{{ title }}</a></li>{% endif %}
+                </ul>
+            </nav>
+        </div>
+    </section>
+{% endblock %}
