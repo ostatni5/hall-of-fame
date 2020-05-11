@@ -3,13 +3,13 @@
 {% block title %}Dashboard{% endblock %}
 {% block brand %}
     <div class="navbar-brand">
-{#        {% if color == "is-primary" %}#}
+        {#        {% if color == "is-primary" %}#}
         <a href="{% url "student:dashboard" %}" class="navbar-item">
             <img src="{% static 'img/ostatniLearningPrimary.png' %}" alt="Logo">
-{#        {% else %}#}
-{#        <a href="#" class="navbar-item">#}
-{#            <img src="{% static 'img/ostatniLearningInfo.png' %}" alt="Logo">#}
-{#        {% endif %}#}
+            {#        {% else %}#}
+            {#        <a href="#" class="navbar-item">#}
+            {#            <img src="{% static 'img/ostatniLearningInfo.png' %}" alt="Logo">#}
+            {#        {% endif %}#}
         </a>
     </div>
 {% endblock %}
@@ -19,13 +19,12 @@
         <div class="container">
             <nav class="breadcrumb is-medium" aria-label="breadcrumbs">
                 <ul>
-                    <li class="is-active"><a href="#" aria-current="page">dashboard</a></li>
+                    <li class="is-active"><a href="#" aria-current="page">Home</a></li>
                     <li class="is-active"><a href="#"></a></li>
                 </ul>
             </nav>
         </div>
     </section>
-{#    {% include 'hallOfFameClient/user_hero.html' with username=username color="is-primary" pageName="My Dashboard" %}#}
 {% endblock %}
 {% block content %}
     <section
@@ -33,11 +32,11 @@
             class="section">
         <div class="columns">
             <div class="column is-6 is-offset-1">
-                {% include 'hallOfFameClient/student_subject_panel.html' with subjects=object_list %}
+                {% include 'hallOfFameClient/student_subject_panel.html' with courses=courses total_ETCS=total_ETCS %}
             </div>
             <div class="column is-4">
-                {% include 'hallOfFameClient/vertical_bars_chart.html' with chartName="Last 5 grades" chartID="notesChart" chartData=diagramData chartLabel=diagramLabel %}
-                {% include 'hallOfFameClient/student_statistics_panel.html' %}
+                {% include 'hallOfFameClient/vertical_bars_chart.html' with chart_name="Last 5 grades" chart_ID="scoreChart" chart_data=score_diagram %}
+                {% include 'hallOfFameClient/student_statistics_panel.html' with averages=averages %}
             </div>
         </div>
     </section>

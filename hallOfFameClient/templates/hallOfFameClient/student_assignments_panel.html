@@ -1,7 +1,7 @@
 <article class="panel is-danger" style="height: 100%">
     <p class="panel-heading is-size-3 navbar has-shadow has-text-centered has-text-light">
             <span style="width: 100%; text-align: center;">
-                Group {{ groupName }}
+                Group {{ group_name }}
             </span>
     </p>
     <p class="panel-block has-text-light has-background-danger">
@@ -20,170 +20,44 @@
             <span>Pending Assignments</span>
         </a>
     </p>
-    <a class="panel-block is-block">
-        <nav class="level is-fullwidth">
-            <div class="level-item column is-one-fifth is-vcentered">
-                <span>
-                    <i class="far fa-flag" aria-hidden="true"></i>
-                </span>
-                <span>
-                    Exercise 1
-                </span>
-            </div>
-            <div class="level-item has-text-centered">
-                <div>
-                    <p class="heading">Note</p>
-                    <p class="title">
-                        4
-                    </p>
+    {% for score in exercises %}
+    {% with exe=score.exercise %}
+        <a class="panel-block is-block">
+            <nav class="level is-fullwidth">
+                <div class="level-item column is-one-fifth is-vcentered">
+                    <span>
+                        <i class="far fa-flag" aria-hidden="true"></i>
+                    </span>
+                    <span>
+                        Exercise: {{ exe.name }}
+                    </span>
                 </div>
-            </div>
-            <div class="level-item has-text-centered">
-                <div>
-                    <p class="heading">Percentage</p>
-                    <p class="title">
-                        80%
-                    </p>
+                <div class="level-item has-text-centered">
+                    <div>
+                        <p class="heading">Note</p>
+                        <p class="title">
+                            {{ score.value }}
+                        </p>
+                    </div>
                 </div>
-            </div>
-        </nav>
-    </a>
-    <a class="panel-block is-block">
-        <nav class="level is-fullwidth">
-            <div class="level-item column is-one-fifth">
-                <span>
-                    <i class="far fa-flag" aria-hidden="true"></i>
-                </span>
-                <span>
-                    Exercise 2
-                </span>
-            </div>
-            <div class="level-item has-text-centered">
-                <div>
-                    <p class="heading">Note</p>
-                    <p class="title">
-                        4.5
-                    </p>
+                <div class="level-item has-text-centered">
+                    <div>
+                        <p class="heading">Percentage</p>
+                        <p class="title">
+                            {{ exe.max_score }}
+                        </p>
+                    </div>
                 </div>
-            </div>
-            <div class="level-item has-text-centered">
-                <div>
-                    <p class="heading">Percentage</p>
-                    <p class="title">
-                        90%
-                    </p>
+            </nav>
+        </a>
+    {% endwith %}
+    {% empty %}
+        <a class="panel-block is-block">
+            <nav class="level is-fullwidth">
+                <div class="level-item">
+                    <h1 class="subtitle">No exercises yet.</h1>
                 </div>
-            </div>
-        </nav>
-    </a>
-    <a class="panel-block is-block">
-        <nav class="level is-fullwidth">
-            <div class="level-item column is-one-fifth">
-                <span>
-                    <i class="far fa-flag" aria-hidden="true"></i>
-                </span>
-                <span>
-                    Exercise 3
-                </span>
-            </div>
-            <div class="level-item has-text-centered">
-                <div>
-                    <p class="heading">Note</p>
-                    <p class="title">
-                        4
-                    </p>
-                </div>
-            </div>
-            <div class="level-item has-text-centered">
-                <div>
-                    <p class="heading">Percentage</p>
-                    <p class="title">
-                        80%
-                    </p>
-                </div>
-            </div>
-        </nav>
-    </a><a class="panel-block is-block">
-        <nav class="level is-fullwidth">
-            <div class="level-item column is-one-fifth">
-                <span>
-                    <i class="far fa-flag" aria-hidden="true"></i>
-                </span>
-                <span>
-                    Exercise 4
-                </span>
-            </div>
-            <div class="level-item has-text-centered">
-                <div>
-                    <p class="heading">Note</p>
-                    <p class="title">
-                        3.5
-                    </p>
-                </div>
-            </div>
-            <div class="level-item has-text-centered">
-                <div>
-                    <p class="heading">Percentage</p>
-                    <p class="title">
-                        70%
-                    </p>
-                </div>
-            </div>
-        </nav>
-    </a>
-    <a class="panel-block is-block">
-        <nav class="level is-fullwidth">
-            <div class="level-item column is-one-fifth">
-                <span>
-                    <i class="far fa-flag" aria-hidden="true"></i>
-                </span>
-                <span>
-                    Test 1
-                </span>
-            </div>
-            <div class="level-item has-text-centered">
-                <div>
-                    <p class="heading">Note</p>
-                    <p class="title">
-                        3
-                    </p>
-                </div>
-            </div>
-            <div class="level-item has-text-centered">
-                <div>
-                    <p class="heading">Percentage</p>
-                    <p class="title">
-                        50%
-                    </p>
-                </div>
-            </div>
-        </nav>
-    </a><a class="panel-block is-block">
-        <nav class="level is-fullwidth">
-            <div class="level-item column is-one-fifth">
-                <span>
-                    <i class="far fa-flag" aria-hidden="true"></i>
-                </span>
-                <span>
-                    Exercise 5
-                </span>
-            </div>
-            <div class="level-item has-text-centered">
-                <div>
-                    <p class="heading">Note</p>
-                    <p class="title">
-                        3.5
-                    </p>
-                </div>
-            </div>
-            <div class="level-item has-text-centered">
-                <div>
-                    <p class="heading">Percentage</p>
-                    <p class="title">
-                        80%
-                    </p>
-                </div>
-            </div>
-        </nav>
-    </a>
+            </nav>
+        </a>
+    {% endfor %}
 </article>

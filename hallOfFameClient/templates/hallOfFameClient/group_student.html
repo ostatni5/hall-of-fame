@@ -15,7 +15,7 @@
         <div class="container">
             <nav class="breadcrumb is-medium" aria-label="breadcrumbs">
                 <ul>
-                    <li><a href="{% url 'student:dashboard' %}" aria-current="page">dashboard</a></li>
+                    <li><a href="{% url 'student:dashboard' %}" aria-current="page">Home</a></li>
                     <li class="is-active"><a href="#" aria-current="page">{{ subject.name }}</a></li>
                     <li class="is-active"><a href="#"></a></li>
                 </ul>
@@ -29,7 +29,7 @@
             class="section">
         <div class="columns">
             <div class="column is-4 is-offset-1">
-                {% include 'hallOfFameClient/student_assignments_panel.html' with groupName="2BC" %}
+                {% include 'hallOfFameClient/student_assignments_panel.html' with group_name="2BC" exercises=group_exercises %}
             </div>
             <div class="column is-6">
                 {% include 'hallOfFameClient/group_ranks_panel.html' %}
@@ -37,7 +37,7 @@
         </div>
         <div class="columns">
             <div class="column is-10 is-offset-1">
-                {% include 'hallOfFameClient/group_ranks_chart.html' with chartName="Group Ranking Timeline" chartID="rankChart" %}
+                {% include 'hallOfFameClient/group_ranks_chart.html' with chart_name="Group Ranking Timeline" chart_ID="rankChart" %}
             </div>
         </div>
     </section>

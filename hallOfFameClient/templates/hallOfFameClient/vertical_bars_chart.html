@@ -7,13 +7,13 @@
 <article class="panel is-dark" style="background: #f5f5f5;">
     <div class="panel-heading is-size-3 has-background-grey-dark" style="border-bottom: 2px solid #f5f5f5;">
         <p class="has-text-centered">
-            {{ chartName }}
+            {{ chart_name }}
         </p>
     </div>
     <p class="panel-block has-text-light has-background-grey-dark">
     </p>
     <p class="panel-block is-block" style="padding-right: 8%">
-        <canvas id="{{ chartID }}" width="400" height="300"></canvas>
+        <canvas id="{{ chart_ID }}" width="400" height="300"></canvas>
     </p>
 </article>
 {#<article class="message is-darker">#}
@@ -24,11 +24,11 @@
 {#    </div>#}
 {#</article>#}
 <script>
-var ctx = document.getElementById('{{ chartID }}').getContext('2d');
+var ctx = document.getElementById('{{ chart_ID }}').getContext('2d');
 
-var myData = {{ chartData|safe }}
-var myLabel = {{ chartLabel|safe }}
-var subjects = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','r','s','t']
+var myData = {{ chart_data.data|safe }}
+var myLabel = {{ chart_data.labels|safe }}
+var subjects = {{ chart_data.subjects|safe }}
 
 var d = new Date('2010-08-05')
 // convert date to pretty format

@@ -5,6 +5,6 @@ from hallOfFameStudent.views import DashboardStudentView, GroupStudentView, Logi
 app_name = 'student'
 urlpatterns = [
     path('', DashboardStudentView.as_view(), name='dashboard'),
-    path('subject/<int:sub_id>', GroupStudentView.as_view(), name='subject'),
+    path('subject/<int:course_id>', GroupStudentView.as_view(), name='subject'),
     path('login',LoginStudentView.as_view(),name='login')
 ]

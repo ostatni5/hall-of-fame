@@ -10,7 +10,7 @@
                 <div>
                     <p class="heading">My Courses</p>
                     <a class="title has-text-light is-size-1">
-                        {{ subjects|length }}
+                        {{ courses|length }}
                     </a>
                 </div>
             </div>
@@ -23,7 +23,7 @@
                 <div>
                     <p class="heading">Total ETCS</p>
                     <a class="title has-text-light is-size-1">
-                        {{ totaletcs|default:30 }}
+                        {{ total_ETCS|default:69 }}
                     </a>
                 </div>
             </div>
@@ -38,15 +38,17 @@
                 <th></th>
                 <th><abbr title="Name of the subject">Subject</abbr></th>
                 <th><abbr title="Description of the subject">Description</abbr></th>
+                <th><abbr title="Your course group">Group</abbr></th>
                 <th><abbr title="ETCS points value">ETCS</abbr></th>
             </tr>
             </thead>
             <tbody>
-            {% for sub in subjects %}
+            {% for course in courses %}
+                {% with sub=course.subject %}
                 <tr>
                     <th>{{ forloop.counter }}</th>
                     <td class="is-paddingless is-fullheight">
-                        <a href="{% url 'student:subject' sub.id %}" style="background: none; border: none;"
+                        <a href="{% url 'student:subject' course.id %}" style="background: none; border: none;"
                            class="has-text-left button is-block is-fullheight is-fullwidth is-radiusless">
                             {{ sub.name }}
                         </a>
@@ -55,9 +57,13 @@
                         <p class="is-info">{{ sub.description }}</p>
                     </td>
                     <td>
+                        <p class="is-info">{{ course.name }}</p>
+                    </td>
+                    <td>
                         <p class="is-info">{{ sub.etcs }}</p>
                     </td>
                 </tr>
+                {% endwith %}
             {% empty %}
                 <tr>
                     <td colspan="3">

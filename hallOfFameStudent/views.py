@@ -4,7 +4,7 @@ from django.views.generic import ListView
 from django.views.generic import TemplateView
 from django.views.generic import View
 
-from hallOfFameClient.models import Student, Subject, StudentScore, Exercise, StatSubjectStudentScore
+from hallOfFameClient.models import Student, Subject, StudentScore, Exercise, StatSubjectStudentScore, Group
 from polls.views import DetailView
 
 color = "primary"
@@ -12,9 +12,16 @@ user_type = "student"
 
 
 class RankingStudentView(TemplateView):
+
+    """ ------------------------------TUTAJ SZYMON TO MI DAJ------------------------------- """
+    student = Student.objects.filter(album_number=213700).first()   #Aktualny user
+    compare_groups = []                                             #Grupy Usera
+    compare_my_averages = []                                        #Moje średnie w grupach
+    compare_group_averages = []                                     #Średnie tych grup
+    group_ranking = Student.objects.all()                           #Lista osób z grupy
+
     def get_context_data(self, **kwargs):
         return "DETALE BITCH!"
-
     """
     Potrzeba:   <-- do tego trzeba ogarnąć Chart.js albo coś podobnego, więc to można później
         User,
@@ -22,89 +29,82 @@ class RankingStudentView(TemplateView):
                 Lista grup Usera,
                 Średnia w danej grupie
                 Średnia z przedmiotu ogólna
-        Lista rankingu osób w Roczniku
-                User
-                Średnia całkowita
-                Miejsce w rankingu (egzekwo mają to samo miejsce)
-        Dane do wykresu RANKING W CZASIE 
-                kolejność w rankingu w danym miesiącu
-                średnia pw danym miesiącu
     """
 
 
 class GroupStudentView(TemplateView):
     template_name = 'hallOfFameClient/group_student.html'
+
+    """ ------------------------------TUTAJ SZYMON TO MI DAJ------------------------------- """
+    student = Student.objects.filter(album_number=213700).first()   #Aktualny user
+    checked_exercises = StudentScore.objects.all()                  #Oceny za zadania w grupie
+    pending_exercises = Exercise.objects.all()                      #Nieocenione zadania
+    group_ranking = Student.objects.all()                           #Lista osób z grupy
+                                                                    # + ewentualnie rangi
+    my_average = 88                                                 #Moja średnia w grupie
+    my_ranking = 15                                                 #Pozycja egzekwo w rankingu
+
+    cos_do_wykresu_zmiany_rangi_w_czasie_ale_nie_wiem_w_jakiej_formie = 2137
+
+
     student = Student.objects.filter(album_number=213700).first()
-    # model = StudentScore
     group_students = Student.objects.all()
     group_exercises = Exercise.objects.all()
 
     def get_context_data(self, **kwargs):
-        student = self.student
+        group = get_object_or_404(Group, id=self.kwargs.get('course_id', None))
         context = super().get_context_data(**kwargs)
         context['username'] = self.student.name + " " + self.student.surname
-        context['subject'] = get_object_or_404(Subject, id=self.kwargs.get('sub_id', None))
-        context['myaverage'] = "88"#StatSubjectStudentScore.objects.filter(student=student). \
+        context['subject'] = group.subject
+        context['my_average'] = "88"#StatSubjectStudentScore.objects.filter(student=student). \
             #agreggate(avg=Avg('mean_value'))['avg']
-        context['myranking'] = "15"
-        context['groupstudents'] = self.group_students
-        context['groupexercises'] = self.group_exercises
-        context['usertype'] = user_type
-        context['primaryColor'] = color
+        context['my_ranking'] = self.my_ranking
+        context['group_students'] = self.group_ranking
+        context['group_exercises'] = self.checked_exercises
+        context['user_type'] = user_type
+        context['primary_color'] = color
         return context
 
     """
     Potrzeba:
-        User,
-        Grupa o id 'sub_id', <-- nazwę zmienię potem, bo teraz to jest id przedmiotu, ale zmieni się to 
-        Twoja średnia w grupie (z przedmiotu), 
-        Twój ranking (egzekwo mają to samo miejsce)
-        Lista ocen z zadań na zajęciach
-                wszystkie dane z zadania
-                ocena
-                procentowo
-        Lista rankingu osób w grupie
-                User
-                Średnia
-                Miejsce w rankingu (egzekwo mają to samo miejsce)
         Dane do wykresu RANKING W CZASIE <-- do tego trzeba ogarnąć Chart.js albo coś podobnego, więc to można później
                 kolejność w rankingu po danym zadaniu
                 średnia po danym zadaniu
     """
 
 
-class DashboardStudentView(ListView):
+class DashboardStudentView(TemplateView):
     template_name = 'hallOfFameClient/dashboard_student.html'
-    student = Student.objects.filter(album_number=213700).first()
-    scores = StudentScore.objects.order_by('-date')[:5]
-    model = Subject
+
+    """ ------------------------------TUTAJ SZYMON TO MI DAJ------------------------------- """
+    student = Student.objects.filter(album_number=213700).first()   #Aktualny user
+    scores = StudentScore.objects.order_by('-date')[:8]             #Ostatnie N ocen
+    groups = Group.objects.all()                                    #MojeGrupy
+    my_average = 88                                                 #Moja średnia z całości
+    semester_average = 76                                           #Średnia z całości
+    total_ETCS = 30                                                 #Suma punktów z kursów
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['username'] = self.student.name + " " + self.student.surname
-        context['myAverage'] = "88"
-        context['semesterAverage'] = "76"
-        context['diagramLabel'] = []
-        context['diagramData'] = []
-        context['userType'] = user_type
-        context['primaryColor'] = color
+        context['averages'] = {
+            'my_average': self.my_average,
+            'semester_average': self.semester_average
+        }
+        context['courses'] = self.groups
+        context['total_ETCS'] = self.total_ETCS
+        context['score_diagram'] = {
+            'data': [],
+            'subjects': [],
+            'labels': []
+        }
+        context['user_type'] = user_type
+        context['primary_color'] = color
         for score in self.scores:
-            context['diagramLabel'].append(score.exercise.name)
-            context['diagramData'].append(score.value)
+            context['score_diagram']['labels'].append('Exercise: ' + score.exercise.name)
+            context['score_diagram']['data'].append(score.value)
+            context['score_diagram']['subjects'].append(score.exercise.group.subject.name)
         return context
-
-    """
-    Potrzeba:
-        User,
-        Średnia Usera (całkowita),
-        Średnia wszystkich na roku (całkowita),
-        Dane do wykresu <- to się później ustali
-        Lista grup w których ma zajęcia
-                Nazwa przedmiotu grupy
-                Nazwa grupy
-                opis krótki
-                ECTS
-    """
 
 
 class LoginStudentView(TemplateView):
@@ -112,6 +112,6 @@ class LoginStudentView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['userType'] = user_type
-        context['primaryColor'] = color
+        context['user_type'] = user_type
+        context['primary_color'] = color
         return context
