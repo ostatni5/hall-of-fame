@@ -126,3 +126,39 @@ def rankingSubject(subject_pk):
 
 def rankingGroup(group_pk):
     return StatGroupStudentScore.objects.filter(stat_group__group__pk=group_pk).order_by('-mean_value')
+
+
+def createRankingStudents(students_desc):
+    ranking, my_pos = createRankingStudentsAndMe(students_desc, -1)
+    return ranking
+
+
+def createRankingStudentsAndMe(students_desc, student_pk):
+    ranking = []
+    my_pos = -1
+    pos = 1
+    last = students_desc.first().mean_value
+    for student in students_desc:
+        if student.mean_value < last:
+            pos += 1
+        student.pos = pos
+        if student.pk == student_pk:
+            my_pos = pos
+        ranking.append(student)
+    return ranking, my_pos
+
+
+def splitArchiveRankingStudents(days_students_desc):
+    days = [days_students_desc.first().record.creation_date]
+    rankings = []
+    last_record = days_students_desc.first().record
+    ranking = []
+    for row in days_students_desc:
+        if row.record != last_record:
+            rankings.append(ranking)
+            days.append(row.record.creation_date)
+            ranking = [row]
+        else:
+            ranking.append(row)
+    rankings.append(ranking)
+    return rankings, days

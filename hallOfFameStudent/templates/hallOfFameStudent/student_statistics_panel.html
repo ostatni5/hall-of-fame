@@ -1,3 +1,4 @@
+{% load  hallOfFame_extra%}
 <article class="panel is-dark" style="background: #f5f5f5;">
     <div class="panel-heading is-size-3 has-background-grey-dark" style="border-bottom: 2px solid #f5f5f5;">
         <p class="has-text-centered">
@@ -13,13 +14,13 @@
             is-vertical">
                 <div style="padding-left: 0; padding-right: 0;" class="card notification">
                     <div class="container has-text-centered ">
-                        <p style="font-size: 5.2rem;" class="title">{{ averages.my_average }}%</p>
+                        <p style="font-size: 5.2rem;" class="title">{{ averages.my_average|roundTo:2 }}%</p>
                         <p class="subtitle">My Average</p>
                     </div>
                 </div>
                 <div style="padding-left: 0; padding-right: 0;" class="card notification">
                     <div class="container has-text-centered">
-                        <p style="font-size: 3.5rem" class="title">{{ averages.semester_average }}%</p>
+                        <p style="font-size: 3.5rem" class="title">{{ averages.semester_average|roundTo:2 }}%</p>
                         <p class="subtitle is-6">Overall Average</p>
                     </div>
                 </div>

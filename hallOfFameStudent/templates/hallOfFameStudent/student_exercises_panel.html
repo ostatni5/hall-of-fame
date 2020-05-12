@@ -1,3 +1,4 @@
+{% load hallOfFame_extra %}
 <article class="panel is-danger" style="height: 100%">
     <p class="panel-heading is-size-3 navbar has-shadow has-text-centered has-text-light">
             <span style="width: 100%; text-align: center;">
@@ -44,7 +45,7 @@
                     <div>
                         <p class="heading">Percentage</p>
                         <p class="title">
-                            {{ exe.max_score }}
+                            {{  score.value|percent:exe.max_score|roundTo:2 }}%
                         </p>
                     </div>
                 </div>
