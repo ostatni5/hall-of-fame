@@ -1,23 +1,26 @@
-from django.db.models import Avg
+from django.db.models import Avg, Sum
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import TemplateView
 
-from hallOfFameClient.models import Student, Subject, StudentScore, Exercise, StatSubjectStudentScore, Group
+from hallOfFameClient.models import Student, Subject, StudentScore, Exercise, StatSubjectStudentScore, Group, \
+    StatGroupStudentScore, ArchiveGroupStudentScore
+from hallOfFameClient.stats.utility import createRankingStudents, createRankingStudentsAndMe, \
+    splitArchiveRankingStudents
 
 color = "primary"
 user_type = "student"
 
 
 class RankingStudentView(TemplateView):
-
     """ ------------------------------TUTAJ SZYMON TO MI DAJ------------------------------- """
-    student = Student.objects.filter(album_number=213700).first()   #Aktualny user
-    compare_groups = []                                             #Grupy Usera
-    compare_my_averages = []                                        #Moje średnie w grupach
-    compare_group_averages = []                                     #Średnie tych grup
+    student = Student.objects.filter(album_number=213700).first()  # Aktualny user
+    compare_groups = []  # Grupy Usera
+    compare_my_averages = []  # Moje średnie w grupach
+    compare_group_averages = []  # Średnie tych grup
 
     def get_context_data(self, **kwargs):
         return "DETALE BITCH!"
+
     """
     Potrzeba:   <-- do tego trzeba ogarnąć Chart.js albo coś podobnego, więc to można później
         User,
@@ -31,63 +34,68 @@ class RankingStudentView(TemplateView):
 class GroupStudentView(TemplateView):
     template_name = 'hallOfFameStudent/group_student.html'
 
-    """ ------------------------------TUTAJ SZYMON TO MI DAJ------------------------------- """
-    student = Student.objects.filter(album_number=213700).first()   #Aktualny user
-    checked_exercises = StudentScore.objects.all()                  #Oceny za zadania w grupie
-    pending_exercises = Exercise.objects.all()                      #Nieocenione zadania
-    group_ranking = Student.objects.all()                           #Lista osób z grupy
-                                                                    # + ewentualnie rangi
-    my_average = StatSubjectStudentScore.objects.filter(student=student). \
-        aggregate(avg=Avg('mean_value'))['avg']                     #Moja średnia w grupie
-    my_ranking = 15                                                 #Pozycja egzekwo w rankingu
-
-    cos_do_wykresu_zmiany_rangi_w_czasie_ale_nie_wiem_w_jakiej_formie = 2137
-
-    student = Student.objects.filter(album_number=213700).first()
-    group_students = Student.objects.all()
-    group_exercises = Exercise.objects.all()
-
     def get_context_data(self, **kwargs):
+        student = Student.objects.filter(album_number=213700).first()
         group = get_object_or_404(Group, id=self.kwargs.get('course_id', None))
+        checked_exercises = student.scores.filter(exercise__group=group)
+        # niechleuj -------------------------------------------------------
+        pending_exercises = Exercise.objects.all()
+        group_students = StatGroupStudentScore.objects.filter(stat_group__group=group).order_by('-mean_value').all()
+        group_ranking, my_ranking = createRankingStudentsAndMe(group_students, student.pk)  # obj.pos
+
+        my_average = checked_exercises.aggregate(avg=Avg('value'))['avg']
+
+        cos_do_wykresu_zmiany_rangi_w_czasie_ale_nie_wiem_w_jakiej_formie = 2137
+
+        arch_group_students = ArchiveGroupStudentScore.objects.filter(group=group).order_by('-record__creation_date',
+                                                                                            '-mean_value').all()
+
+        arch_group_students_s, days = splitArchiveRankingStudents(arch_group_students)
+        arch_group_ranking, arch_my_ranking = ([], [])
+        for arch_group in arch_group_students_s:
+            ranking, my = createRankingStudentsAndMe(arch_group, student.pk)
+            arch_group_ranking.append(ranking)
+            arch_my_ranking.append(my)
+
         context = super().get_context_data(**kwargs)
-        context['username'] = self.student.name + " " + self.student.surname
+        context['username'] = student.name + " " + student.surname
         context['subject'] = group.subject
-        context['my_average'] = self.my_average
-        context['my_ranking'] = self.my_ranking
-        context['group_students'] = self.group_ranking
-        context['group_exercises'] = self.checked_exercises
+        context['my_average'] = my_average
+        context['my_ranking'] = my_ranking
+        context['group_students'] = group_ranking
+        context['group_exercises'] = checked_exercises
         context['user_type'] = user_type
         context['primary_color'] = color
         return context
 
-    """
-    Potrzeba:
-        Dane do wykresu RANKING W CZASIE <-- do tego trzeba ogarnąć Chart.js albo coś podobnego, więc to można później
-                kolejność w rankingu po danym zadaniu
-                średnia po danym zadaniu
-    """
+
+"""
+Potrzeba:
+    Dane do wykresu RANKING W CZASIE <-- do tego trzeba ogarnąć Chart.js albo coś podobnego, więc to można później
+            kolejność w rankingu po danym zadaniu
+            średnia po danym zadaniu
+"""
 
 
 class DashboardStudentView(TemplateView):
     template_name = 'hallOfFameStudent/dashboard_student.html'
 
-    """ ------------------------------TUTAJ SZYMON TO MI DAJ--------------------------------------- """
-    student = Student.objects.filter(album_number=213700).first()   #Aktualny user
-    scores = StudentScore.objects.order_by('-date')[:12][::-1]       #Ostatnie N ocen
-    groups = Group.objects.all()                                    #MojeGrupy
-    my_average = 88                                                 #Moja średnia z całości
-    semester_average = 76                                           #Średnia z całości
-    total_ETCS = 30                                                 #Suma punktów z kursów
-
     def get_context_data(self, **kwargs):
+        student = Student.objects.filter(album_number=213700).first()
+        scores = student.scores.all().order_by('-date')[:12][::-1]
+        groups = student.groups.all()
+        my_average = StatSubjectStudentScore.objects.filter(student=student).aggregate(avg=Avg('mean_value'))['avg']
+        semester_average = StatSubjectStudentScore.objects.aggregate(avg=Avg('mean_value'))['avg']
+        total_ETCS = student.groups.values('subject').distinct().aggregate(etcs=Sum('subject__etcs'))['etcs']
+
         context = super().get_context_data(**kwargs)
-        context['username'] = self.student.name + " " + self.student.surname
+        context['username'] = student.name + " " + student.surname
         context['averages'] = {
-            'my_average': self.my_average,
-            'semester_average': self.semester_average
+            'my_average': my_average,
+            'semester_average': semester_average
         }
-        context['courses'] = self.groups
-        context['total_ETCS'] = self.total_ETCS
+        context['courses'] = groups
+        context['total_ETCS'] = total_ETCS
         context['score_diagram'] = {
             'label': [],
             'percentage': [],
@@ -98,9 +106,9 @@ class DashboardStudentView(TemplateView):
         }
         context['user_type'] = user_type
         context['primary_color'] = color
-        for score in self.scores:
+        for score in scores:
             context['score_diagram']['label'].append('Exercise: ' + score.exercise.name)
-            context['score_diagram']['percentage'].append((score.value*100.0)/score.exercise.max_score)
+            context['score_diagram']['percentage'].append((score.value * 100.0) / score.exercise.max_score)
             context['score_diagram']['score'].append(score.value)
             context['score_diagram']['max_score'].append(score.exercise.max_score)
             context['score_diagram']['date'].append(score.date)

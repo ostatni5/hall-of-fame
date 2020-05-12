@@ -87,6 +87,11 @@ class StudentScore(models.Model):
     def __str__(self):
         return self.value.__str__()
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['exercise', 'student'], name='only one score per exercise for student')
+        ]
+
 
 class StatModel(models.Model):
     mean_value = models.FloatField()
