@@ -2,7 +2,7 @@ import json
 from datetime import datetime
 
 from django.core import serializers
-from django.db.models import Sum, Q, F, Avg
+from django.db.models import Sum, Q, F, Avg, QuerySet
 from django.utils import timezone
 
 from hallOfFameClient.models import Subject, Student, Group, StudentScore, StatGroupScore, StatGroupStudentScore, \
@@ -137,7 +137,11 @@ def createRankingStudentsAndMe(students_desc, student_pk):
     ranking = []
     my_pos = -1
     pos = 1
-    last = students_desc.first().mean_value
+    last = 999
+    if type(students_desc) is QuerySet:
+        last = students_desc.first().mean_value
+    else:
+        last = students_desc[0].mean_value
     for student in students_desc:
         if student.mean_value < last:
             pos += 1
