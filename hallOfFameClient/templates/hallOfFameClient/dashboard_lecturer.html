@@ -14,7 +14,7 @@
         <div class="container">
             <nav class="breadcrumb is-medium" aria-label="breadcrumbs">
                 <ul>
-                    <li class="is-active"><a href="#" aria-current="page">dashboard</a></li>
+                    <li class="is-active"><a href="#" aria-current="page">Home</a></li>
                     <li class="is-active"><a href="#"></a></li>
                 </ul>
             </nav>
@@ -26,22 +26,11 @@
             style='min-height: 79vh; background-image: url("{% static 'img/spiral-cut.png' %}"); background-position: bottom; background-repeat: no-repeat; background-size:30%;'
             class="section">
         <div class="columns is-centered">
-            <div class="column is-half">
+            <div class="column is-four-fifths tile is-ancestor is-vertical">
                 {% for sub in subjects %}
-                    <article class="panel is-{{ primaryColor }}">
-                        <p class="panel-heading ">
-                            {{ sub.name }}
-                        </p>
-                        <a href=" {% url "lecturer:hallOfFameClient_subject_change" sub.pk %}">Edit</a>
-                        <p class="panel-block subtitle">
-                            {{ sub.description }}
-                        </p>
-                        <div class="panel-block columns is-centered">
-                            <div class="column is-four-fifths">
-                                {% include 'hallOfFameClient/lecturer_groups_panel.html' with groups=groups_by_sub|key:sub.pk %}
-                            </div>
-                        </div>
-                    </article>
+                    {% if forloop.counter0|divisibleby:2 %}<div class="tile is-parent columns">{% endif %}
+                    {% include 'hallOfFameClient/lecturer_course_tile.html' with groups=groups_by_sub|key:sub.pk sub=sub  %}
+                    {% if forloop.counter|divisibleby:2 %}</div>{% endif %}
                 {% endfor %}
             </div>
         </div>

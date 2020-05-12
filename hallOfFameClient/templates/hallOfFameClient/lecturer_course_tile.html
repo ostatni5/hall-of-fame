@@ -1,0 +1,101 @@
+<div class="tile is-child column is-6">
+    <article class="panel is-dark" style="background: #eef6fc; height: 100%;">
+        <div class="panel-heading has-text-centered has-text-light" style="border-bottom: 4px solid #DB6D3D; background: #246C9C;">
+            <a class="is-pulled-right has-text-white" href="{% url "lecturer:hallOfFameClient_subject_change" sub.pk %}">
+                <i class="fas fa-edit"></i>
+            </a>
+{#            <div class="level is-fullwidth">#}
+                <p class="has-text-centered is-size-3" style="padding: 0 3rem">
+                {{ sub.name }}
+                </p>
+{#            </div>#}
+        </div>
+        <div class="panel-block has-text-light is-block" style="border-bottom: 1px solid #15405C; background: #15405C;">
+            <nav class="level is-fullwidth is-mobile columns">
+                <div class="level-item has-text-centered has-text-light column is-4">
+                    <div>
+                        <p class="heading">Total students</p>
+                        <a class="title has-text-light is-size-1">
+                            {{ sub.group.student|length|default:216 }}
+                        </a>
+                    </div>
+                </div>
+                <div class="is-hidden-mobile column is-4 has-text-centered">
+                    <span class="icon is-large is-size-4" style="color: #DB6D3D;">
+                        <i class="fas fa-4x fa-school"></i>
+                    </span>
+                </div>
+                <div class="level-item has-text-centered has-text-light column is-4">
+                    <div>
+                        <p class="heading">Course ETCS points</p>
+                        <a class="title has-text-light is-size-1">
+                            {{ sub.etcs }}
+                        </a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <div class="panel-block" style="background: #15405C; border-bottom: 2px solid #f5f5f5;">
+            <p class="has-text-centered is-fullwidth is-5 has-text-white">{{ sub.description }}</p>
+        </div>
+        <p class="panel-block has-text-light" style="background: #246C9C;">
+        </p>
+        {% include 'hallOfFameClient/groups_comparation_chart.html' with chart_ID=sub.pk %}
+        <div class="panel-block columns is-centered">
+            <div class="column is-four-fifths tile is-ancestor is-vertical">
+                {% for gru in groups %}
+                    {% if forloop.counter0|divisibleby:3 %}<div class="tile is-parent columns">{% endif %}
+                    <div class="tile is-child is-4 column">
+                        <div class="field has-addons">
+                            <p class="control">
+                                <a href="{% url "lecturer:subject_scores" pk=gru.subject.pk %}" class="button card level is-marginless is-info is-text is-outlined">
+                                    <span class="icon is-small">
+                                        <i class="fas fa-book"></i>
+                                    </span>
+                                    <span>{{ gru.name }}</span>
+                                    <span style="padding-left: 1rem">{{ gru.students|length|default:14 }}os</span>
+                                </a>
+                            </p>
+                            <p class="control">
+                                <a href=" {% url "lecturer:hallOfFameClient_group_change" gru.pk %}" class="button card level is-marginless is-info is-text is-outlined">
+                                    <span class="icon is-small">
+                                        <i class="fas fa-edit"></i>
+                                    </span>
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                    {% if forloop.counter|divisibleby:3 %}</div>{% endif %}
+{#                    <button style="border: none; border-bottom: 1px solid; margin-bottom: .5rem !important;"#}
+{#                            class="button card is-fullwidth level is-marginless is-info is-text is-outlined">#}
+{#                        <div class="level-left">#}
+{#                            <span class="icon is-small level-item">#}
+{#                                <i class="fas fa-book"></i>#}
+{#                            </span>#}
+{#                            <span class="level-item"><a#}
+{#                                    href="{% url "lecturer:subject_scores" pk=gru.subject.pk %}">{{ gru.name }}</a></span>#}
+{#                        </div>#}
+{#                        <div class="level-right">#}
+{#                            <p><a href=" {% url "lecturer:hallOfFameClient_group_change" gru.pk %}">Edit |</a></p>#}
+{#                            <p class="level-item">{{ groups.size }}os</p>#}
+{#                        </div>#}
+{#                    </button>#}
+                {% empty %}
+                    <div class="tile is-child">
+                        <br/>
+                        <p class="subtitle has-text-centered">No groups yet.</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </article>
+</div>
+{# #eef6fc #246C9C #DB6D3D #}
+<article class="panel is-{{ primary_color|default:"info" }}">
+
+</article>
+    {% comment %}</p>
+    <div class="message-body">
+
+    </div>
+</article>{% endcomment %}

@@ -15,7 +15,6 @@ class RankingStudentView(TemplateView):
     compare_groups = []                                             #Grupy Usera
     compare_my_averages = []                                        #Moje średnie w grupach
     compare_group_averages = []                                     #Średnie tych grup
-    group_ranking = Student.objects.all()                           #Lista osób z grupy
 
     def get_context_data(self, **kwargs):
         return "DETALE BITCH!"
