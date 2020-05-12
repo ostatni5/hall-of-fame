@@ -5,4 +5,4 @@ from django.views.generic import TemplateView
 
 
 class WorldView(TemplateView):
-    template_name = "hallOfFameClient/world.html"
+    template_name = "hallOfFameWorld/world.html"

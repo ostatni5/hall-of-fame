@@ -1,11 +1,8 @@
 from django.db.models import Avg
 from django.shortcuts import render, get_object_or_404
-from django.views.generic import ListView
 from django.views.generic import TemplateView
-from django.views.generic import View
 
 from hallOfFameClient.models import Student, Subject, StudentScore, Exercise, StatSubjectStudentScore, Group
-from polls.views import DetailView
 
 color = "primary"
 user_type = "student"
@@ -33,7 +30,7 @@ class RankingStudentView(TemplateView):
 
 
 class GroupStudentView(TemplateView):
-    template_name = 'hallOfFameClient/group_student.html'
+    template_name = 'hallOfFameStudent/group_student.html'
 
     """ ------------------------------TUTAJ SZYMON TO MI DAJ------------------------------- """
     student = Student.objects.filter(album_number=213700).first()   #Aktualny user
@@ -41,11 +38,11 @@ class GroupStudentView(TemplateView):
     pending_exercises = Exercise.objects.all()                      #Nieocenione zadania
     group_ranking = Student.objects.all()                           #Lista osób z grupy
                                                                     # + ewentualnie rangi
-    my_average = 88                                                 #Moja średnia w grupie
+    my_average = StatSubjectStudentScore.objects.filter(student=student). \
+        aggregate(avg=Avg('mean_value'))['avg']                     #Moja średnia w grupie
     my_ranking = 15                                                 #Pozycja egzekwo w rankingu
 
     cos_do_wykresu_zmiany_rangi_w_czasie_ale_nie_wiem_w_jakiej_formie = 2137
-
 
     student = Student.objects.filter(album_number=213700).first()
     group_students = Student.objects.all()
@@ -56,8 +53,7 @@ class GroupStudentView(TemplateView):
         context = super().get_context_data(**kwargs)
         context['username'] = self.student.name + " " + self.student.surname
         context['subject'] = group.subject
-        context['my_average'] = "88"#StatSubjectStudentScore.objects.filter(student=student). \
-            #agreggate(avg=Avg('mean_value'))['avg']
+        context['my_average'] = self.my_average
         context['my_ranking'] = self.my_ranking
         context['group_students'] = self.group_ranking
         context['group_exercises'] = self.checked_exercises
@@ -74,7 +70,7 @@ class GroupStudentView(TemplateView):
 
 
 class DashboardStudentView(TemplateView):
-    template_name = 'hallOfFameClient/dashboard_student.html'
+    template_name = 'hallOfFameStudent/dashboard_student.html'
 
     """ ------------------------------TUTAJ SZYMON TO MI DAJ------------------------------- """
     student = Student.objects.filter(album_number=213700).first()   #Aktualny user
@@ -108,7 +104,7 @@ class DashboardStudentView(TemplateView):
 
 
 class LoginStudentView(TemplateView):
-    template_name = 'hallOfFameClient/login_student.html'
+    template_name = 'hallOfFameStudent/login_student.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

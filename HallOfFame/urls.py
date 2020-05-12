@@ -20,9 +20,9 @@ from HallOfFame.admin import default_admin_site
 from hallOfFameClient.admin import lecturer_admin_site
 
 urlpatterns = [
-    path('', include('hallOfFameWorld.urls')),
     path('student/', include('hallOfFameStudent.urls')),
-    path('polls/', include('polls.urls')),
+    path('', include('hallOfFameWorld.urls')),
     path('admin/', default_admin_site.urls, name="admin"),
-    path('lecturer/', lecturer_admin_site.urls, name="lecturer")
+    path('lecturer/', lecturer_admin_site.urls, name="lecturer"),
+    path('polls/', include('polls.urls')),
 ]

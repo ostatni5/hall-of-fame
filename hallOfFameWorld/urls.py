@@ -4,5 +4,5 @@ from hallOfFameWorld.views import WorldView
 
 app_name = 'world'
 urlpatterns = [
-    path('',WorldView.as_view(),name="main"),
+    path('', WorldView.as_view(), name="main"),
 ]

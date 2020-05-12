@@ -29,15 +29,15 @@
             class="section">
         <div class="columns">
             <div class="column is-4 is-offset-1">
-                {% include 'hallOfFameClient/student_assignments_panel.html' with group_name="2BC" exercises=group_exercises %}
+                {% include 'hallOfFameStudent/student_exercises_panel.html' with group_name="2BC" exercises=group_exercises %}
             </div>
             <div class="column is-6">
-                {% include 'hallOfFameClient/group_ranks_panel.html' %}
+                {% include 'hallOfFameStudent/group_ranks_panel.html' %}
             </div>
         </div>
         <div class="columns">
             <div class="column is-10 is-offset-1">
-                {% include 'hallOfFameClient/group_ranks_chart.html' with chart_name="Group Ranking Timeline" chart_ID="rankChart" %}
+                {% include 'hallOfFameStudent/group_ranks_chart.html' with chart_name="Group Ranking Timeline" chart_ID="rankChart" %}
             </div>
         </div>
     </section>
