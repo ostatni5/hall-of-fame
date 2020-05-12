@@ -35,7 +35,7 @@
                 {% include 'hallOfFameStudent/student_courses_panel.html' with courses=courses total_ETCS=total_ETCS %}
             </div>
             <div class="column is-4">
-                {% include 'hallOfFameStudent/lastscore_chart.html' with chart_name="Last 5 grades" chart_ID="scoreChart" chart_data=score_diagram %}
+                {% include 'hallOfFameStudent/lastgrades_chart.html' with chart_ID="scoreChart" chart_data=score_diagram %}
                 {% include 'hallOfFameStudent/student_statistics_panel.html' with averages=averages %}
             </div>
         </div>

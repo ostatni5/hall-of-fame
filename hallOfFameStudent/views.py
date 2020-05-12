@@ -72,9 +72,9 @@ class GroupStudentView(TemplateView):
 class DashboardStudentView(TemplateView):
     template_name = 'hallOfFameStudent/dashboard_student.html'
 
-    """ ------------------------------TUTAJ SZYMON TO MI DAJ------------------------------- """
+    """ ------------------------------TUTAJ SZYMON TO MI DAJ--------------------------------------- """
     student = Student.objects.filter(album_number=213700).first()   #Aktualny user
-    scores = StudentScore.objects.order_by('-date')[:8]             #Ostatnie N ocen
+    scores = StudentScore.objects.order_by('-date')[:12][::-1]       #Ostatnie N ocen
     groups = Group.objects.all()                                    #MojeGrupy
     my_average = 88                                                 #Moja średnia z całości
     semester_average = 76                                           #Średnia z całości
@@ -90,16 +90,22 @@ class DashboardStudentView(TemplateView):
         context['courses'] = self.groups
         context['total_ETCS'] = self.total_ETCS
         context['score_diagram'] = {
-            'data': [],
-            'subjects': [],
-            'labels': []
+            'label': [],
+            'percentage': [],
+            'score': [],
+            'max_score': [],
+            'date': [],
+            'subject': [],
         }
         context['user_type'] = user_type
         context['primary_color'] = color
         for score in self.scores:
-            context['score_diagram']['labels'].append('Exercise: ' + score.exercise.name)
-            context['score_diagram']['data'].append(score.value)
-            context['score_diagram']['subjects'].append(score.exercise.group.subject.name)
+            context['score_diagram']['label'].append('Exercise: ' + score.exercise.name)
+            context['score_diagram']['percentage'].append((score.value*100.0)/score.exercise.max_score)
+            context['score_diagram']['score'].append(score.value)
+            context['score_diagram']['max_score'].append(score.exercise.max_score)
+            context['score_diagram']['date'].append(score.date)
+            context['score_diagram']['subject'].append(score.exercise.group.subject.name)
         return context
 
 
