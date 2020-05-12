@@ -1,0 +1,107 @@
+{% load static %}
+<script src="{% static 'js/Chart.min.js' %}"></script>
+{% comment %}https://www.chartjs.org/docs/latest/{% endcomment %}
+<script src="{% static 'js/jsspectrum.min.js' %}"></script>
+{% comment %}https://gist.github.com/ibrechin/2489005#file-jsspectrum-js{% endcomment %}
+<script src="{% static 'js/functions.js' %}"></script>
+<p class="panel-block is-block" style="padding-right: 8%">
+    <canvas id="{{ chart_ID }}" width="400" height="300"></canvas>
+</p>
+{#<article class="message is-darker">#}
+{#    <div class="message-header">#}
+{#        <h1 style="width: 100%; text-align: center;" class="title has-text-light is-inline">{{ chartName }}</h1>#}
+{#    </div>#}
+{#    <div class="message-body">#}
+{#    </div>#}
+{#</article>#}
+<script>
+    {
+        var ctx = document.getElementById('{{ chart_ID }}').getContext('2d');
+
+        var myData = [1, 2, 3, 4, 5]
+        var myLabel = ['a', 'b', 'c', 'd', 'e']
+        var subjects = ['a', 'b', 'c', 'd', 'e']
+        var dates = ['a', 'b', 'c', 'd', 'e']
+        {% comment %}
+    {% for date in chart_data.date %}
+    dates.push("{{ date|date:'d M' }}")
+    {% endfor %}
+    var d = new Date('2010-08-05')
+    // convert date to pretty format
+    var dateStr = getPrettyDate(d)
+    var dates = [dateStr,dateStr,dateStr,dateStr,dateStr]
+
+    // add random data and labels
+    for(var i=0; i<14; i++) {
+        myData.push(Math.floor(Math.random() * (100 - 1 + 1)) + 1)
+        myLabel.push(Math.floor(Math.random() * (100 - 1 + 1)) + 1)
+    }
+    {% endcomment %}
+        var colors = getEvenlySpacedColors(myData);
+// shift colors
+        for (let i = 0; i < parseInt(colors.length / 3.5); i++)
+            arrayRotate(colors, true)
+
+        for (let i = 0; i < parseInt(colors.length) / 2 - 1; i++)
+            colors[i] = "rgb(191, 63, 86)"
+
+
+// create array of bars colors
+        var colors2 = []
+        let min = Math.min.apply(null, myData)
+        for (let i = 0; i < myData.length; i++) {
+            let item = myData[i]
+            colors2.push(colors[parseInt(item - min)])
+        }
+
+
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: dates,
+                datasets: [{
+                    label: false,
+                    data: myData,
+                    backgroundColor: colors2,
+                    borderColor: colors2,
+                    borderWidth: 1
+                }
+                ]
+            },
+            options: {
+                legend: {
+                    display: false
+                },
+                tooltips: {
+                    callbacks: {
+                        title: function (tooltipItem, data) {
+                            return "Subject: " + subjects[tooltipItem[0].index];
+                        },
+
+                        label: function (tooltipItem, data) {
+                            return "Percentage: " + tooltipItem.yLabel;
+                        }
+                    }
+
+                },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Percentage'
+                        }
+                    }],
+                    xAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Date'
+                        }
+                    }]
+                }
+            }
+        });
+    }
+</script>
