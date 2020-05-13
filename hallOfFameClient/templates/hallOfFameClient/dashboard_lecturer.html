@@ -1,9 +1,10 @@
 {% extends 'hallOfFameClient/base.html' %}
 {% load static hallOfFame_extra %}
 {% block title %}Dashboard{% endblock %}
+{#Wiodki nie korzystaja z tego samego base w admin i tu #}
 {% block brand %}
     <div class="navbar-brand">
-        <a href="#" class="navbar-item">
+        <a href="{% url "world:main" %}" class="navbar-item">
             <img src="{% static 'img/ostatniLearningInfo.png' %}" alt="Logo">
         </a>
     </div>

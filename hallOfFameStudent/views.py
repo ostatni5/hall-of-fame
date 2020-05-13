@@ -1,7 +1,11 @@
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Avg, Sum
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
+from django.views import View
 from django.views.generic import TemplateView
 
+from HallOfFame.permissions import isStudent
 from hallOfFameClient.models import Student, Subject, StudentScore, Exercise, StatSubjectStudentScore, Group, \
     StatGroupStudentScore, ArchiveGroupStudentScore
 from hallOfFameClient.stats.utility import createRankingStudents, createRankingStudentsAndMe, \
@@ -11,14 +15,24 @@ color = "primary"
 user_type = "student"
 
 
-class RankingStudentView(TemplateView):
+class StudentView(LoginRequiredMixin, UserPassesTestMixin, View):
+    login_url = '/student/login/'
+
+    def test_func(self):
+        flag = True
+        user = self.request.user
+        return flag and isStudent(user)
+
+
+class RankingStudentView(StudentView, TemplateView):
     """ ------------------------------TUTAJ SZYMON TO MI DAJ------------------------------- """
-    student = Student.objects.filter(album_number=213700).first()  # Aktualny user
-    compare_groups = []  # Grupy Usera
-    compare_my_averages = []  # Moje średnie w grupach
-    compare_group_averages = []  # Średnie tych grup
+
 
     def get_context_data(self, **kwargs):
+        student = self.request.user.student  # Aktualny user
+        compare_groups = []  # Grupy Usera
+        compare_my_averages = []  # Moje średnie w grupach
+        compare_group_averages = []  # Średnie tych grup
         return "DETALE BITCH!"
 
     """
@@ -31,11 +45,11 @@ class RankingStudentView(TemplateView):
     """
 
 
-class GroupStudentView(TemplateView):
+class GroupStudentView(StudentView, TemplateView):
     template_name = 'hallOfFameStudent/group_student.html'
 
     def get_context_data(self, **kwargs):
-        student = Student.objects.filter(album_number=213700).first()
+        student = self.request.user.student
         group = get_object_or_404(Group, id=self.kwargs.get('course_id', None))
         checked_exercises = student.scores.filter(exercise__group=group)
         # niechleuj -------------------------------------------------------
@@ -77,11 +91,11 @@ Potrzeba:
 """
 
 
-class DashboardStudentView(TemplateView):
+class DashboardStudentView(StudentView, TemplateView):
     template_name = 'hallOfFameStudent/dashboard_student.html'
 
     def get_context_data(self, **kwargs):
-        student = Student.objects.filter(album_number=213700).first()
+        student = self.request.user.student
         scores = student.scores.all().order_by('-date')[:12][::-1]
         groups = student.groups.all()
         my_average = StatSubjectStudentScore.objects.filter(student=student).aggregate(avg=Avg('mean_value'))['avg']
@@ -124,3 +138,21 @@ class LoginStudentView(TemplateView):
         context['user_type'] = user_type
         context['primary_color'] = color
         return context
+
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect("/")
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request):
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        print(user)
+        if user is not None:
+            login(request, user)
+            return redirect('/student/')
+        else:
+            context = self.get_context_data()
+            context["error"] = "zleeee"
+            return render(request, self.template_name, context)

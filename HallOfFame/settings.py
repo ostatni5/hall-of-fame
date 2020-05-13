@@ -154,3 +154,5 @@ STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
 LOGIN_URL = '/login'
 
 django_heroku.settings(locals())
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True

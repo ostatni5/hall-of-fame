@@ -9,13 +9,16 @@
     <section class="is-paddingless is-marginless" style="width: 100vw; height: 100vh;">
         <div class="columns is-gapless is-overlay is-desktop is-vcentered has-background-light">
             <div class="column is-5 has-background-{{ primaryColor }}" style="height: 100%; background: rgb(0,82,69);">
-
+                {% if error %}
+                    {{ error }}
+                {% endif %}
             </div>
-            <div class="column is-7 has-text-centered"/>
+            <div class="column is-7 has-text-centered">
                 <form action="{{ app_path }}" method="post" id="login-form" class="is-inline-block" style="min-width: 40%;">
+                    {% csrf_token %}
                     <div class="field">
                         <p class="control has-icons-left has-icons-right">
-                            <input class="input" type="text" placeholder="Email"/>
+                            <input class="input" type="text"  name="username" placeholder="Username"/>
                             <span class="icon is-small is-left">
                                 <i class="fas fa-user"></i>
                             </span>
@@ -26,7 +29,7 @@
                     </div>
                     <div class="field">
                         <p class="control has-icons-left">
-                            <input class="input" type="password" placeholder="Password"/>
+                            <input class="input" type="password" name="password" placeholder="Password"/>
                             <span class="icon is-small is-left">
                                 <i class="fas fa-lock"></i>
                             </span>
@@ -34,7 +37,7 @@
                     </div>
                     <div class="field">
                         <p class="control">
-                            <button href="{% url "student:dashboard" %}" class="button is-{{ primaryColor }}">
+                            <button type="submit" class="button is-{{ primaryColor }}">
                                 Login
                             </button>
                         </p>
