@@ -65,7 +65,6 @@ class LecturerAdminSite(AdminSite):
         flag = False
         if not request.user.is_anonymous:
             flag = isLecturer(request.user)
-            flag = flag or request.user.is_superuser
         return super().has_permission(request) and flag
 
     def get_urls(self):

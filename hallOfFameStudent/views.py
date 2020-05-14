@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Avg, Sum
 from django.shortcuts import render, get_object_or_404, redirect
@@ -23,10 +23,12 @@ class StudentView(LoginRequiredMixin, UserPassesTestMixin, View):
         user = self.request.user
         return flag and isStudent(user)
 
+    def handle_no_permission(self):
+        return redirect('student:login')
+
 
 class RankingStudentView(StudentView, TemplateView):
     """ ------------------------------TUTAJ SZYMON TO MI DAJ------------------------------- """
-
 
     def get_context_data(self, **kwargs):
         student = self.request.user.student  # Aktualny user
@@ -141,7 +143,11 @@ class LoginStudentView(TemplateView):
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            return redirect("/")
+            if isStudent(request.user):
+                return redirect('/student/')
+            context = self.get_context_data()
+            context["error"] = """You are authorised not as a student. Please login student account."""
+            return render(request, self.template_name, context)
         return super().get(request, *args, **kwargs)
 
     def post(self, request):
@@ -154,5 +160,18 @@ class LoginStudentView(TemplateView):
             return redirect('/student/')
         else:
             context = self.get_context_data()
-            context["error"] = "zleeee"
+            context["error"] = """Please enter the correct username and password."""
             return render(request, self.template_name, context)
+
+
+class LogoutStudentView(TemplateView):
+    template_name = 'hallOfFameStudent/login_student.html'
+
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            context = self.get_context_data()
+            logout(request)
+            context["message"] = """Successfully logged out."""
+            context["app_path"] = "/student/login/"
+            return render(request, self.template_name, context)
+        return redirect('student:login')

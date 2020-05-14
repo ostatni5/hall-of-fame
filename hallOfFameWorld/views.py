@@ -17,6 +17,5 @@ class WorldView(TemplateView):
                 return redirect("/lecturer/")
             if isAdmin(request.user):
                 return redirect("/admin/")
-        else:
-            return super().get(request, args, kwargs)
+        return super().get(request, args, kwargs)
 
