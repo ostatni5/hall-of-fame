@@ -10,7 +10,7 @@ from django.views.generic.list import ListView
 from hallOfFameClient.models import StudentScore, Exercise
 
 from hallOfFameClient.models import Subject, Student, Lecturer, Group
-from HallOfFame.permissions import isLecturer, canAccessSubject, canUpdateScore, canInsertScore
+from HallOfFame.permissions import isLecturer, canAccessSubject, canUpdateScore, canInsertScore, canAccessGroup
 
 
 class UserLecturerTestMixinView(LoginRequiredMixin, UserPassesTestMixin, View):
@@ -31,12 +31,13 @@ class TabView(UserLecturerTestMixinView):
         subject = Subject.objects.filter(pk=self.kwargs['pk']).first()
         if subject is None:
             return False
-        return super().test_func() and canAccessSubject(user, subject.pk)
+        return super().test_func() and canAccessSubject(user, subject.pk) and canAccessGroup(user,
+                                                                                             self.kwargs['group_pk'])
 
     def get_ctx(self):
         subject = Subject.objects.get(pk=self.kwargs['pk'])
 
-        groups = subject.groups.all()
+        groups = subject.groups.filter(pk=self.kwargs['group_pk']).all()
 
         groups_ctx = {}
         for group in groups:

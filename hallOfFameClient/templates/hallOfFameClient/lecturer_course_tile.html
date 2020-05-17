@@ -48,7 +48,7 @@
                     <div class="tile is-child is-4 column">
                         <div class="field has-addons">
                             <p class="control">
-                                <a href="{% url "lecturer:subject_scores" pk=gru.subject.pk %}" class="button card level is-marginless is-info is-text is-outlined">
+                                <a href="{% url "lecturer:subject_scores" pk=gru.subject.pk group_pk=gru.pk %}" class="button card level is-marginless is-info is-text is-outlined">
                                     <span class="icon is-small">
                                         <i class="fas fa-book"></i>
                                     </span>

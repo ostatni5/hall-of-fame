@@ -72,7 +72,7 @@ class LecturerAdminSite(AdminSite):
         my_urls = [
             path('', LecturerAdminSite.admin_view(self, DashboardLecturerView.as_view())),
             path('hallOfFameClient/', LecturerAdminSite.admin_view(self, DashboardLecturerView.as_view())),
-            path('subject/<int:pk>/scores/', LecturerAdminSite.admin_view(self, TabView.as_view()),
+            path('subject/<int:pk>/scores/<int:group_pk>', LecturerAdminSite.admin_view(self, TabView.as_view()),
                  name="subject_scores"),
         ]
         return my_urls + urls
