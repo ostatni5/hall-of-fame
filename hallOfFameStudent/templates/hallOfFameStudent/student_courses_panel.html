@@ -5,29 +5,29 @@
         </p>
     </div>
     <div class="panel-block has-text-light is-block" style="border-bottom: 2px solid #f5f5f5; background: #005245;">
-        <nav class="level is-fullwidth is-mobile">
-            <div class="level-item has-text-centered has-text-light">
-                <div>
+        <div class="columns is-gapless is-mobile">
+            <div class="column is-4 has-text-centered has-text-light">
+                <div class="is-pulled-right">
                     <p class="heading">My Courses</p>
                     <a class="title has-text-light is-size-1">
                         {{ courses|length }}
                     </a>
                 </div>
             </div>
-            <div class="is-hidden-mobile">
+            <p class="is-hidden-mobile column is-4 has-text-centered has-text-light">
                 <span class="icon is-large is-size-4 has-text-primary">
                     <i class="fas fa-5x fa-university"></i>
                 </span>
-            </div>
-            <div class="level-item has-text-centered has-text-light">
-                <div>
+            </p>
+            <div class="column is-4 has-text-centered has-text-light">
+                <div class="is-pulled-left">
                     <p class="heading">Total ETCS</p>
                     <a class="title has-text-light is-size-1">
                         {{ total_ETCS|default:69 }}
                     </a>
                 </div>
             </div>
-        </nav>
+        </div>
     </div>
     <p class="panel-block has-text-light" style="background: #005245">
     </p>
