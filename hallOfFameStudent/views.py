@@ -55,7 +55,8 @@ class GroupStudentView(StudentView, TemplateView):
         group = get_object_or_404(Group, id=self.kwargs.get('course_id', None))
         checked_exercises = student.scores.filter(exercise__group=group)
         # niechleuj -------------------------------------------------------
-        pending_exercises = Exercise.objects.all()
+        pending_exercises = StudentScore.objects.all().difference(checked_exercises)
+            # StudentScore.objects.filter(exercise__pk__in=group.exercises.values('pk')).all().difference(checked_exercises)
         group_students = StatGroupStudentScore.objects.filter(stat_group__group=group).order_by('-mean_value').all()
         group_ranking, my_ranking = createRankingStudentsAndMe(group_students, student.pk)  # obj.pos
 
@@ -72,14 +73,18 @@ class GroupStudentView(StudentView, TemplateView):
             ranking, my = createRankingStudentsAndMe(arch_group, student.pk)
             arch_group_ranking.append(ranking)
             arch_my_ranking.append(my)
-
         context = super().get_context_data(**kwargs)
         context['username'] = student.name + " " + student.surname
         context['subject'] = group.subject
         context['my_average'] = my_average
         context['my_ranking'] = my_ranking
         context['group_students'] = group_ranking
-        context['group_exercises'] = checked_exercises
+        context['exercises'] = {
+            'pending': pending_exercises,
+            'checked': checked_exercises
+        }
+
+
         context['user_type'] = user_type
         context['primary_color'] = color
         return context
@@ -98,7 +103,7 @@ class DashboardStudentView(StudentView, TemplateView):
 
     def get_context_data(self, **kwargs):
         student = self.request.user.student
-        scores = student.scores.all().order_by('-date')[:12][::-1]
+        scores = student.scores.all().order_by('-date')[:5][::-1]
         groups = student.groups.all()
         my_average = StatSubjectStudentScore.objects.filter(student=student).aggregate(avg=Avg('mean_value'))['avg']
         semester_average = StatSubjectStudentScore.objects.aggregate(avg=Avg('mean_value'))['avg']

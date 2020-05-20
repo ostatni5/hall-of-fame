@@ -1,5 +1,15 @@
 {% load hallOfFame_extra %}
-<article class="panel is-danger" style="height: 100%">
+<script>
+    function toggle_checked() {
+        document.getElementById("exercises").classList.remove("pending-list")
+        document.getElementById("exercises").classList.add("checked-list")
+    }
+    function toggle_pending() {
+        document.getElementById("exercises").classList.remove("checked-list")
+        document.getElementById("exercises").classList.add("pending-list")
+    }
+</script>
+<article id="exercises" class="panel is-danger checked-list" style="height: 100%">
     <p class="panel-heading is-size-3 navbar has-shadow has-text-centered has-text-light">
             <span style="width: 100%; text-align: center;">
                 Group {{ group_name }}
@@ -7,23 +17,37 @@
     </p>
     <p class="panel-block has-text-light has-background-danger">
     </p>
-    <p class="panel-tabs is-size-6 ">
+    <p class="panel-tabs is-size-6 checked">
         <a class="is-active">
             <span class="icon is-small">
                 <i class="fas fa-user-check"></i>
             </span>
-            <span>Checked Assignments</span>
+            <span>Checked exercises</span>
         </a>
-        <a>
+        <a class="is-text" onclick="toggle_pending()">
             <span class="icon is-small">
                 <i class="fas fa-user-clock"></i>
             </span>
-            <span>Pending Assignments</span>
+            <span>Pending exercises</span>
         </a>
     </p>
-    {% for score in exercises %}
-    {% with exe=score.exercise %}
-        <a class="panel-block is-block">
+    <p class="panel-tabs is-size-6 pending">
+        <a class="is-text" onclick="toggle_checked()">
+            <span class="icon is-small">
+                <i class="fas fa-user-check"></i>
+            </span>
+            <span>Checked exercises</span>
+        </a>
+        <a class="is-text is-active">
+            <span class="icon is-small">
+                <i class="fas fa-user-clock"></i>
+            </span>
+            <span>Pending exercises</span>
+        </a>
+    </p>
+    {% for score in pending %}
+    {% with exe=score.exercise class="pending"%}
+        <a class="panel-block is-block {{ class }}">
             <nav class="level is-fullwidth">
                 <div class="level-item column is-one-fifth is-vcentered">
                     <span>
@@ -53,7 +77,48 @@
         </a>
     {% endwith %}
     {% empty %}
-        <a class="panel-block is-block">
+        <a class="panel-block is-block {{ class }}">
+            <nav class="level is-fullwidth">
+                <div class="level-item">
+                    <h1 class="subtitle">No exercises yet.</h1>
+                </div>
+            </nav>
+        </a>
+    {% endfor %}
+
+    {% for score in checked %}
+    {% with exe=score.exercise class="checked"%}
+        <a class="panel-block is-block {{ class }}">
+            <nav class="level is-fullwidth">
+                <div class="level-item column is-one-fifth is-vcentered">
+                    <span>
+                        <i class="far fa-flag" aria-hidden="true"></i>
+                    </span>
+                    <span>
+                        Exercise: {{ exe.name }}
+                    </span>
+                </div>
+                <div class="level-item has-text-centered">
+                    <div>
+                        <p class="heading">Note</p>
+                        <p class="title">
+                            {{ score.value }}
+                        </p>
+                    </div>
+                </div>
+                <div class="level-item has-text-centered">
+                    <div>
+                        <p class="heading">Percentage</p>
+                        <p class="title">
+                            {{  score.value|percent:exe.max_score|roundTo:2 }}%
+                        </p>
+                    </div>
+                </div>
+            </nav>
+        </a>
+    {% endwith %}
+    {% empty %}
+        <a class="panel-block is-block {{ class }}">
             <nav class="level is-fullwidth">
                 <div class="level-item">
                     <h1 class="subtitle">No exercises yet.</h1>
@@ -62,3 +127,11 @@
         </a>
     {% endfor %}
 </article>
+<style>
+    .checked-list > .pending{
+        display: none !important;
+    }
+    .pending-list > .checked{
+        display: none !important;
+    }
+</style>
