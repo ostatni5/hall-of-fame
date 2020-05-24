@@ -56,11 +56,10 @@ class GroupStudentView(StudentView, TemplateView):
         group = get_object_or_404(Group, id=self.kwargs.get('course_id', None))
         checked_exercises = student.scores.filter(exercise__group=group)
         # niechleuj -------------------------------------------------------
-        pending_exercises = group.exercises.difference(group.exercises.filter(scores__student=student)) #.difference(checked_exercises)
+        pending_exercises = group.exercises.difference(
+            group.exercises.filter(scores__student=student))  # .difference(checked_exercises)
         group_students = StatGroupStudentScore.objects.filter(stat_group__group=group).order_by('-mean_value').all()
-        group_ranking, my_ranking = create_ranking_students_and_me(group_students, student.pk)  # obj.pos
-
-        my_average = checked_exercises.aggregate(avg=Avg('value'))['avg']
+        group_ranking, my_ranking, my_average = create_ranking_students_and_me(group_students, student.pk)  # obj.pos
 
         cos_do_wykresu_zmiany_rangi_w_czasie_ale_nie_wiem_w_jakiej_formie = 2137
 
@@ -70,9 +69,9 @@ class GroupStudentView(StudentView, TemplateView):
         arch_group_students_s, days = split_archive_ranking_students(arch_group_students)
         arch_group_ranking, arch_my_ranking = ([], [])
         for arch_group in arch_group_students_s:
-            ranking, my = create_ranking_students_and_me(arch_group, student.pk)
+            ranking, my_pos, mean = create_ranking_students_and_me(arch_group, student.pk)
             arch_group_ranking.append(ranking)
-            arch_my_ranking.append(my)
+            arch_my_ranking.append(my_pos)
         arch_group_ranking[0] = group_ranking
         arch_my_ranking[0] = my_ranking
         context = super().get_context_data(**kwargs)

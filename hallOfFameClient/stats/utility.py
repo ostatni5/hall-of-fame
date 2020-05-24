@@ -46,7 +46,7 @@ def arch_stats(curr_date):
     ArchiveSubjectStudentScore.objects.bulk_create(objs)
 
 
-def calc_all_stats(to_archive):
+def calc_all_stats(force, to_archive):
     curr_date = timezone.now()
     last_date = ArchiveRecord.objects.all().order_by('-creation_date').first()
 
@@ -55,7 +55,7 @@ def calc_all_stats(to_archive):
         diff_hours = (curr_date - last_date.creation_date).total_seconds() / 3600
         create = (diff_hours > 24)
 
-    if not create:
+    if not create and not force:
         return -1
 
     StatGroupScore.objects.all().delete()
@@ -73,15 +73,16 @@ def calc_all_stats(to_archive):
         objs.append(obj)
     StatGroupScore.objects.bulk_create(objs)
 
-    query_students = Student.objects.values('pk', 'groups__pk', 'groups__stat_score__pk',
-                                            'groups__stat_score__max_score').annotate(score=Sum('scores__value'), )
+    query_students = StudentScore.objects.values("student__pk", 'exercise__group__pk',
+                                                 'exercise__group__stat_score__pk',
+                                                 'exercise__group__stat_score__max_score').annotate(score=Sum('value'))
     objs = []
     for res in query_students:
         obj = StatGroupStudentScore()
-        obj.student_id = res['pk']
-        obj.stat_group_id = res['groups__stat_score__pk']
+        obj.student_id = res['student__pk']
+        obj.stat_group_id = res['exercise__group__stat_score__pk']
         obj.value = res['score']
-        val = res['groups__stat_score__max_score']
+        val = res['exercise__group__stat_score__max_score']
         obj.mean_value = res['score'] * 100 / val if val != 0 else 0
         objs.append(obj)
     StatGroupStudentScore.objects.bulk_create(objs)
@@ -130,7 +131,7 @@ def ranking_group(group_pk):
 
 
 def create_ranking_students(students_desc):
-    ranking, my_pos = create_ranking_students_and_me(students_desc, -1)
+    ranking, my_pos, my_mean = create_ranking_students_and_me(students_desc, -1)
     return ranking
 
 
@@ -139,18 +140,20 @@ def create_ranking_students_and_me(students_desc, student_pk):
     my_pos = -1
     pos = 1
     last = 9999
+    my_mean = 0
     if type(students_desc) is QuerySet:
         last = students_desc.first().mean_value
     else:
         last = students_desc[0].mean_value
-    for student in students_desc:
-        if student.mean_value < last:
+    for row in students_desc:
+        if row.mean_value < last:
             pos += 1
-        student.pos = pos
-        if student.student.pk == student_pk:
+        row.pos = pos
+        if row.student.pk == student_pk:
             my_pos = pos
-        ranking.append(student)
-    return ranking, my_pos
+            my_mean = row.mean_value
+        ranking.append(row)
+    return ranking, my_pos, my_mean
 
 
 def split_archive_ranking_students(days_students_desc):
