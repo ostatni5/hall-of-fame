@@ -57,7 +57,7 @@ class GroupStudentView(StudentView, TemplateView):
         checked_exercises = student.scores.filter(exercise__group=group)
         # niechleuj -------------------------------------------------------
         pending_exercises = StudentScore.objects.all().difference(checked_exercises)
-            # StudentScore.objects.filter(exercise__pk__in=group.exercises.values('pk')).all().difference(checked_exercises)
+        # StudentScore.objects.filter(exercise__pk__in=group.exercises.values('pk')).all().difference(checked_exercises)
         group_students = StatGroupStudentScore.objects.filter(stat_group__group=group).order_by('-mean_value').all()
         group_ranking, my_ranking = create_ranking_students_and_me(group_students, student.pk)  # obj.pos
 
@@ -86,16 +86,16 @@ class GroupStudentView(StudentView, TemplateView):
         context['group_ranking'] = {
             'student_ranking': []
         }
-        if(len(arch_group_ranking) < 2):
+        if len(arch_group_ranking) < 2:
             for ranking in group_ranking:
                 context['group_ranking']['student_ranking'].append(ranking)
-                context['group_ranking'][ranking.student.pk] = 0;
+                context['group_ranking'][ranking.student.pk] = 0
         else:
-            print(len(group_ranking),len(arch_group_ranking),len(arch_group_ranking[1]))
+            print(len(group_ranking), len(arch_group_ranking), len(arch_group_ranking[1]))
             for i in range(len(group_ranking)):
                 ranking = group_ranking[i]
                 last_ranking_pos = ranking.pos
-                if(len(arch_group_ranking[1])>i):
+                if (len(arch_group_ranking[1]) > i):
                     last_ranking_pos = arch_group_ranking[1][i].pos
                 context['group_ranking']['student_ranking'].append(ranking)
                 context['group_ranking'][ranking.student.pk] = last_ranking_pos - ranking.pos
