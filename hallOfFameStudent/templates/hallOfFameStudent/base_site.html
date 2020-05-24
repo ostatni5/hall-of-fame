@@ -1,0 +1,30 @@
+{% extends 'hallOfFameClient\base.html' %}
+{% load static %}
+
+{% block hero %}
+  {% with 'primary' as primaryColor %}
+  {{block.super}}
+  {% endwith %}
+{% endblock %}
+
+{% block brand %}
+    <div class="navbar-brand">
+        {#        {% if color == "is-primary" %}#}
+        <a href="{% url "student:dashboard" %}" class="navbar-item">
+            <img src="{% static 'img/ostatniLearningPrimary.png' %}" alt="Logo">
+            {#        {% else %}#}
+            {#        <a href="#" class="navbar-item">#}
+            {#            <img src="{% static 'img/ostatniLearningInfo.png' %}" alt="Logo">#}
+            {#        {% endif %}#}
+        </a>
+    </div>
+{% endblock %}
+
+{% block logout %}
+<a href="{% url "student:logout" %}" class="button is-primary is-inverted">
+    <span class="icon">
+        <i class="fas fa-sign-out-alt"></i>
+    </span>
+    <span>Sign out</span>
+</a>
+{% endblock %}
