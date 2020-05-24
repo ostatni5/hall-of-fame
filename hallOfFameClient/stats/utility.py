@@ -146,7 +146,7 @@ def createRankingStudentsAndMe(students_desc, student_pk):
         if student.mean_value < last:
             pos += 1
         student.pos = pos
-        if student.pk == student_pk:
+        if student.student.pk == student_pk:
             my_pos = pos
         ranking.append(student)
     return ranking, my_pos
