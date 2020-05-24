@@ -56,7 +56,7 @@ class GroupStudentView(StudentView, TemplateView):
         group = get_object_or_404(Group, id=self.kwargs.get('course_id', None))
         checked_exercises = student.scores.filter(exercise__group=group)
         # niechleuj -------------------------------------------------------
-        pending_exercises = Exercise.objects.filter(group=group) #.difference(checked_exercises)
+        pending_exercises = group.exercises.difference(group.exercises.filter(scores__student=student))
         group_students = StatGroupStudentScore.objects.filter(stat_group__group=group).order_by('-mean_value').all()
         group_ranking, my_ranking = create_ranking_students_and_me(group_students, student.pk)  # obj.pos
 
@@ -78,6 +78,7 @@ class GroupStudentView(StudentView, TemplateView):
         context = super().get_context_data(**kwargs)
         context['username'] = student.name + " " + student.surname
         context['subject'] = group.subject
+        context['name'] = group.name
         context['my_ranking'] = {
             'position': my_ranking,
             'average': my_average

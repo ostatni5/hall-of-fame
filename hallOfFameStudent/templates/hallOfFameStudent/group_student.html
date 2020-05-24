@@ -22,7 +22,7 @@
             class="section">
         <div class="columns">
             <div class="column is-4 is-offset-1">
-                {% include 'hallOfFameStudent/student_exercises_panel.html' with group_name="2BC" checked=exercises.checked pending=exercises.pending %}
+                {% include 'hallOfFameStudent/student_exercises_panel.html' with group_name=name checked=exercises.checked pending=exercises.pending %}
             </div>
             <div class="column is-6">
                 {% include 'hallOfFameStudent/group_ranks_panel.html' with my_ranking=my_ranking group_ranking=group_ranking%}
