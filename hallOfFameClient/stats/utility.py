@@ -18,7 +18,7 @@ Group.objects.values('pk', ).annotate(core=Sum('exercises__scores__value'))
 StudentScore.objects.values('exercise__group__pk').annotate(score=Sum('value'))
 
 
-def archStats(curr_date):
+def arch_stats(curr_date):
     arch_record = ArchiveRecord()
     arch_record.creation_date = curr_date
     arch_record.save()
@@ -46,7 +46,7 @@ def archStats(curr_date):
     ArchiveSubjectStudentScore.objects.bulk_create(objs)
 
 
-def calcStatsSubject():
+def calc_all_stats(to_archive):
     curr_date = timezone.now()
     last_date = ArchiveRecord.objects.all().order_by('-creation_date').first()
 
@@ -117,27 +117,28 @@ def calcStatsSubject():
         objs.append(obj)
     StatSubjectStudentScore.objects.bulk_create(objs)
 
-    archStats(curr_date)
+    if to_archive:
+        arch_stats(curr_date)
 
 
-def rankingSubject(subject_pk):
+def ranking_subject(subject_pk):
     return StatSubjectStudentScore.objects.filter(subject__pk=subject_pk).order_by('-mean_value')
 
 
-def rankingGroup(group_pk):
+def ranking_group(group_pk):
     return StatGroupStudentScore.objects.filter(stat_group__group__pk=group_pk).order_by('-mean_value')
 
 
-def createRankingStudents(students_desc):
-    ranking, my_pos = createRankingStudentsAndMe(students_desc, -1)
+def create_ranking_students(students_desc):
+    ranking, my_pos = create_ranking_students_and_me(students_desc, -1)
     return ranking
 
 
-def createRankingStudentsAndMe(students_desc, student_pk):
+def create_ranking_students_and_me(students_desc, student_pk):
     ranking = []
     my_pos = -1
     pos = 1
-    last = 999
+    last = 9999
     if type(students_desc) is QuerySet:
         last = students_desc.first().mean_value
     else:
@@ -152,7 +153,7 @@ def createRankingStudentsAndMe(students_desc, student_pk):
     return ranking, my_pos
 
 
-def splitArchiveRankingStudents(days_students_desc):
+def split_archive_ranking_students(days_students_desc):
     days = [days_students_desc.first().record.creation_date]
     rankings = []
     last_record = days_students_desc.first().record

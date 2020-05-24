@@ -9,8 +9,8 @@ import random
 from HallOfFame.permissions import isStudent
 from hallOfFameClient.models import Student, Subject, StudentScore, Exercise, StatSubjectStudentScore, Group, \
     StatGroupStudentScore, ArchiveGroupStudentScore
-from hallOfFameClient.stats.utility import createRankingStudents, createRankingStudentsAndMe, \
-    splitArchiveRankingStudents
+from hallOfFameClient.stats.utility import create_ranking_students, create_ranking_students_and_me, \
+    split_archive_ranking_students
 
 color = "primary"
 user_type = "student"
@@ -58,7 +58,7 @@ class GroupStudentView(StudentView, TemplateView):
         # niechleuj -------------------------------------------------------
         pending_exercises = Exercise.objects.filter(group=group) #.difference(checked_exercises)
         group_students = StatGroupStudentScore.objects.filter(stat_group__group=group).order_by('-mean_value').all()
-        group_ranking, my_ranking = createRankingStudentsAndMe(group_students, student.pk)  # obj.pos
+        group_ranking, my_ranking = create_ranking_students_and_me(group_students, student.pk)  # obj.pos
 
         my_average = checked_exercises.aggregate(avg=Avg('value'))['avg']
 
@@ -67,10 +67,10 @@ class GroupStudentView(StudentView, TemplateView):
         arch_group_students = ArchiveGroupStudentScore.objects.filter(group=group).order_by('-record__creation_date',
                                                                                             '-mean_value').all()
 
-        arch_group_students_s, days = splitArchiveRankingStudents(arch_group_students)
+        arch_group_students_s, days = split_archive_ranking_students(arch_group_students)
         arch_group_ranking, arch_my_ranking = ([], [])
         for arch_group in arch_group_students_s:
-            ranking, my = createRankingStudentsAndMe(arch_group, student.pk)
+            ranking, my = create_ranking_students_and_me(arch_group, student.pk)
             arch_group_ranking.append(ranking)
             arch_my_ranking.append(my)
         arch_group_ranking[0] = group_ranking
@@ -191,7 +191,7 @@ class LoginStudentView(TemplateView):
 
 
 class LogoutStudentView(View):
-    
+
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
             logout(request)
