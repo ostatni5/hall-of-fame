@@ -179,14 +179,9 @@ class LoginStudentView(TemplateView):
             return render(request, self.template_name, context)
 
 
-class LogoutStudentView(TemplateView):
-    template_name = 'hallOfFameStudent/login_student.html'
-
+class LogoutStudentView(View):
+    
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            context = self.get_context_data()
             logout(request)
-            context["message"] = """Successfully logged out."""
-            context["app_path"] = "/student/login/"
-            return render(request, self.template_name, context)
         return redirect('student:login')
