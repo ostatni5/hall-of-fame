@@ -142,9 +142,11 @@ def create_ranking_students_and_me(students_desc, student_pk):
     last = 9999
     my_mean = 0
     if type(students_desc) is QuerySet:
-        last = students_desc.first().mean_value
+        if students_desc.first():
+            last = students_desc.first().mean_value
     else:
-        last = students_desc[0].mean_value
+        if len(students_desc) > 0:
+            last = students_desc[0].mean_value
     for row in students_desc:
         if row.mean_value < last:
             pos += 1
