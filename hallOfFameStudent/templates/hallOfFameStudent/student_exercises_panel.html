@@ -90,9 +90,11 @@
                     </tr>
                 {% endwith %}
                 {% empty %}
+                {% with class="pending"%}
                     <tr class="{{ class }}">
-                        <td rowspan="4">no {{ class }} exercises yet</td>
+                        <td colspan="4">no {{ class }} exercises yet</td>
                     </tr>
+                {% endwith %}
                 {% endfor %}
                 {% for score in checked %}
                 {% with exe=score.exercise class="checked"%}
@@ -114,9 +116,11 @@
                     </tr>
                 {% endwith %}
                 {% empty %}
+                {% with class="checked"%}
                     <tr class="{{ class }}">
-                        <td rowspan="4">no {{ class }} exercises yet</td>
+                        <td colspan="4">no {{ class }} exercises yet</td>
                     </tr>
+                {% endwith %}
                 {% endfor %}
                 </tbody>
             </table>
