@@ -4,6 +4,7 @@ from django.db.models import Avg, Sum
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 from django.views.generic import TemplateView
+import random
 
 from HallOfFame.permissions import isStudent
 from hallOfFameClient.models import Student, Subject, StudentScore, Exercise, StatSubjectStudentScore, Group, \
@@ -76,14 +77,23 @@ class GroupStudentView(StudentView, TemplateView):
         context = super().get_context_data(**kwargs)
         context['username'] = student.name + " " + student.surname
         context['subject'] = group.subject
-        context['my_average'] = my_average
-        context['my_ranking'] = my_ranking
-        context['group_students'] = group_ranking
+        context['my_ranking'] = {
+            'position': my_ranking,
+            'average': my_average
+        }
+        context['group_ranking'] = []
+        for ranking in group_ranking:
+            context['group_ranking'].append({
+                'student_ranking': ranking,
+                'difference': random.randint(-ranking.pos+1, 4)
+            })
         context['exercises'] = {
             'pending': pending_exercises,
             'checked': checked_exercises
         }
 
+        for obj in group_ranking:
+            print(obj)
 
         context['user_type'] = user_type
         context['primary_color'] = color

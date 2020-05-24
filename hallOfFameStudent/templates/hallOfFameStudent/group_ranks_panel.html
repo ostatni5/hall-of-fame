@@ -10,7 +10,7 @@
                 <div class="is-pulled-right">
                     <p class="heading">My Average</p>
                     <a class="title has-text-light is-size-1">
-                        98%
+                        {{ my_ranking.average }}
                     </a>
                 </div>
             </div>
@@ -23,7 +23,7 @@
                 <div class="is-pulled-left">
                     <p class="heading">My Group Rank</p>
                     <a class="title has-text-light is-size-1">
-                        #12
+                        #{{ my_ranking.position }}
                     </a>
                 </div>
             </div>
@@ -43,25 +43,55 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {% for obj in group_ranking %}
+                    {% with student=obj.student_ranking.student ranking=obj.student_ranking difference=obj.difference %}
                     <tr>
-                        <th>#1</th>
+                        <th>#{{ ranking.pos }}</th>
                         <td>
-                            <span>Michał Krawczyk</span>
+                            <span>
+                                {{ student.name }} {{ " " }} {{ student.surname }}
+                            </span>
+                            {% if ranking.pos == 1 %}
                             <span class="is-icon is-medium has-text-warning">
                                 <i class="fas fa-fw fa-lg fa-medal"></i>
                             </span>
+                            {% elif ranking.pos == 2 %}
+                            <span class="is-icon is-medium has-text-grey-light">
+                                <i class="fas fa-fw fa-lg fa-medal"></i>
+                            </span>
+                            {% elif ranking.pos == 3%}
+                            <span class="is-icon is-medium" style="color: #CD7F32">
+                                <i class="fas fa-fw fa-lg fa-medal"></i>
+                            </span>
+                            {% endif %}
                         </td>
                         <td>
+                            {% if difference > 0 %}
                             <p class="has-text-success">
                                 <span class="is-icon is-medium is-pulled-left">
                                     <i class="fas fa-fg fa-caret-square-up"></i>
                                 </span>
-                                <span>(+1)</span>
+                                <span>(+{{ difference }})</span>
                             </p>
+                            {% elif difference < 0 %}
+                            <p class="has-text-danger">
+                                <span class="is-icon is-medium is-pulled-left">
+                                    <i class="fas fa-fg fa-caret-square-down"></i>
+                                </span>
+                                <span>( {{ difference }})</span>
+                            </p>
+                            {% else %}
+                            <p class="has-text-info">
+                                <span>(-)</span>
+                            </p>
+                            {% endif %}
                         </td>
-                        <td>96%</td>
+                        <td>{{ ranking.value }}</td>
                     </tr>
-                    <tr>
+                    {% endwith %}
+                    {% empty %}
+                    {% endfor %}
+                    {% comment %}<tr>
                         <th>#2</th>
                         <td>
                             <span>Michał Krawczyk</span>
@@ -156,7 +186,7 @@
                             </p>
                         </td>
                         <td>82%</td>
-                    </tr>
+                    </tr>{% endcomment %}
                 </tbody>
             </table>
         </div>

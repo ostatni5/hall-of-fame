@@ -32,7 +32,7 @@
                 {% include 'hallOfFameStudent/student_exercises_panel.html' with group_name="2BC" checked=exercises.checked pending=exercises.pending %}
             </div>
             <div class="column is-6">
-                {% include 'hallOfFameStudent/group_ranks_panel.html' %}
+                {% include 'hallOfFameStudent/group_ranks_panel.html' with my_ranking=my_ranking group_ranking=group_ranking%}
             </div>
         </div>
         <div class="columns">
