@@ -1,3 +1,4 @@
+{% load static hallOfFame_extra%}
 <article class="panel is-dark" style="height: 100%;">
     <div class="panel-heading is-size-3 has-text-centered has-text-light" style="border-bottom: 4px solid #ffdd57; background: #636363;">
         <p class="has-text-centered">
@@ -43,8 +44,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for obj in group_ranking %}
-                    {% with student=obj.student_ranking.student ranking=obj.student_ranking difference=obj.difference %}
+                    {% for ranking in group_ranking.student_ranking %}
+                    {% with student=ranking.student difference=group_ranking|key:ranking.student.pk %}
                     <tr>
                         <th>#{{ ranking.pos }}</th>
                         <td>

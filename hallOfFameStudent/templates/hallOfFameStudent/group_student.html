@@ -1,14 +1,7 @@
-{% extends 'hallOfFameClient/base.html' %}
+{% extends 'hallOfFameStudent/base_site.html' %}
 {#{{ forloop.counter }}#}
 {% load static %}
 {% block title %}{{ subject.name }}{% endblock %}
-{% block brand %}
-    <div class="navbar-brand">
-        <a href="{% url "student:dashboard" %}" class="navbar-item">
-            <img src="{% static 'img/ostatniLearningPrimary.png' %}" alt="Logo">
-        </a>
-    </div>
-{% endblock %}
 {% block herotitle %}{{ subject.name }}{% endblock %}
 {% block breadcrumb %}
     <section style="padding: 1rem" class="section card">

@@ -1,18 +1,6 @@
-{% extends 'hallOfFameClient/base.html' %}
+{% extends 'hallOfFameStudent/base_site.html' %}
 {% load static hallOfFame_extra%}
 {% block title %}Dashboard{% endblock %}
-{% block brand %}
-    <div class="navbar-brand">
-        {#        {% if color == "is-primary" %}#}
-        <a href="{% url "student:dashboard" %}" class="navbar-item">
-            <img src="{% static 'img/ostatniLearningPrimary.png' %}" alt="Logo">
-            {#        {% else %}#}
-            {#        <a href="#" class="navbar-item">#}
-            {#            <img src="{% static 'img/ostatniLearningInfo.png' %}" alt="Logo">#}
-            {#        {% endif %}#}
-        </a>
-    </div>
-{% endblock %}
 {% block herotitle %}My Dashboard{% endblock %}
 {% block breadcrumb %}
     <section style="padding: 1rem" class="section card">
