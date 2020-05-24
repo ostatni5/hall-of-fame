@@ -45,8 +45,8 @@
             <span>Pending exercises</span>
         </a>
     </p>
-    {% for score in pending %}
-    {% with exe=score.exercise class="pending"%}
+    {% for exe in pending %}
+    {% with class="pending"%}
         <a class="panel-block is-block {{ class }}">
             <nav class="level is-fullwidth">
                 <div class="level-item column is-one-fifth is-vcentered">
@@ -61,7 +61,7 @@
                     <div>
                         <p class="heading">Note</p>
                         <p class="title">
-                            {{ score.value }}
+                            _
                         </p>
                     </div>
                 </div>
@@ -69,7 +69,7 @@
                     <div>
                         <p class="heading">Percentage</p>
                         <p class="title">
-                            {{  score.value|percent:exe.max_score|roundTo:2 }}%
+                            _
                         </p>
                     </div>
                 </div>
