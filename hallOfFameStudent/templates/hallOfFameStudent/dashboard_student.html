@@ -18,13 +18,17 @@
     <section
             style='background-image: url("{% static 'img/spiral-cut.png' %}"); background-position: bottom; background-repeat: no-repeat; background-size:30%;'
             class="section">
-        <div class="columns">
-            <div class="column is-6 is-offset-1">
-                {% include 'hallOfFameStudent/includes/student_courses_panel.html' with courses=courses total_ETCS=total_ETCS %}
-            </div>
-            <div class="column is-4">
-                {% include 'hallOfFameStudent/includes/lastgrades_chart.html' with chart_ID="scoreChart" chart_data=score_diagram %}
-                {% include 'hallOfFameStudent/includes/student_statistics_panel.html' with averages=averages %}
+        <div class="columns is-centered">
+            <div class="column is-four-fifths-desktop is-11-tablet is-12-mobile">
+                <div class="columns is-desktop">
+                    <div class="column is-7-desktop">
+                        {% include 'hallOfFameStudent/includes/student_courses_panel.html' with courses=courses total_ETCS=total_ETCS %}
+                    </div>
+                    <div class="column">
+                        {% include 'hallOfFameStudent/includes/lastgrades_chart.html' with chart_ID="scoreChart" chart_data=score_diagram %}
+                        {% include 'hallOfFameStudent/includes/student_statistics_panel.html' with averages=averages %}
+                    </div>
+                </div>
             </div>
         </div>
     </section>
