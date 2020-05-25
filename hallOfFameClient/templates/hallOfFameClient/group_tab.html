@@ -35,7 +35,7 @@
                 </article>
             {% endif %}
             <div class="columns is-centered">
-                <div class="column is-four-fifths tile is-ancestor is-vertical">
+                <div class="column is-four-fifths-desktop is-12-tablet tile is-ancestor is-vertical">
                 {% for k,group in groupsCtx.ctx_list.items %}
                 {% include 'hallOfFameClient/includes/group_tab_grades_tile.html' with group=group subject=subject  %}
                 {% endfor %}

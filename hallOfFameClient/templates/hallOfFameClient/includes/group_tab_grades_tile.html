@@ -1,29 +1,57 @@
 {% load hallOfFame_extra %}
-<h2>{{ group.name }}</h2>
-<form id="updateScoresForm" action="{% url "lecturer:subject_scores" pk=subject.pk group_pk=group.pk %}" method="post" autocomplete=off>
-    {% csrf_token %}
-    <input name="change_info" type="hidden">
-    <table class="table is-bordered is-hoverable">
-        <tr>
-            <th>Students</th>
-            {% for exercise in group.exercises %}
-                <th>{{ exercise.name }}</th>
-            {% endfor %}
-            <th>Percent</th>
-        </tr>
-        {% for student in group.students %}
-            <tr>
-                <td>{{ student.name }}</td>
-                {% for exercise in group.exercises %}
-                    {#                                <td>{{ group.scores|key:student.id|key:exercise.id }}</td>#}
-                    <td><input class="score_field" type="number"
-                               name="ss-{{ group.scores|keyS:student.id|keyS:exercise.id|keyS:"id" }}-{{ student.id }}-{{ exercise.id }}"
-                               value="{{ group.scores|keyS:student.id|keyS:exercise.id|keyS:"value" }}">
-                    </td>
-                {% endfor %}
-                <td>{{ group.scores|key:"sum"|key:student.id|percent:group.max_score }}</td>
-            </tr>
-        {% endfor %}
-    </table>
-    <button type="submit"> SAVE</button>
-</form>
+<div class="tile is-child">
+    <article class="panel is-info">
+        <div class="panel-heading has-text-centered has-shadow" style="border-bottom: 2px solid #f5f5f5;">
+            <p class="has-text-centered is-size-3">
+                {{ group.name }}
+            </p>
+        </div>
+        <p class="panel-block has-background-info">
+        </p>
+        <form id="updateScoresForm" action="{% url "lecturer:subject_scores" pk=subject.pk group_pk=group.pk %}" method="post" autocomplete=off>
+            <div class="panel-block is-paddingless has-text-centered table-container">
+                {% csrf_token %}
+                <input name="change_info" type="hidden">
+                <table class="table is-fullwidth is-size-5 is-hoverable is-striped">
+                    <thead>
+                        <tr class="is-bold" style="background: #D0EEF2">
+                                <th></th>
+                                {% for exercise in group.exercises %}
+                                    <th><abbr title="Max score: {{ exercise.max_score }}">{{ exercise.name }}</abbr></th>
+                                {% endfor %}
+                                <th><abbr title="Percentage score of student">Percent</abbr></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for student in group.students %}
+                            <tr>
+                                <th>{{ student.name }}</th>
+                                {% for exercise in group.exercises %}
+                                    {#                                <td>{{ group.scores|key:student.id|key:exercise.id }}</td>#}
+                                    <td class="is-paddingless">
+                                    <p class="control has-icons-right is-overlay is-marginless is-paddingless">
+                                        <input class="input score_field is-medium" type="number" placeholder="{{ exercise.max_score }}"
+                                               name="ss-{{ group.scores|keyS:student.id|keyS:exercise.id|keyS:"id" }}-{{ student.id }}-{{ exercise.id }}"
+                                               value="{{ group.scores|keyS:student.id|keyS:exercise.id|keyS:"value" }}"
+                                               style="border: none; background: transparent;">
+                                        {% if group.scores|keyS:student.id|keyS:exercise.id|keyS:"value" %}
+                                        <span class="icon is-small is-right">
+                                            <i class="fas fa-check"></i>
+                                        </span>
+                                        {% endif %}
+                                    </p>
+                                    </td>
+                                {% endfor %}
+                                <td>{{ group.scores|key:"sum"|key:student.id|percent:group.max_score|roundTo:2 }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <nav class="panel-block buttons is-right">
+                <button class="button is-success" type="submit"> SAVE</button>
+                <a href="{% url "lecturer:subject_scores" pk=subject.pk group_pk=group.pk  %}" class="button">CANCEL</a>
+            </nav>
+        </form>
+    </article>
+</div>
