@@ -1,0 +1,66 @@
+{% load static hallOfFame_extra %}
+<article class="panel is-dark" style="height: 100%;">
+    <div class="panel-heading is-size-3 has-text-centered has-text-light"
+         style="border-bottom: 4px solid #ffdd57; background: #636363;">
+        <p class="has-text-centered">
+            Rankings
+        </p>
+    </div>
+    <div class="panel-block has-text-light has-background-dark is-block" style="border-bottom: 2px solid #f5f5f5;">
+        <div class="columns is-gapless is-mobile">
+            <div class="column is-4 has-text-centered has-text-light">
+            </div>
+            <p class="is-hidden-mobile column is-4 has-text-centered has-text-light">
+                <span class="icon is-large is-size-4 has-text-warning">
+                    <i class="fas fa-4x fa-trophy"></i>
+                </span>
+            </p>
+            <div class="column is-4 has-text-centered has-text-light">
+            </div>
+        </div>
+    </div>
+    <p class="panel-block has-text-light has-background-dark">
+    </p>
+    <div class="panel-block is-block is-paddingless">
+        <div class="table-container">
+            <table class="table is-fullwidth is-size-5 is-hoverable is-striped">
+                <thead>
+                <tr class="is-bold" style="background: #fffbeb">
+                    <th></th>
+                    <th><abbr title="Student on this rank">Student</abbr></th>
+                    <th><abbr title="Average from this course">Average</abbr></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for ranking in group_ranking %}
+                    {% with student=ranking.student %}
+                        <tr>
+                            <th>#{{ ranking.pos }}</th>
+                            <td>
+                            <span>
+                                {{ student.name }} {{ " " }} {{ student.surname }}
+                            </span>
+                                {% if ranking.pos == 1 %}
+                                    <span class="is-icon is-medium has-text-warning">
+                                <i class="fas fa-fw fa-lg fa-medal"></i>
+                            </span>
+                                {% elif ranking.pos == 2 %}
+                                    <span class="is-icon is-medium has-text-grey-light">
+                                <i class="fas fa-fw fa-lg fa-medal"></i>
+                            </span>
+                                {% elif ranking.pos == 3 %}
+                                    <span class="is-icon is-medium" style="color: #CD7F32">
+                                <i class="fas fa-fw fa-lg fa-medal"></i>
+                            </span>
+                                {% endif %}
+                            </td>
+                            <td>{{ ranking.mean_value|roundTo:2 }}%</td>
+                        </tr>
+                    {% endwith %}
+                {% empty %}
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</article>

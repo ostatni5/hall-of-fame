@@ -3,9 +3,9 @@
 {% load static %}
 {% block title %}{{ subject.name }}{% endblock %}
 {% block hero %}
-  {% with groupsCtx.username as username %}
-  {{block.super}}
-  {% endwith %}
+    {% with groupsCtx.username as username %}
+        {{ block.super }}
+    {% endwith %}
 {% endblock %}
 {% block herotitle %}{{ subject.name }}{% endblock %}
 {% block breadcrumb %}
@@ -23,25 +23,31 @@
     </section>
 {% endblock %}
 {% block content %}
-{#    <p>{{ subject.description }}</p>#}
-<section
+    {#    <p>{{ subject.description }}</p>#}
+    <section
             style='min-height: 79vh; background-image: url("{% static 'img/spiral-cut.png' %}"); background-position: bottom; background-repeat: no-repeat; background-size:30%;'
             class="section">
-            {% if msg %}
-                <article class="message is-success">
-                    <div class="message-body">
-                    {{msg}}
-                    </div>
-                </article>
-            {% endif %}
+        {% if msg %}
+            <article class="message is-success">
+                <div class="message-body">
+                    {{ msg }}
+                </div>
+            </article>
+        {% endif %}
+        {% for k,group in groupsCtx.ctx_list.items %}
             <div class="columns is-centered">
                 <div class="column is-four-fifths-desktop is-12-tablet tile is-ancestor is-vertical">
-                {% for k,group in groupsCtx.ctx_list.items %}
-                {% include 'hallOfFameClient/includes/group_tab_grades_tile.html' with group=group subject=subject  %}
-                {% endfor %}
+                    {% include 'hallOfFameClient/includes/group_tab_grades_tile.html' with group=group subject=subject %}
                 </div>
             </div>
-        </div>
+            <div class="columns is-centered">
+                <div class="column is-four-fifths-desktop is-12-tablet tile is-ancestor is-vertical">
+                    {% include 'hallOfFameClient/includes/group_ranks_panel.html' with group_ranking=group.ranking %}
+                </div>
+            </div>
+
+        {% endfor %}
+
     </section>
 
 

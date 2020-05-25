@@ -8,11 +8,11 @@ from django.utils import timezone
 from django.views import View
 from django.views.generic.list import ListView
 
-from hallOfFameClient.models import StudentScore, Exercise
+from hallOfFameClient.models import StudentScore, Exercise, StatGroupStudentScore
 
 from hallOfFameClient.models import Subject, Student, Lecturer, Group
 from HallOfFame.permissions import isLecturer, canAccessSubject, canUpdateScore, canInsertScore, canAccessGroup
-from hallOfFameClient.stats.utility import calc_all_stats
+from hallOfFameClient.stats.utility import calc_all_stats, create_ranking_students
 
 
 class UserLecturerTestMixinView(LoginRequiredMixin, UserPassesTestMixin, View):
@@ -47,19 +47,23 @@ class LecturerGroupTabView(UserLecturerTestMixinView):
             'username': lecturer.name + " " + lecturer.surname,
             'ctx_list': {}
         }
+
         ctx_list = groups_ctx['ctx_list']
         for group in groups:
             ctx_list[group.pk] = {}
             ctx_list[group.pk]["name"] = group.name
             groups_ctx['group_names'] += group.name + " "
             ctx_list[group.pk]["pk"] = group.pk
-            ctx_list[group.pk]["scores"] = {}
+
+            group_students = StatGroupStudentScore.objects.filter(stat_group__group=group).order_by('-mean_value').all()
+            ctx_list[group.pk]["ranking"] = create_ranking_students(group_students)
 
             exercises = group.exercises.all()
             students = group.students.all()
             ctx_list[group.pk]["exercises"] = exercises.values()
             ctx_list[group.pk]["students"] = students.values()
 
+            ctx_list[group.pk]["scores"] = {}
             ctx_list[group.pk]["scores"]["sum"] = {}
             for student in group.students.all():
                 ctx_list[group.pk]["scores"][student.pk] = {}
