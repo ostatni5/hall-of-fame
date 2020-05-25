@@ -43,3 +43,7 @@ def percent(value, full):
 @register.filter
 def roundTo(value, prec):
     return round(value, prec)
+
+@register.filter
+def dataId(value):
+    return "data-{0}".format(value)

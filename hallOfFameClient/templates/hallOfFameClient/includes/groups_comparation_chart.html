@@ -14,29 +14,19 @@
 {#    <div class="message-body">#}
 {#    </div>#}
 {#</article>#}
+{{ chart_data|json_script:id_data }}
 <script>
     {
+        let chartData = JSON.parse(document.getElementById('{{ id_data }}').textContent);
         var ctx = document.getElementById('{{ chart_ID }}').getContext('2d');
-
-        var myData = [1, 2, 3, 4, 5]
-        var myLabel = ['a', 'b', 'c', 'd', 'e']
-        var subjects = ['a', 'b', 'c', 'd', 'e']
-        var dates = ['a', 'b', 'c', 'd', 'e']
-        {% comment %}
-    {% for date in chart_data.date %}
-    dates.push("{{ date|date:'d M' }}")
-    {% endfor %}
-    var d = new Date('2010-08-05')
-    // convert date to pretty format
-    var dateStr = getPrettyDate(d)
-    var dates = [dateStr,dateStr,dateStr,dateStr,dateStr]
-
-    // add random data and labels
-    for(var i=0; i<14; i++) {
-        myData.push(Math.floor(Math.random() * (100 - 1 + 1)) + 1)
-        myLabel.push(Math.floor(Math.random() * (100 - 1 + 1)) + 1)
-    }
-    {% endcomment %}
+        console.log(chartData);
+        var myData = [];
+        var groups = [];
+        for(let g of chartData)
+        {
+            myData.push(g.mean_value);
+            groups.push(g.name);
+        }
         var colors = getEvenlySpacedColors(myData);
 // shift colors
         for (let i = 0; i < parseInt(colors.length / 3.5); i++)
@@ -47,10 +37,10 @@
 
 
 // create array of bars colors
-        var colors2 = []
-        let min = Math.min.apply(null, myData)
+        var colors2 = [];
+        let min = Math.min.apply(null, myData);
         for (let i = 0; i < myData.length; i++) {
-            let item = myData[i]
+            let item = myData[i];
             colors2.push(colors[parseInt(item - min)])
         }
 
@@ -58,7 +48,7 @@
         var myChart = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: dates,
+                labels: groups,
                 datasets: [{
                     label: false,
                     data: myData,
@@ -74,12 +64,8 @@
                 },
                 tooltips: {
                     callbacks: {
-                        title: function (tooltipItem, data) {
-                            return "Subject: " + subjects[tooltipItem[0].index];
-                        },
-
                         label: function (tooltipItem, data) {
-                            return "Percentage: " + tooltipItem.yLabel;
+                            return `${tooltipItem.yLabel.toFixed(2)}%`;
                         }
                     }
 
@@ -97,7 +83,7 @@
                     xAxes: [{
                         scaleLabel: {
                             display: true,
-                            labelString: 'Date'
+                            labelString: 'Group'
                         }
                     }]
                 }

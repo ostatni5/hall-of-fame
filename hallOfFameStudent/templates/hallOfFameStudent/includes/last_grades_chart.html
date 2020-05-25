@@ -87,7 +87,7 @@ var myChart = new Chart(ctx, {
                 },
 
                label: function(tooltipItem, data) {
-                    return "Percentage: " + tooltipItem.yLabel;
+                    return "Percentage: " + tooltipItem.yLabel.toFixed(2);
                 }
             }
 

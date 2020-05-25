@@ -159,14 +159,18 @@ class DashboardLecturerView(UserLecturerTestMixinView, View):
 
         groups_by_sub = {}
         context['subjects_quantity'] = {}
+        context['chart_data'] = {}
+
         for g in context['groups']:
             if g.subject.pk in groups_by_sub:
                 groups_by_sub[g.subject.pk].append(g)
                 context['subjects_quantity'][g.subject.pk] += g.students.count()
+                context['chart_data'][g.subject.pk].append(
+                    {"name": g.name, "mean_value": g.stat_score.first().mean_value})
             else:
                 groups_by_sub[g.subject.pk] = [g]
                 context['subjects_quantity'][g.subject.pk] = g.students.count()
-
+                context['chart_data'][g.subject.pk] = [{"name": g.name, "mean_value": g.stat_score.first().mean_value}]
 
         context['groups_by_sub'] = groups_by_sub
         print(context)
