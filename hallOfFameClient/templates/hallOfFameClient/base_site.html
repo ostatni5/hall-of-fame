@@ -2,7 +2,15 @@
 {% load static %}
 
 {% block hero %}
-  {% with 'info' as primaryColor %}
+  {% with 'info' as primary_color %}
   {{block.super}}
   {% endwith %}
+{% endblock %}
+
+{% block brand %}
+    <div class="navbar-brand">
+        <a href="{% url "world:main" %}" class="navbar-item">
+            <img src="{% static 'img/ostatniLearningInfo.png' %}" alt="Logo">
+        </a>
+    </div>
 {% endblock %}
