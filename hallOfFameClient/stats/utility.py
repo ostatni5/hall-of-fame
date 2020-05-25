@@ -149,10 +149,11 @@ def create_ranking_students_and_me(students_desc, student_pk):
         if len(students_desc) > 0:
             last = students_desc[0].mean_value
     for row in students_desc:
-        if row.mean_value < last:
+        if round(row.mean_value, 2) < round(last, 2):
             pos += 1
+            last = round(row.mean_value, 2)
         row.pos = pos
-        student_ranking[row.student.pk] = {"pos": pos, "mean_value": row.mean_value,
+        student_ranking[row.student.pk] = {"pos": pos, "mean_value": round(row.mean_value, 2),
                                            "name": row.student.name, "surname": row.student.surname,
                                            }
         if row.student.pk == student_pk:
