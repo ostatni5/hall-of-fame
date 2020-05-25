@@ -30,7 +30,7 @@
                         <div class="navbar-menu">
                             <div class="navbar-end">
                                 <a class="navbar-item has-text-light">
-                                    <span class="is-size-5" style="margin-right: .5rem">{{ username }}</span>
+                                    <span class="is-size-5" style="margin-right: .5rem">{% firstof user.get_short_name user.get_username username %}</span>
                                     <span class="icon">
                                         <i class="fas fa-lg fa-user-cog"></i>
                                     </span>
