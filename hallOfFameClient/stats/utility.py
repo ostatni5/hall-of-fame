@@ -131,7 +131,7 @@ def ranking_group(group_pk):
 
 
 def create_ranking_students(students_desc):
-    ranking, my_pos, my_mean = create_ranking_students_and_me(students_desc, -1)
+    ranking, my_pos, my_mean, student_ranking = create_ranking_students_and_me(students_desc, -1)
     return ranking
 
 
@@ -141,6 +141,7 @@ def create_ranking_students_and_me(students_desc, student_pk):
     pos = 1
     last = 9999
     my_mean = 0
+    student_ranking = {}
     if type(students_desc) is QuerySet:
         if students_desc.first():
             last = students_desc.first().mean_value
@@ -151,11 +152,14 @@ def create_ranking_students_and_me(students_desc, student_pk):
         if row.mean_value < last:
             pos += 1
         row.pos = pos
+        student_ranking[row.student.pk] = {"pos": pos, "mean_value": row.mean_value,
+                                           "name": row.student.name, "surname": row.student.surname,
+                                           }
         if row.student.pk == student_pk:
             my_pos = pos
             my_mean = row.mean_value
         ranking.append(row)
-    return ranking, my_pos, my_mean
+    return ranking, my_pos, my_mean, student_ranking
 
 
 def split_archive_ranking_students(days_students_desc):
@@ -168,6 +172,7 @@ def split_archive_ranking_students(days_students_desc):
             rankings.append(ranking)
             days.append(row.record.creation_date)
             ranking = [row]
+            last_record = row.record
         else:
             ranking.append(row)
     rankings.append(ranking)

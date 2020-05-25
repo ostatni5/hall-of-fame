@@ -59,7 +59,8 @@ class GroupStudentView(StudentView, TemplateView):
         pending_exercises = group.exercises.difference(
             group.exercises.filter(scores__student=student))
         group_students = StatGroupStudentScore.objects.filter(stat_group__group=group).order_by('-mean_value').all()
-        group_ranking, my_ranking, my_average = create_ranking_students_and_me(group_students, student.pk)  # obj.pos
+        group_ranking, my_ranking, my_average, all_ranking = create_ranking_students_and_me(group_students,
+                                                                                            student.pk)  # obj.pos
 
         cos_do_wykresu_zmiany_rangi_w_czasie_ale_nie_wiem_w_jakiej_formie = 2137
 
@@ -67,15 +68,18 @@ class GroupStudentView(StudentView, TemplateView):
                                                                                             '-mean_value').all()
 
         arch_group_students_s, days = split_archive_ranking_students(arch_group_students)
-        arch_group_ranking, arch_my_ranking = ([], [])
+        arch_group_ranking, arch_my_ranking, arch_all_ranking = ([], [], [])
         for arch_group in arch_group_students_s:
-            ranking, my_pos, mean = create_ranking_students_and_me(arch_group, student.pk)
+            ranking, my_pos, mean, student_ranking = create_ranking_students_and_me(arch_group, student.pk)
+
             arch_group_ranking.append(ranking)
             arch_my_ranking.append(my_pos)
+            arch_all_ranking.append(student_ranking)
 
         days.insert(0, timezone.now())
         arch_group_ranking.insert(0, group_ranking)
         arch_my_ranking.insert(0, my_ranking)
+        arch_all_ranking.insert(0, {})
 
         context = super().get_context_data(**kwargs)
         context['username'] = student.name + " " + student.surname
@@ -87,6 +91,10 @@ class GroupStudentView(StudentView, TemplateView):
         }
         context['group_ranking'] = {
             'student_ranking': []
+        }
+        context['chart_data'] = {
+            'days': days[1:],
+            'rankings': arch_all_ranking[1:]
         }
 
         if len(arch_group_ranking) < 2:
