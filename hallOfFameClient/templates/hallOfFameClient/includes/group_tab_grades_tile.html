@@ -2,6 +2,9 @@
 <div class="tile is-child">
     <article class="panel is-info">
         <div class="panel-heading has-text-centered has-shadow" style="border-bottom: 2px solid #f5f5f5;">
+            <a class="is-pulled-right has-text-white" href="{% url "lecturer:hallOfFameClient_group_change" group.pk %}">
+                <i class="fas fa-edit"></i>
+            </a>
             <p class="has-text-centered is-size-3">
                 {{ group.name }}
             </p>
