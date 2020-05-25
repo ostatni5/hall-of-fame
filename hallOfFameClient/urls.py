@@ -3,7 +3,7 @@ from django.conf.urls import url
 from django.contrib.auth import views as auth_views
 from . import views
 from .admin import lecturer_admin_site
-from .views import TabView, DashboardLecturerView,StatView
+from .views import LecturerGroupTabView, DashboardLecturerView,StatView
 
 app_name = 'lecturer'
 urlpatterns = [

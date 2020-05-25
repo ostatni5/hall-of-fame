@@ -4,6 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Sum
 from django.forms import model_to_dict
 from django.shortcuts import render, redirect
+from django.utils import timezone
 from django.views import View
 from django.views.generic.list import ListView
 
@@ -11,6 +12,7 @@ from hallOfFameClient.models import StudentScore, Exercise
 
 from hallOfFameClient.models import Subject, Student, Lecturer, Group
 from HallOfFame.permissions import isLecturer, canAccessSubject, canUpdateScore, canInsertScore, canAccessGroup
+from hallOfFameClient.stats.utility import calc_all_stats
 
 
 class UserLecturerTestMixinView(LoginRequiredMixin, UserPassesTestMixin, View):
@@ -23,8 +25,8 @@ class UserLecturerTestMixinView(LoginRequiredMixin, UserPassesTestMixin, View):
         return flag
 
 
-class TabView(UserLecturerTestMixinView):
-    template_name = 'hallOfFameClient/tab.html'
+class LecturerGroupTabView(UserLecturerTestMixinView):
+    template_name = 'hallOfFameClient/group_tab.html'
 
     def test_func(self):
         user = self.request.user
@@ -43,6 +45,7 @@ class TabView(UserLecturerTestMixinView):
         for group in groups:
             groups_ctx[group.pk] = {}
             groups_ctx[group.pk]["name"] = group.name
+            groups_ctx[group.pk]["pk"] = group.pk
             groups_ctx[group.pk]["scores"] = {}
 
             exercises = group.exercises.all()
@@ -84,12 +87,16 @@ class TabView(UserLecturerTestMixinView):
 
     def post(self, request, *args, **kwargs):
         update_scores, create_scores = self.filter_request(request)
+        saved_scores = 0
 
         for score in update_scores:
             q = StudentScore.objects.get(pk=score["id"])
             if canUpdateScore(request.user, q):
                 q.value = score.get("value")
+                q.date = timezone.now()
                 q.save()
+
+                saved_scores += 1
 
         for score in create_scores:
             student = Student.objects.get(pk=score.get("student"))
@@ -97,9 +104,12 @@ class TabView(UserLecturerTestMixinView):
             if canInsertScore(request.user, exercise):
                 StudentScore.objects.create(student=student, exercise=exercise,
                                             value=score.get("value"))
+                saved_scores += 1
 
-        print(update_scores, create_scores)
-        msg = "SAVED"
+        if saved_scores > 0:
+            calc_all_stats(force=True, to_archive=False)
+
+        msg = "Saved {0} scores".format(saved_scores)
         subject, groups_ctx = self.get_ctx()
         return render(request, self.template_name,
                       {'groupsCtx': groups_ctx, "subject": subject, "msg": msg})
@@ -141,7 +151,6 @@ class DashboardLecturerView(UserLecturerTestMixinView, View):
             'diagramUrl'] = "https://media.discordapp.net/attachments/689977881535053839/701202475906236456/unknown.png"
 
         groups_by_sub = {}
-
         for g in context['groups']:
             if g.subject.pk in groups_by_sub:
                 groups_by_sub[g.subject.pk].append(g)

@@ -8,7 +8,7 @@ from django.urls import path
 
 from hallOfFameClient.models import Subject, Group, StudentScore, Exercise
 from HallOfFame.permissions import isAdmin, isLecturer
-from hallOfFameClient.views import DashboardLecturerView, TabView
+from hallOfFameClient.views import DashboardLecturerView, LecturerGroupTabView
 
 
 class ExerciseInLine(admin.TabularInline):
@@ -72,7 +72,7 @@ class LecturerAdminSite(AdminSite):
         my_urls = [
             path('', LecturerAdminSite.admin_view(self, DashboardLecturerView.as_view())),
             path('hallOfFameClient/', LecturerAdminSite.admin_view(self, DashboardLecturerView.as_view())),
-            path('subject/<int:pk>/scores/<int:group_pk>', LecturerAdminSite.admin_view(self, TabView.as_view()),
+            path('subject/<int:pk>/scores/<int:group_pk>', LecturerAdminSite.admin_view(self, LecturerGroupTabView.as_view()),
                  name="subject_scores"),
         ]
         return my_urls + urls

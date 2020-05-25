@@ -10,7 +10,7 @@
 
     {% for k,group in groupsCtx.items %}
         <h2>{{ group.name }}</h2>
-        <form id="updateScoresForm" action="/tab/" method="post" autocomplete=off>
+        <form id="updateScoresForm" action="{% url "lecturer:subject_scores" pk=subject.pk group_pk=group.pk %}" method="post" autocomplete=off>
             {% csrf_token %}
             <input name="change_info" type="hidden">
             <table class="table is-bordered is-hoverable">

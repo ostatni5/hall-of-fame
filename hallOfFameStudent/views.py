@@ -74,6 +74,7 @@ class GroupStudentView(StudentView, TemplateView):
             arch_my_ranking.append(my_pos)
         arch_group_ranking[0] = group_ranking
         arch_my_ranking[0] = my_ranking
+
         context = super().get_context_data(**kwargs)
         context['username'] = student.name + " " + student.surname
         context['subject'] = group.subject
@@ -93,7 +94,7 @@ class GroupStudentView(StudentView, TemplateView):
             for i in range(len(group_ranking)):
                 ranking = group_ranking[i]
                 last_ranking_pos = ranking.pos
-                if (len(arch_group_ranking[1]) > i):
+                if len(arch_group_ranking[1]) > i:
                     last_ranking_pos = arch_group_ranking[1][i].pos
                 context['group_ranking']['student_ranking'].append(ranking)
                 context['group_ranking'][ranking.student.pk] = last_ranking_pos - ranking.pos
