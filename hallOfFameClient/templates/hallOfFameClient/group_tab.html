@@ -1,43 +1,48 @@
 {% extends 'hallOfFameClient/base_site.html' %}
 {% load hallOfFame_extra %}
+{% load static %}
+{% block title %}{{ subject.name }}{% endblock %}
+{% block hero %}
+  {% with groupsCtx.username as username %}
+  {{block.super}}
+  {% endwith %}
+{% endblock %}
+{% block herotitle %}{{ subject.name }}{% endblock %}
+{% block breadcrumb %}
+    <section style="padding: 1rem" class="section card">
+        <div class="container">
+            <nav class="breadcrumb is-medium" aria-label="breadcrumbs">
+                <ul>
+                    <li><a href="{% url 'lecturer:dashboard' %}">Home</a></li>
+                    <li><a href="{% url 'lecturer:client' %}" aria-current="page">{{ subject.name }}</a></li>
+                    <li class="is-active"><a href="#" aria-current="page">{{ groupsCtx.group_names }}</a></li>
+                    <li class="is-active"><a href="#"></a></li>
+                </ul>
+            </nav>
+        </div>
+    </section>
+{% endblock %}
 {% block content %}
-    {% block title %}subject.name{% endblock %}
 {#    <p>{{ subject.description }}</p>#}
-
-    {% if msg %}
-        <h1>{{msg}}</h1>
-    {% endif %}
-
-    {% for k,group in groupsCtx.items %}
-        <h2>{{ group.name }}</h2>
-        <form id="updateScoresForm" action="{% url "lecturer:subject_scores" pk=subject.pk group_pk=group.pk %}" method="post" autocomplete=off>
-            {% csrf_token %}
-            <input name="change_info" type="hidden">
-            <table class="table is-bordered is-hoverable">
-                <tr>
-                    <th>Students</th>
-                    {% for exercise in group.exercises %}
-                        <th>{{ exercise.name }}</th>
-                    {% endfor %}
-                    <th>Percent</th>
-                </tr>
-                {% for student in group.students %}
-                    <tr>
-                        <td>{{ student.name }}</td>
-                        {% for exercise in group.exercises %}
-                            {#                                <td>{{ group.scores|key:student.id|key:exercise.id }}</td>#}
-                            <td><input class="score_field" type="number"
-                                       name="ss-{{ group.scores|keyS:student.id|keyS:exercise.id|keyS:"id" }}-{{ student.id }}-{{ exercise.id }}"
-                                       value="{{ group.scores|keyS:student.id|keyS:exercise.id|keyS:"value" }}">
-                            </td>
-                        {% endfor %}
-                        <td>{{ group.scores|key:"sum"|key:student.id|percent:group.max_score }}</td>
-                    </tr>
+<section
+            style='min-height: 79vh; background-image: url("{% static 'img/spiral-cut.png' %}"); background-position: bottom; background-repeat: no-repeat; background-size:30%;'
+            class="section">
+            {% if msg %}
+                <article class="message is-success">
+                    <div class="message-body">
+                    {{msg}}
+                    </div>
+                </article>
+            {% endif %}
+            <div class="columns is-centered">
+                <div class="column is-four-fifths tile is-ancestor is-vertical">
+                {% for k,group in groupsCtx.ctx_list.items %}
+                {% include 'hallOfFameClient/includes/group_tab_grades_tile.html' with group=group subject=subject  %}
                 {% endfor %}
-            </table>
-            <button type="submit"> SAVE</button>
-        </form>
-    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </section>
 
 
     {{ temp }}

@@ -1,10 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+{% load hallOfFame_extra %}
+<h2>{{ group.name }}</h2>
+<form id="updateScoresForm" action="{% url "lecturer:subject_scores" pk=subject.pk group_pk=group.pk %}" method="post" autocomplete=off>
+    {% csrf_token %}
+    <input name="change_info" type="hidden">
+    <table class="table is-bordered is-hoverable">
+        <tr>
+            <th>Students</th>
+            {% for exercise in group.exercises %}
+                <th>{{ exercise.name }}</th>
+            {% endfor %}
+            <th>Percent</th>
+        </tr>
+        {% for student in group.students %}
+            <tr>
+                <td>{{ student.name }}</td>
+                {% for exercise in group.exercises %}
+                    {#                                <td>{{ group.scores|key:student.id|key:exercise.id }}</td>#}
+                    <td><input class="score_field" type="number"
+                               name="ss-{{ group.scores|keyS:student.id|keyS:exercise.id|keyS:"id" }}-{{ student.id }}-{{ exercise.id }}"
+                               value="{{ group.scores|keyS:student.id|keyS:exercise.id|keyS:"value" }}">
+                    </td>
+                {% endfor %}
+                <td>{{ group.scores|key:"sum"|key:student.id|percent:group.max_score }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    <button type="submit"> SAVE</button>
+</form>

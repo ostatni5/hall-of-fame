@@ -38,32 +38,39 @@ class LecturerGroupTabView(UserLecturerTestMixinView):
 
     def get_ctx(self):
         subject = Subject.objects.get(pk=self.kwargs['pk'])
-
         groups = subject.groups.filter(pk=self.kwargs['group_pk']).all()
+        lecturer = self.request.user.lecturer
 
-        groups_ctx = {}
+        groups_ctx = {
+            'group_names': "",
+            'lecturer': lecturer,
+            'username': lecturer.name + " " + lecturer.surname,
+            'ctx_list': {}
+        }
+        ctx_list = groups_ctx['ctx_list']
         for group in groups:
-            groups_ctx[group.pk] = {}
-            groups_ctx[group.pk]["name"] = group.name
-            groups_ctx[group.pk]["pk"] = group.pk
-            groups_ctx[group.pk]["scores"] = {}
+            ctx_list[group.pk] = {}
+            ctx_list[group.pk]["name"] = group.name
+            groups_ctx['group_names'] += group.name + " "
+            ctx_list[group.pk]["pk"] = group.pk
+            ctx_list[group.pk]["scores"] = {}
 
             exercises = group.exercises.all()
             students = group.students.all()
-            groups_ctx[group.pk]["exercises"] = exercises.values()
-            groups_ctx[group.pk]["students"] = students.values()
+            ctx_list[group.pk]["exercises"] = exercises.values()
+            ctx_list[group.pk]["students"] = students.values()
 
-            groups_ctx[group.pk]["scores"]["sum"] = {}
+            ctx_list[group.pk]["scores"]["sum"] = {}
             for student in group.students.all():
-                groups_ctx[group.pk]["scores"][student.pk] = {}
-                groups_ctx[group.pk]["scores"]["sum"][student.pk] = 0
+                ctx_list[group.pk]["scores"][student.pk] = {}
+                ctx_list[group.pk]["scores"]["sum"][student.pk] = 0
 
-            groups_ctx[group.pk]["max_score"] = 0
+            ctx_list[group.pk]["max_score"] = 0
             for exercise in exercises:
-                groups_ctx[group.pk]["max_score"] += exercise.max_score
+                ctx_list[group.pk]["max_score"] += exercise.max_score
                 for score in exercise.scores.all():
-                    groups_ctx[group.pk]["scores"][score.student.pk][score.exercise.pk] = model_to_dict(score)
-                    groups_ctx[group.pk]["scores"]["sum"][score.student.pk] += score.value
+                    ctx_list[group.pk]["scores"][score.student.pk][score.exercise.pk] = model_to_dict(score)
+                    ctx_list[group.pk]["scores"]["sum"][score.student.pk] += score.value
         return subject, groups_ctx
 
     def parse_score_name(self, score, value):
