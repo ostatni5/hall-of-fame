@@ -158,11 +158,15 @@ class DashboardLecturerView(UserLecturerTestMixinView, View):
             'diagramUrl'] = "https://media.discordapp.net/attachments/689977881535053839/701202475906236456/unknown.png"
 
         groups_by_sub = {}
+        context['subjects_quantity'] = {}
         for g in context['groups']:
             if g.subject.pk in groups_by_sub:
                 groups_by_sub[g.subject.pk].append(g)
+                context['subjects_quantity'][g.subject.pk] += g.students.count()
             else:
                 groups_by_sub[g.subject.pk] = [g]
+                context['subjects_quantity'][g.subject.pk] = g.students.count()
+
 
         context['groups_by_sub'] = groups_by_sub
         print(context)
