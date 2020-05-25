@@ -25,13 +25,15 @@
                 {% include 'hallOfFameStudent/includes/student_exercises_panel.html' with group_name=name checked=exercises.checked pending=exercises.pending %}
             </div>
             <div class="column is-6">
-                {% include 'hallOfFameStudent/includes/group_ranks_panel.html' with my_ranking=my_ranking group_ranking=group_ranking%}
+                {% include 'hallOfFameStudent/includes/group_ranks_panel.html' with my_ranking=my_ranking group_ranking=group_ranking %}
             </div>
         </div>
-        <div class="columns">
-            <div class="column is-10 is-offset-1">
-                {% include 'hallOfFameStudent/includes/group_ranks_chart.html' with chart_name="Group Ranking Timeline" chart_ID="rankChart" %}
+        {% if show_history %}
+            <div class="columns">
+                <div class="column is-10 is-offset-1">
+                    {% include 'hallOfFameStudent/includes/group_ranks_chart.html' with chart_name="Group Ranking Timeline" chart_ID="rankChart" %}
+                </div>
             </div>
-        </div>
+        {% endif %}
     </section>
 {% endblock %}
