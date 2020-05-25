@@ -21,7 +21,7 @@
 </head>
 <body>
     {% block hero %}
-    <section class="hero is-{{ primary_color|default:"info" }} is-bold">
+    <section class="hero is-{{ primary_color }} is-bold">
         <div class="hero-head">
             <nav class="navbar">
                 <div class="container">
@@ -37,7 +37,7 @@
                                 </a>
                                 <span class="navbar-item">
                                     {% block logout %}
-                                    <a href="{% url "lecturer:logout" %}" class="button is-{{ primary_color|default:"info" }} is-inverted">
+                                    <a href="{% url "lecturer:logout" %}" class="button is-{{ primary_color }} is-inverted">
                                         <span class="icon">
                                             <i class="fas fa-sign-out-alt"></i>
                                         </span>

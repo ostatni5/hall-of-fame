@@ -20,11 +20,11 @@
             class="section">
         <div class="columns">
             <div class="column is-6 is-offset-1">
-                {% include 'hallOfFameStudent/student_courses_panel.html' with courses=courses total_ETCS=total_ETCS %}
+                {% include 'hallOfFameStudent/includes/student_courses_panel.html' with courses=courses total_ETCS=total_ETCS %}
             </div>
             <div class="column is-4">
-                {% include 'hallOfFameStudent/lastgrades_chart.html' with chart_ID="scoreChart" chart_data=score_diagram %}
-                {% include 'hallOfFameStudent/student_statistics_panel.html' with averages=averages %}
+                {% include 'hallOfFameStudent/includes/lastgrades_chart.html' with chart_ID="scoreChart" chart_data=score_diagram %}
+                {% include 'hallOfFameStudent/includes/student_statistics_panel.html' with averages=averages %}
             </div>
         </div>
     </section>
