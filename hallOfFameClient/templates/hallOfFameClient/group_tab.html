@@ -1,8 +1,8 @@
-{% extends 'hallOfFameClient/base.html' %}
+{% extends 'hallOfFameClient/base_site.html' %}
 {% load hallOfFame_extra %}
 {% block content %}
-    <h1>{{ subject.name }}</h1>
-    <p>{{ subject.description }}</p>
+    {% block title %}subject.name{% endblock %}
+{#    <p>{{ subject.description }}</p>#}
 
     {% if msg %}
         <h1>{{msg}}</h1>
