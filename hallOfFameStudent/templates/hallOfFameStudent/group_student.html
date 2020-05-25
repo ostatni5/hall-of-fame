@@ -22,15 +22,15 @@
             class="section">
         <div class="columns">
             <div class="column is-4 is-offset-1">
-                {% include 'hallOfFameStudent/student_exercises_panel.html' with group_name=name checked=exercises.checked pending=exercises.pending %}
+                {% include 'hallOfFameStudent/includes/student_exercises_panel.html' with group_name=name checked=exercises.checked pending=exercises.pending %}
             </div>
             <div class="column is-6">
-                {% include 'hallOfFameStudent/group_ranks_panel.html' with my_ranking=my_ranking group_ranking=group_ranking%}
+                {% include 'hallOfFameStudent/includes/group_ranks_panel.html' with my_ranking=my_ranking group_ranking=group_ranking%}
             </div>
         </div>
         <div class="columns">
             <div class="column is-10 is-offset-1">
-                {% include 'hallOfFameStudent/group_ranks_chart.html' with chart_name="Group Ranking Timeline" chart_ID="rankChart" %}
+                {% include 'hallOfFameStudent/includes/group_ranks_chart.html' with chart_name="Group Ranking Timeline" chart_ID="rankChart" %}
             </div>
         </div>
     </section>

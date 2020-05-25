@@ -12,7 +12,6 @@ from hallOfFameClient.models import Student, Subject, StudentScore, Exercise, St
 from hallOfFameClient.stats.utility import create_ranking_students, create_ranking_students_and_me, \
     split_archive_ranking_students
 
-color = "primary"
 user_type = "student"
 
 
@@ -107,7 +106,6 @@ class GroupStudentView(StudentView, TemplateView):
             print(obj)
 
         context['user_type'] = user_type
-        context['primary_color'] = color
         return context
 
 
@@ -124,6 +122,7 @@ class DashboardStudentView(StudentView, TemplateView):
 
     def get_context_data(self, **kwargs):
         student = self.request.user.student
+        scores = student.scores.all().order_by('-date')[:5][::-1]
         scores = student.scores.all().order_by('-date')[:5][::-1]
         my_average = StatSubjectStudentScore.objects.filter(student=student).aggregate(avg=Avg('mean_value'))['avg']
         semester_average = StatSubjectStudentScore.objects.aggregate(avg=Avg('mean_value'))['avg']
@@ -146,7 +145,6 @@ class DashboardStudentView(StudentView, TemplateView):
             'subject': [],
         }
         context['user_type'] = user_type
-        context['primary_color'] = color
         for score in scores:
             context['score_diagram']['label'].append('Exercise: ' + score.exercise.name)
             context['score_diagram']['percentage'].append((score.value * 100.0) / score.exercise.max_score)
@@ -163,7 +161,6 @@ class LoginStudentView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['user_type'] = user_type
-        context['primary_color'] = color
         return context
 
     def get(self, request, *args, **kwargs):
