@@ -70,8 +70,9 @@ class LecturerAdminSite(AdminSite):
     def get_urls(self):
         urls = super().get_urls()
         my_urls = [
-            path('', LecturerAdminSite.admin_view(self, DashboardLecturerView.as_view())),
-            path('hallOfFameClient/', LecturerAdminSite.admin_view(self, DashboardLecturerView.as_view())),
+            path('', LecturerAdminSite.admin_view(self, DashboardLecturerView.as_view()), name="dashboard"),
+            path('hallOfFameClient/', LecturerAdminSite.admin_view(self, DashboardLecturerView.as_view()),
+                 name="client"),
             path('subject/<int:pk>/scores/<int:group_pk>', LecturerAdminSite.admin_view(self, LecturerGroupTabView.as_view()),
                  name="subject_scores"),
         ]
