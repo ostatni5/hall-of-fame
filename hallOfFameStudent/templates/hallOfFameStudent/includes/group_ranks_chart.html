@@ -8,7 +8,7 @@
     <div class="panel-heading is-size-3 has-text-centered has-text-light"
          style="border-bottom: 4px solid #00D1B2; background: rgb(0,82,69);">
         <p class="has-text-centered">
-            {{ chart_Name }}
+            {{ chart_Name |default:"Rankings in time" }}
         </p>
     </div>
     <div class="panel-block has-text-light is-block"
@@ -18,7 +18,7 @@
                 <div>
                     <p class="heading">Last Update</p>
                     <a class="title has-text-light is-size-1">
-                        {{ updatetime|default:"10.05.2020" }}
+                        {{ chart_data.days.0|default:"10.05.2020" }}
                     </a>
                 </div>
             </div>
