@@ -26,7 +26,7 @@
     <div class="panel-block has-text-light" style="background: rgb(0,82,69);">
     </div>
     <div class="panel-block is-block">
-        <canvas id="{{ chart_ID }}" width="400" height="300"></canvas>
+        <canvas id="{{ chart_ID }}" width="300" height="{% widthratio chart_data|length 1 30 %}"></canvas>
     </div>
 </article>
 {{ chart_data|json_script:"chart-data" }}
