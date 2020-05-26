@@ -3,6 +3,7 @@
 {% comment %}https://www.chartjs.org/docs/latest/{% endcomment %}
 <script src="{% static 'js/jsspectrum.min.js' %}"></script>
 {% comment %}https://gist.github.com/ibrechin/2489005#file-jsspectrum-js{% endcomment %}
+<script src="{% static 'js/functions.js' %}"></script>
 <article class="panel is-dark" style="height: 100%; background: #ebfffc;">
     <div class="panel-heading is-size-3 has-text-centered has-text-light"
          style="border-bottom: 4px solid #00D1B2; background: rgb(0,82,69);">
@@ -101,7 +102,7 @@
             reversed: true
         },
         data: {
-            labels: chartData.days.reverse(),
+            labels: chartData.days.reverse().map((val)=>getPrettyDate(Date.parse(val))),
             datasets: chartDataset,
         },
         options: {
