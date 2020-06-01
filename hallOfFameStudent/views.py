@@ -54,6 +54,7 @@ class GroupStudentView(StudentView, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['show_history'] = True
+        context['show_ranking'] = True
         student = self.request.user.student
         group = get_object_or_404(Group, id=self.kwargs.get('course_id', None))
         checked_exercises = student.scores.filter(exercise__group=group)
@@ -81,6 +82,7 @@ class GroupStudentView(StudentView, TemplateView):
                 group_ranking = arch_group_ranking[0]
                 my_ranking = arch_my_ranking[0]
             context['show_history'] = False
+            context['show_ranking'] = False
         else:
             days.insert(0, timezone.now())
             arch_group_ranking.insert(0, group_ranking)

@@ -26,9 +26,11 @@
                     <div class="column">
                         {% include 'hallOfFameStudent/includes/student_exercises_panel.html' with group_name=name checked=exercises.checked pending=exercises.pending %}
                     </div>
-                    <div class="column is-7-desktop">
-                        {% include 'hallOfFameStudent/includes/group_ranks_panel.html' with my_ranking=my_ranking group_ranking=group_ranking %}
-                    </div>
+                    {% if show_ranking %}
+                        <div class="column is-7-desktop">
+                            {% include 'hallOfFameStudent/includes/group_ranks_panel.html' with my_ranking=my_ranking group_ranking=group_ranking %}
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
