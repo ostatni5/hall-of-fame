@@ -35,16 +35,19 @@
             </article>
         {% endif %}
         {% for k,group in groupsCtx.ctx_list.items %}
-            <div class="columns is-centered">
+            <div class="columns is-centered" style="margin-bottom: 2rem;">
                 <div class="column is-four-fifths-desktop is-12-tablet tile is-ancestor is-vertical">
                     {% include 'hallOfFameClient/includes/group_tab_grades_tile.html' with group=group subject=subject %}
                 </div>
             </div>
+            
+            {% if group.ranking|length > 0 %}
             <div class="columns is-centered">
                 <div class="column is-four-fifths-desktop is-12-tablet tile is-ancestor is-vertical">
                     {% include 'hallOfFameClient/includes/group_ranks_panel.html' with group_ranking=group.ranking %}
                 </div>
             </div>
+            {% endif %}
 
         {% endfor %}
 

@@ -51,10 +51,12 @@
                     </tbody>
                 </table>
             </div>
+            {% if group.exercises|length > 0 %}
             <nav class="panel-block buttons is-right">
                 <button class="button is-success" type="submit"> SAVE</button>
                 <a href="{% url "lecturer:subject_scores" pk=subject.pk group_pk=group.pk  %}" class="button">CANCEL</a>
             </nav>
+            {% endif %}
         </form>
     </article>
 </div>
