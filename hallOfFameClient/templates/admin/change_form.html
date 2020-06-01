@@ -2,7 +2,6 @@
 {% load i18n admin_urls static admin_modify %}
 {% load static hallOfFame_extra %}
 {% block title %}{{ original|truncatewords:"18" }}{% endblock %}
-{#Wiodki nie korzystaja z tego samego base w admin i tu #}
 {% block herotitle %}{{ original|truncatewords:"18" }}{% endblock %}
 
 {% block extrahead %}{{ block.super }}
