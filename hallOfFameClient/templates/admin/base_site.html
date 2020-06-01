@@ -26,12 +26,15 @@
     {% if has_permission %}
     <div class="navbar-menu">
         <div class="navbar-end">
-            <div class="navbar-item has-text-light">
+            <span class="navbar-item has-text-light is-disabled is-active">
                 <span class="is-size-5" style="margin-right: .5rem">
                     <span>Welcome,</span>
                     <strong>{% firstof user.get_short_name user.get_username %}</strong>
                 </span>
-            </div>
+                <span class="icon">
+                    <i class="fas fa-lg fa-user"></i>
+                </span>
+            </span>
             {% if user.has_usable_password %}
             <a href="{% url 'admin:password_change' %}" class="navbar-item has-text-light">
                 <span class="is-size-5" style="margin-right: .5rem">
