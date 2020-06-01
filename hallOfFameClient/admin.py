@@ -1,13 +1,10 @@
 from django.contrib import admin
-from django.apps import apps
 # Register your models here.
 from django.contrib.admin import AdminSite
-from django.contrib.admin.sites import AlreadyRegistered
-from django.contrib.auth.models import User
 from django.urls import path
 
-from hallOfFameClient.models import Subject, Group, StudentScore, Exercise
 from HallOfFame.permissions import isAdmin, isLecturer
+from hallOfFameClient.models import Subject, Group, Exercise
 from hallOfFameClient.views import DashboardLecturerView, LecturerGroupTabView
 
 
