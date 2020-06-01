@@ -10,11 +10,28 @@
 {{ media }}
 {% endblock %}
 
-                {% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}">{% endblock %}
+{% block extrastyle %}
+    {{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}">
+    <style>
+        .delete, .delete:hover, .delete:active{
+            width: auto;
+            position: static;
+            max-width: none;
+            max-height: none;
+            background: none;
+        }
+        p.deletelink-box{
+            height: 35px;
+        }
+        a.deletelink{
+            height: 100% !important;
+        }
+    </style>
+{% endblock %}
 
-                {% block coltype %}colM{% endblock %}
+{% block coltype %}colM{% endblock %}
 
-                {% block bodyclass %}{{ block.super }} app-{{ opts.app_label }} model-{{ opts.model_name }} change-form{% endblock %}
+{#{% block bodyclass %}{{ block.super }} app-{{ opts.app_label }} model-{{ opts.model_name }} change-form{% endblock %}#}
 
 {% if not is_popup %}
 {% block breadcrumb %}
@@ -44,9 +61,7 @@
 {% endif %}
 
 {% block content %}
-<section
-    style='min-height: 79vh; background-image: url("{% static 'img/spiral-cut.png' %}"); background-position: bottom; background-repeat: no-repeat; background-size:30%;'
-    class="section">
+<section class="section">
 <div class="columns is-centered">
     <div class="column is-four-fifths tile is-ancestor is-vertical">
     {% block object-tools %}
