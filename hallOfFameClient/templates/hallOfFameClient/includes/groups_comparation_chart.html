@@ -27,6 +27,18 @@
             myData.push(g.mean_value);
             groups.push(g.name);
         }
+
+
+        if(myData.length === 1){
+            myData.unshift(0);
+            myData.push(0);
+        }
+        if(groups.length === 1){
+            groups.unshift("");
+            groups.push("");
+        }
+
+
         var colors = getEvenlySpacedColors(myData);
 // shift colors
         for (let i = 0; i < parseInt(colors.length / 3.5); i++)
@@ -43,6 +55,9 @@
             let item = myData[i];
             colors2.push(colors[parseInt(item - min)])
         }
+
+
+
 
 
         var myChart = new Chart(ctx, {
@@ -84,7 +99,8 @@
                         scaleLabel: {
                             display: true,
                             labelString: 'Group'
-                        }
+                        },
+                        maxWidth: 20
                     }]
                 }
             }
