@@ -1,1 +1,0 @@
-let smiec =0;

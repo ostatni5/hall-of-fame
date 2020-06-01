@@ -6,11 +6,8 @@ from hallOfFameClient.models import Student, Group, StudentScore, StatGroupScore
     ArchiveGroupStudentScore
 
 Student.objects.values('pk', 'groups__pk', 'groups__stat_score__max_score').annotate(score=Sum('scores__value'), )
-
 Group.objects.values('pk', ).annotate(max_score=Sum('exercises__max_score'))
-
 Group.objects.values('pk', ).annotate(core=Sum('exercises__scores__value'))
-
 StudentScore.objects.values('exercise__group__pk').annotate(score=Sum('value'))
 
 

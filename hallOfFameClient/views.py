@@ -94,6 +94,11 @@ class LecturerGroupTabView(UserLecturerTestMixinView):
                     update_scores.append(self.parse_score_name(req, value))
         return update_scores, create_scores
 
+    def get(self, request, *args, **kwargs):
+        subject, groups_ctx = self.get_ctx()
+        return render(request, self.template_name,
+                      {'groupsCtx': groups_ctx, "subject": subject})
+
     def post(self, request, *args, **kwargs):
         update_scores, create_scores = self.filter_request(request)
         saved_scores = 0
@@ -123,10 +128,7 @@ class LecturerGroupTabView(UserLecturerTestMixinView):
         return render(request, self.template_name,
                       {'groupsCtx': groups_ctx, "subject": subject, "msg": msg})
 
-    def get(self, request, *args, **kwargs):
-        subject, groups_ctx = self.get_ctx()
-        return render(request, self.template_name,
-                      {'groupsCtx': groups_ctx, "subject": subject})
+
 
 
 class StatView(View):
@@ -149,6 +151,9 @@ class DashboardLecturerView(UserLecturerTestMixinView, View):
 
     # paginate_by = 100  # if pagination is desired
 
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name, self.get_context_data())
+
     def get_context_data(self, **kwargs):
         lecturer = self.request.user.lecturer
         context = {}
@@ -156,8 +161,7 @@ class DashboardLecturerView(UserLecturerTestMixinView, View):
         context['username'] = lecturer.name + " " + lecturer.surname
         context['subjects'] = lecturer.subjects.all()
         context['groups'] = lecturer.groups.all()
-        context[
-            'diagramUrl'] = "https://media.discordapp.net/attachments/689977881535053839/701202475906236456/unknown.png"
+        context['diagramUrl'] = "https://media.discordapp.net/attachments/689977881535053839/701202475906236456/unknown.png"
 
         groups_by_sub = {}
         context['subjects_quantity'] = {}
@@ -181,18 +185,3 @@ class DashboardLecturerView(UserLecturerTestMixinView, View):
         context['groups_by_sub'] = groups_by_sub
         print(context)
         return context
-
-    def get(self, request, *args, **kwargs):
-        return render(request, self.template_name, self.get_context_data())
-
-
-"""
-Potrzeba:
-    User (Prowadzący),
-    Lista przedmiotów w których jest prowadzącym
-            Nazwa przedmiotu
-            Opis krótki
-            Lista grup w których prowadzi ten przedmiot
-                nazwa grupy
-                ilość osób
-"""

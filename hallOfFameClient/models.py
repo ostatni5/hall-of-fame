@@ -136,12 +136,10 @@ class ArchiveModel(StatModel):
     class Meta:
         abstract = True
 
-
 class ArchiveSubjectStudentScore(ArchiveModel):
     record = models.ForeignKey(ArchiveRecord, on_delete=models.CASCADE, related_name="subjects_scores")
     student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name="arch_subjects_score")
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name="arch_students_score")
-
 
 class ArchiveGroupStudentScore(ArchiveModel):
     record = models.ForeignKey(ArchiveRecord, on_delete=models.CASCADE, related_name="students_scores")
