@@ -3,15 +3,13 @@ import json
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Sum
 from django.forms import model_to_dict
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.utils import timezone
 from django.views import View
-from django.views.generic.list import ListView
 
-from hallOfFameClient.models import StudentScore, Exercise, StatGroupStudentScore
-
-from hallOfFameClient.models import Subject, Student, Lecturer, Group
 from HallOfFame.permissions import isLecturer, canAccessSubject, canUpdateScore, canInsertScore, canAccessGroup
+from hallOfFameClient.models import StudentScore, Exercise, StatGroupStudentScore
+from hallOfFameClient.models import Subject, Student
 from hallOfFameClient.stats.utility import calc_all_stats, create_ranking_students
 
 

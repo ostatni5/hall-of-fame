@@ -1,12 +1,8 @@
-import json
-from datetime import datetime
-
-from django.core import serializers
-from django.db.models import Sum, Q, F, Avg, QuerySet
+from django.db.models import Sum, Avg, QuerySet
 from django.utils import timezone
 
-from hallOfFameClient.models import Subject, Student, Group, StudentScore, StatGroupScore, StatGroupStudentScore, \
-    StatSubjectScore, StatSubjectStudentScore, ArchiveRecord, Variable, ArchiveSubjectStudentScore, \
+from hallOfFameClient.models import Student, Group, StudentScore, StatGroupScore, StatGroupStudentScore, \
+    StatSubjectScore, StatSubjectStudentScore, ArchiveRecord, ArchiveSubjectStudentScore, \
     ArchiveGroupStudentScore
 
 Student.objects.values('pk', 'groups__pk', 'groups__stat_score__max_score').annotate(score=Sum('scores__value'), )
