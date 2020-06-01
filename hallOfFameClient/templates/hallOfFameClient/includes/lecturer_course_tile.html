@@ -19,7 +19,7 @@
                     <div class="is-pulled-right">
                         <p class="heading">Total students</p>
                         <a class="title has-text-light is-size-1">
-                            {{ quantity|default:214 }}
+                            {{ quantity|default:0 }}
                         </a>
                     </div>
                 </div>
@@ -43,11 +43,35 @@
         </div>
         <p class="panel-block has-text-light" style="background: #15405C;">
         </p>
+        {% if groups %}
         {% include 'hallOfFameClient/includes/groups_comparation_chart.html' with chart_ID=sub.pk chart_data=chart_data|key:sub.pk  id_data=sub.pk|dataId %}
+        {% endif %}
         <div class="panel-block columns is-centered">
-            <div class="column is-four-fifths tile is-ancestor is-vertical">
+            <div class="column is-four-fifths is-flex" style="flex-wrap: wrap;">
                 {% for gru in groups %}
-                    {% if forloop.counter0|divisibleby:3 %}
+                    <div class="tile is-block" style="padding: 1rem;">
+                        <div class="field has-addons is-fullwidth">
+                            <p class="control is-expanded ">
+                                <a href="{% url "lecturer:subject_scores" pk=gru.subject.pk group_pk=gru.pk %}"
+                                   class="button card level is-marginless is-info is-text is-outlined">
+                                        <span class="icon is-small">
+                                            <i class="fas fa-book"></i>
+                                        </span>
+                                    <span>{{ gru.name }}</span>
+                                    <span style="padding-left: 1rem">{{ gru.students.count }}os</span>
+                                </a>
+                            </p>
+                            <p class="control">
+                                <a href=" {% url "lecturer:hallOfFameClient_group_change" gru.pk %}"
+                                   class="button card level is-marginless is-info is-text is-outlined">
+                                        <span class="icon is-small">
+                                            <i class="fas fa-edit"></i>
+                                        </span>
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                 {% comment %}   {% if forloop.counter0|divisibleby:3 %}
                         <div class="tile is-parent columns">{% endif %}
                 <div class="tile is-child column" style="max-width: 100%;">
                     <div class="field has-addons">
@@ -71,21 +95,7 @@
                         </p>
                     </div>
                 </div>
-                {% if forloop.counter|divisibleby:3 %}</div>{% endif %}
-                    {#                    <button style="border: none; border-bottom: 1px solid; margin-bottom: .5rem !important;"#}
-                    {#                            class="button card is-fullwidth level is-marginless is-info is-text is-outlined">#}
-                    {#                        <div class="level-left">#}
-                    {#                            <span class="icon is-small level-item">#}
-                    {#                                <i class="fas fa-book"></i>#}
-                    {#                            </span>#}
-                    {#                            <span class="level-item"><a#}
-                    {#                                    href="{% url "lecturer:subject_scores" pk=gru.subject.pk %}">{{ gru.name }}</a></span>#}
-                    {#                        </div>#}
-                    {#                        <div class="level-right">#}
-                    {#                            <p><a href=" {% url "lecturer:hallOfFameClient_group_change" gru.pk %}">Edit |</a></p>#}
-                    {#                            <p class="level-item">{{ groups.size }}os</p>#}
-                    {#                        </div>#}
-                    {#                    </button>#}
+                {% if forloop.counter|divisibleby:3 %}</div>{% endif %}{% endcomment %}
                 {% empty %}
                     <div class="tile is-child">
                         <br/>
@@ -97,11 +107,7 @@
     </article>
 </div>
 {# #eef6fc #246C9C #DB6D3D #}
+{% comment %}
 <article class="panel is-{{ primary_color|default:"info" }}">
 
-</article>
-{% comment %}</p>
-    <div class="message-body">
-
-    </div>
 </article>{% endcomment %}
