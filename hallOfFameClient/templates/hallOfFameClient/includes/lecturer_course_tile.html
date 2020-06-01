@@ -49,7 +49,7 @@
                 {% for gru in groups %}
                     {% if forloop.counter0|divisibleby:3 %}
                         <div class="tile is-parent columns">{% endif %}
-                <div class="tile is-child column">
+                <div class="tile is-child column" style="max-width: 100%;">
                     <div class="field has-addons">
                         <p class="control">
                             <a href="{% url "lecturer:subject_scores" pk=gru.subject.pk group_pk=gru.pk %}"
