@@ -164,6 +164,8 @@ def create_ranking_students_and_me(students_desc, student_pk):
 
 
 def split_archive_ranking_students(days_students_desc):
+    if days_students_desc.first() is None:
+        return [], []
     days = [days_students_desc.first().record.creation_date]
     rankings = []
     last_record = days_students_desc.first().record
