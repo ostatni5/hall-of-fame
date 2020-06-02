@@ -17,9 +17,9 @@
             {#            <img src="{% static 'img/ostatniLearningInfo.png' %}" alt="Logo">#}
             {#        {% endif %}#}
         </a>
-        <div class="navbar-item is-hidden-tablet">
+        <div class="navbar-item is-hidden-desktop">
         {% block mob_logout %}
-        <a href="{% url "lecturer:logout" %}" class="button is-{{ primary_color }} is-outlined is-inverted">
+        <a href="{% url "student:logout" %}" class="button is-{{ primary_color }} is-outlined is-inverted">
             <span class="icon">
                 <i class="fas fa-sign-out-alt"></i>
             </span>
