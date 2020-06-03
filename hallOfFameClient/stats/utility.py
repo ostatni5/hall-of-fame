@@ -195,7 +195,7 @@ def create_ranking_students_and_me(students_desc, student_pk):
     return ranking, my_pos, my_mean, student_ranking
 
 
-def split_archive_ranking_students(days_students_desc):
+def split_arch_ranking_students(days_students_desc):
     if days_students_desc.first() is None:
         return [], []
     days = [days_students_desc.first().record.creation_date]
@@ -212,3 +212,14 @@ def split_archive_ranking_students(days_students_desc):
             ranking.append(row)
     rankings.append(ranking)
     return rankings, days
+
+
+def rankings_from_arch_group(arch_group_students_s, student):
+    arch_group_ranking, arch_my_ranking, arch_all_ranking = ([], [], [])
+    for arch_group in arch_group_students_s:
+        ranking, my_pos, mean, student_ranking = create_ranking_students_and_me(arch_group, student.pk)
+
+        arch_group_ranking.append(ranking)
+        arch_my_ranking.append(my_pos)
+        arch_all_ranking.append(student_ranking)
+    return arch_all_ranking, arch_group_ranking, arch_my_ranking

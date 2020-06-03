@@ -5,13 +5,12 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from django.views import View
 from django.views.generic import TemplateView
-import random
 
 from HallOfFame.permissions import is_student
-from hallOfFameClient.models import Student, Subject, StudentScore, Exercise, StatSubjectStudentScore, Group, \
+from hallOfFameClient.models import StatSubjectStudentScore, Group, \
     StatGroupStudentScore, ArchiveGroupStudentScore
-from hallOfFameClient.stats.utility import create_ranking_students, create_ranking_students_and_me, \
-    split_archive_ranking_students
+from hallOfFameClient.stats.utility import create_ranking_students_and_me, \
+    split_arch_ranking_students, rankings_from_arch_group
 
 user_type = "student"
 
@@ -28,26 +27,6 @@ class StudentView(LoginRequiredMixin, UserPassesTestMixin, View):
         return redirect('student:login')
 
 
-class RankingStudentView(StudentView, TemplateView):
-    """ ------------------------------TUTAJ SZYMON TO MI DAJ------------------------------- """
-
-    def get_context_data(self, **kwargs):
-        student = self.request.user.student  # Aktualny user
-        compare_groups = []  # Grupy Usera
-        compare_my_averages = []  # Moje średnie w grupach
-        compare_group_averages = []  # Średnie tych grup
-        return "DETALE BITCH!"
-
-    """
-    Potrzeba:   <-- do tego trzeba ogarnąć Chart.js albo coś podobnego, więc to można później
-        User,
-        Wykres słubkowy
-                Lista grup Usera,
-                Średnia w danej grupie
-                Średnia z przedmiotu ogólna
-    """
-
-
 class GroupStudentView(StudentView, TemplateView):
     template_name = 'hallOfFameStudent/group_student.html'
 
@@ -55,30 +34,26 @@ class GroupStudentView(StudentView, TemplateView):
         context = super().get_context_data(**kwargs)
         context['show_history'] = True
         context['show_ranking'] = True
+
         student = self.request.user.student
         group = get_object_or_404(Group, id=self.kwargs.get('course_id', None))
+
         checked_exercises = student.scores.filter(exercise__group=group)
-        # niechleuj -------------------------------------------------------
         pending_exercises = group.exercises.difference(
             group.exercises.filter(scores__student=student))
+
         group_students = StatGroupStudentScore.objects.filter(stat_group__group=group).order_by('-mean_value').all()
         group_ranking, my_ranking, my_average, all_ranking = create_ranking_students_and_me(group_students,
                                                                                             student.pk)
 
         arch_group_students = ArchiveGroupStudentScore.objects.filter(group=group).order_by('-record__creation_date',
                                                                                             '-mean_value').all()
-
-        arch_group_students_s, days = split_archive_ranking_students(arch_group_students)
-        arch_group_ranking, arch_my_ranking, arch_all_ranking = ([], [], [])
-        for arch_group in arch_group_students_s:
-            ranking, my_pos, mean, student_ranking = create_ranking_students_and_me(arch_group, student.pk)
-
-            arch_group_ranking.append(ranking)
-            arch_my_ranking.append(my_pos)
-            arch_all_ranking.append(student_ranking)
+        arch_group_students_s, days = split_arch_ranking_students(arch_group_students)
+        arch_all_ranking, arch_group_ranking, arch_my_ranking = rankings_from_arch_group(arch_group_students_s,
+                                                                                         student)
 
         if my_ranking == -1:
-            if len(arch_group_ranking) >0:
+            if len(arch_group_ranking) > 0:
                 group_ranking = arch_group_ranking[0]
                 my_ranking = arch_my_ranking[0]
             context['show_history'] = False
@@ -126,19 +101,8 @@ class GroupStudentView(StudentView, TemplateView):
             'checked': checked_exercises
         }
 
-        for obj in group_ranking:
-            print(obj)
-
         context['user_type'] = user_type
         return context
-
-
-"""
-Potrzeba:
-    Dane do wykresu RANKING W CZASIE <-- do tego trzeba ogarnąć Chart.js albo coś podobnego, więc to można później
-            kolejność w rankingu po danym zadaniu
-            średnia po danym zadaniu
-"""
 
 
 class DashboardStudentView(StudentView, TemplateView):
@@ -146,6 +110,7 @@ class DashboardStudentView(StudentView, TemplateView):
 
     def get_context_data(self, **kwargs):
         student = self.request.user.student
+        
         scores = student.scores.all().order_by('-date')[:5][::-1]
         my_average = StatSubjectStudentScore.objects.filter(student=student).aggregate(avg=Avg('mean_value'))['avg']
         semester_average = StatSubjectStudentScore.objects.aggregate(avg=Avg('mean_value'))['avg']
