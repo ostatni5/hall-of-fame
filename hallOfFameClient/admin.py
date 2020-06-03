@@ -70,7 +70,8 @@ class LecturerAdminSite(AdminSite):
             path('', LecturerAdminSite.admin_view(self, DashboardLecturerView.as_view()), name="dashboard"),
             path('hallOfFameClient/', LecturerAdminSite.admin_view(self, DashboardLecturerView.as_view()),
                  name="client"),
-            path('subject/<int:pk>/scores/<int:group_pk>', LecturerAdminSite.admin_view(self, LecturerGroupTabView.as_view()),
+            path('subject/<int:pk>/scores/<int:group_pk>',
+                 LecturerAdminSite.admin_view(self, LecturerGroupTabView.as_view()),
                  name="subject_scores"),
         ]
         return my_urls + urls
@@ -80,4 +81,3 @@ lecturer_admin_site = LecturerAdminSite(name='lecturer')
 lecturer_admin_site.register(Subject, SubjectAdmin)
 lecturer_admin_site.register(Exercise)
 lecturer_admin_site.register(Group, GroupAdmin)
-# lecturer_admin_site.register(StudentScore)

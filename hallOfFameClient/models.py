@@ -5,6 +5,7 @@ from django.utils import timezone
 from hallOfFameClient.validators import validate_album_number
 
 
+# ---------basic
 class Basic(models.Model):
     name = models.CharField(max_length=100)
 
@@ -53,7 +54,6 @@ class Lecturer(Person):
 
 class Subject(Basic):
     description = models.CharField(max_length=250)
-    # long_description = models.CharField(max_length=300)
     semester = models.ForeignKey(Semester, on_delete=models.CASCADE, related_name="subject")
     etcs = models.SmallIntegerField()
     lecturers = models.ManyToManyField(Lecturer, related_name="subjects")
@@ -94,6 +94,7 @@ class StudentScore(models.Model):
         ]
 
 
+# ---------stats
 class StatModel(models.Model):
     mean_value = models.FloatField()
 
@@ -121,6 +122,7 @@ class StatSubjectStudentScore(StatModel):
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name="stat_students_score")
 
 
+# ---------archive
 class Variable(models.Model):
     key = models.CharField(max_length=100, unique=True)
     value = models.TextField()
@@ -136,10 +138,12 @@ class ArchiveModel(StatModel):
     class Meta:
         abstract = True
 
+
 class ArchiveSubjectStudentScore(ArchiveModel):
     record = models.ForeignKey(ArchiveRecord, on_delete=models.CASCADE, related_name="subjects_scores")
     student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name="arch_subjects_score")
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name="arch_students_score")
+
 
 class ArchiveGroupStudentScore(ArchiveModel):
     record = models.ForeignKey(ArchiveRecord, on_delete=models.CASCADE, related_name="students_scores")

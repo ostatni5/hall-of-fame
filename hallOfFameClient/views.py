@@ -32,7 +32,8 @@ class LecturerGroupTabView(UserLecturerTestMixinView):
         if subject is None:
             return False
         return super().test_func() and can_access_subject(user, subject.pk) and can_access_group(user,
-                                                                                                 self.kwargs['group_pk'])
+                                                                                                 self.kwargs[
+                                                                                                     'group_pk'])
 
     def get_ctx(self):
         subject = Subject.objects.get(pk=self.kwargs['pk'])
@@ -84,7 +85,6 @@ class LecturerGroupTabView(UserLecturerTestMixinView):
     def filter_request(self, request):
         update_scores = []
         create_scores = []
-        print(request.POST["change_info"])
         change_info = json.loads(request.POST["change_info"])
         for req, value in request.POST.items():
             if req[0:3] == "ss-" and change_info.get(req):
@@ -129,27 +129,8 @@ class LecturerGroupTabView(UserLecturerTestMixinView):
                       {'groupsCtx': groups_ctx, "subject": subject, "msg": msg})
 
 
-
-
-class StatView(View):
-    template_name = 'hallOfFameClient/stat.html'
-    stat = StudentScore.objects.values("exercise__group__subject", "exercise__group", "exercise", ).annotate(
-        sum_value=Sum('value'),
-        sum_max_score=Sum('exercise__max_score'))
-
-    stat2 = StudentScore.objects.values("student", "exercise__group__subject", "exercise__group", ).annotate(
-        sum_value=Sum('value'),
-        sum_max_score=Sum('exercise__max_score'))
-
-    def get(self, request, *args, **kwargs):
-        return render(request, self.template_name,
-                      {"stat": self.stat, "stat2": self.stat2})
-
-
 class DashboardLecturerView(UserLecturerTestMixinView, View):
     template_name = 'hallOfFameClient/dashboard_lecturer.html'
-
-    # paginate_by = 100  # if pagination is desired
 
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name, self.get_context_data())
@@ -161,14 +142,15 @@ class DashboardLecturerView(UserLecturerTestMixinView, View):
         context['username'] = lecturer.name + " " + lecturer.surname
         context['subjects'] = lecturer.subjects.all()
         context['groups'] = lecturer.groups.all()
-        context['diagramUrl'] = "https://media.discordapp.net/attachments/689977881535053839/701202475906236456/unknown.png"
+        context[
+            'diagramUrl'] = "https://media.discordapp.net/attachments/689977881535053839/701202475906236456/unknown.png"
 
         groups_by_sub = {}
         context['subjects_quantity'] = {}
         context['chart_data'] = {}
 
         for g in context['groups']:
-            mean_value= 0
+            mean_value = 0
             if g.stat_score.first():
                 mean_value = g.stat_score.first().mean_value
 
@@ -183,5 +165,4 @@ class DashboardLecturerView(UserLecturerTestMixinView, View):
                 context['chart_data'][g.subject.pk] = [{"name": g.name, "mean_value": mean_value}]
 
         context['groups_by_sub'] = groups_by_sub
-        print(context)
         return context
