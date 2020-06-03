@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.contrib.admin import AdminSite
 from django.urls import path
 
-from HallOfFame.permissions import isAdmin, isLecturer
+from HallOfFame.permissions import is_admin, is_lecturer
 from hallOfFameClient.models import Subject, Group, Exercise
 from hallOfFameClient.views import DashboardLecturerView, LecturerGroupTabView
 
@@ -20,7 +20,7 @@ class GroupAdmin(admin.ModelAdmin):
     ]
 
     def get_queryset(self, request):
-        if isAdmin(request.user):
+        if is_admin(request.user):
             return super().get_queryset(request)
         return request.user.lecturer.groups
 
@@ -48,7 +48,7 @@ class SubjectAdmin(admin.ModelAdmin):
     ]
 
     def get_queryset(self, request):
-        if isAdmin(request.user):
+        if is_admin(request.user):
             return super().get_queryset(request)
         return request.user.lecturer.subjects
 
@@ -61,7 +61,7 @@ class LecturerAdminSite(AdminSite):
     def has_permission(self, request):
         flag = False
         if not request.user.is_anonymous:
-            flag = isLecturer(request.user)
+            flag = is_lecturer(request.user)
         return super().has_permission(request) and flag
 
     def get_urls(self):

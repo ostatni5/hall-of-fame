@@ -11,12 +11,8 @@ Group.objects.values('pk', ).annotate(core=Sum('exercises__scores__value'))
 StudentScore.objects.values('exercise__group__pk').annotate(score=Sum('value'))
 
 
-def arch_stats(curr_date):
-    arch_record = ArchiveRecord()
-    arch_record.creation_date = curr_date
-    arch_record.save()
-
-    query_group = StatGroupStudentScore.objects.all()
+# -------------archive
+def arch_group_student(query_group, arch_record):
     objs = []
     for res in query_group:
         obj = ArchiveGroupStudentScore()
@@ -25,9 +21,10 @@ def arch_stats(curr_date):
         obj.group = res.stat_group.group
         obj.mean_value = res.mean_value
         objs.append(obj)
-    ArchiveGroupStudentScore.objects.bulk_create(objs)
+    return objs
 
-    query_subject = StatSubjectStudentScore.objects.all()
+
+def arch_subject_student(query_subject, arch_record):
     objs = []
     for res in query_subject:
         obj = ArchiveSubjectStudentScore()
@@ -36,7 +33,82 @@ def arch_stats(curr_date):
         obj.subject = res.subject
         obj.mean_value = res.mean_value
         objs.append(obj)
+    return objs
+
+
+def arch_stats(curr_date):
+    arch_record = ArchiveRecord()
+    arch_record.creation_date = curr_date
+    arch_record.save()
+
+    query_group = StatGroupStudentScore.objects.all()
+    objs = arch_group_student(query_group, arch_record)
+    ArchiveGroupStudentScore.objects.bulk_create(objs)
+
+    query_subject = StatSubjectStudentScore.objects.all()
+    objs = arch_subject_student(query_subject, arch_record)
     ArchiveSubjectStudentScore.objects.bulk_create(objs)
+
+
+# -------------stats
+def clear_all_stats():
+    StatGroupScore.objects.all().delete()
+    StatGroupStudentScore.objects.all().delete()
+    StatSubjectScore.objects.all().delete()
+    StatSubjectStudentScore.objects.all().delete()
+
+
+def calc_max_score_group(query_group):
+    objs = []
+    for res in query_group:
+        obj = StatGroupScore()
+        obj.group_id = res['pk']
+        obj.max_score = res['max_score'] or 0
+        obj.mean_value = 0
+        objs.append(obj)
+    return objs
+
+
+def calc_student_score_group(query_students):
+    objs = []
+    for res in query_students:
+        obj = StatGroupStudentScore()
+        obj.student_id = res['student__pk']
+        obj.stat_group_id = res['exercise__group__stat_score__pk']
+        obj.value = res['score']
+        val = res['exercise__group__stat_score__max_score']
+        obj.mean_value = res['score'] * 100 / val if val != 0 else 0
+        objs.append(obj)
+    return objs
+
+
+def calc_avg_group(query_group_avg):
+    objs = []
+    for res in query_group_avg:
+        obj = StatGroupScore.objects.get(pk=res['stat_group__pk'])
+        obj.mean_value = res['mean_value']
+        objs.append(obj)
+    return objs
+
+
+def calc_avg_subject(query_subject_avg):
+    objs = []
+    for res in query_subject_avg:
+        obj = StatSubjectScore()
+        obj.subject_id = res['group__subject__pk']
+        obj.mean_value = res['mean_value']
+        objs.append(obj)
+    return objs
+
+def calc_subject_student(query_subject_student):
+    objs = []
+    for res in query_subject_student:
+        obj = StatSubjectStudentScore()
+        obj.subject_id = res['stat_group__group__subject__pk']
+        obj.student_id = res['student__pk']
+        obj.mean_value = res['mean_value']
+        objs.append(obj)
+    return objs
 
 
 def calc_all_stats(force, to_archive):
@@ -51,70 +123,37 @@ def calc_all_stats(force, to_archive):
     if not create and not force:
         return -1
 
-    StatGroupScore.objects.all().delete()
-    StatGroupStudentScore.objects.all().delete()
-    StatSubjectScore.objects.all().delete()
-    StatSubjectStudentScore.objects.all().delete()
+    clear_all_stats()
 
     query_group = Group.objects.values('pk', ).annotate(max_score=Sum('exercises__max_score'))
-    objs = []
-    for res in query_group:
-        obj = StatGroupScore()
-        obj.group_id = res['pk']
-        obj.max_score = res['max_score'] or 0
-        obj.mean_value = 0
-        objs.append(obj)
+    objs = calc_max_score_group(query_group)
     StatGroupScore.objects.bulk_create(objs)
 
     query_students = StudentScore.objects.values("student__pk", 'exercise__group__pk',
                                                  'exercise__group__stat_score__pk',
                                                  'exercise__group__stat_score__max_score').annotate(score=Sum('value'))
-    objs = []
-    for res in query_students:
-        obj = StatGroupStudentScore()
-        obj.student_id = res['student__pk']
-        obj.stat_group_id = res['exercise__group__stat_score__pk']
-        obj.value = res['score']
-        val = res['exercise__group__stat_score__max_score']
-        obj.mean_value = res['score'] * 100 / val if val != 0 else 0
-        objs.append(obj)
+    objs = calc_student_score_group(query_students)
     StatGroupStudentScore.objects.bulk_create(objs)
 
     query_group_avg = StatGroupStudentScore.objects.values('stat_group__pk').annotate(mean_value=Avg('mean_value'), )
-
-    objs = []
-    for res in query_group_avg:
-        obj = StatGroupScore.objects.get(pk=res['stat_group__pk'])
-        obj.mean_value = res['mean_value']
-        objs.append(obj)
+    objs = calc_avg_group(query_group_avg)
     StatGroupScore.objects.bulk_update(objs, ['mean_value'])
 
     query_subject_avg = StatGroupScore.objects.values('group__subject__pk').annotate(mean_value=Avg('mean_value'), )
-    objs = []
-    for res in query_subject_avg:
-        obj = StatSubjectScore()
-        obj.subject_id = res['group__subject__pk']
-        obj.mean_value = res['mean_value']
-        objs.append(obj)
+    objs = calc_avg_subject(query_subject_avg)
     StatSubjectScore.objects.bulk_create(objs)
 
     query_subject_student = StatGroupStudentScore \
         .objects.values('student__pk',
-                        'stat_group__group__subject__pk') \
-        .annotate(mean_value=Avg('mean_value'), )
-    objs = []
-    for res in query_subject_student:
-        obj = StatSubjectStudentScore()
-        obj.subject_id = res['stat_group__group__subject__pk']
-        obj.student_id = res['student__pk']
-        obj.mean_value = res['mean_value']
-        objs.append(obj)
+                        'stat_group__group__subject__pk').annotate(mean_value=Avg('mean_value'),)
+    objs = calc_subject_student(query_subject_student)
     StatSubjectStudentScore.objects.bulk_create(objs)
 
     if to_archive:
         arch_stats(curr_date)
 
 
+# ---------------rankings
 def ranking_subject(subject_pk):
     return StatSubjectStudentScore.objects.filter(subject__pk=subject_pk).order_by('-mean_value')
 

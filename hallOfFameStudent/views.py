@@ -7,7 +7,7 @@ from django.views import View
 from django.views.generic import TemplateView
 import random
 
-from HallOfFame.permissions import isStudent
+from HallOfFame.permissions import is_student
 from hallOfFameClient.models import Student, Subject, StudentScore, Exercise, StatSubjectStudentScore, Group, \
     StatGroupStudentScore, ArchiveGroupStudentScore
 from hallOfFameClient.stats.utility import create_ranking_students, create_ranking_students_and_me, \
@@ -22,7 +22,7 @@ class StudentView(LoginRequiredMixin, UserPassesTestMixin, View):
     def test_func(self):
         flag = True
         user = self.request.user
-        return flag and isStudent(user)
+        return flag and is_student(user)
 
     def handle_no_permission(self):
         return redirect('student:login')
@@ -188,7 +188,7 @@ class LoginStudentView(TemplateView):
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            if isStudent(request.user):
+            if is_student(request.user):
                 return redirect('/student/')
             context = self.get_context_data()
             context["error"] = """You are authorised not as a student. Please login student account."""

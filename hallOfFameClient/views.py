@@ -7,7 +7,7 @@ from django.shortcuts import render
 from django.utils import timezone
 from django.views import View
 
-from HallOfFame.permissions import isLecturer, canAccessSubject, canUpdateScore, canInsertScore, canAccessGroup
+from HallOfFame.permissions import is_lecturer, can_access_subject, can_update_score, can_insert_score, can_access_group
 from hallOfFameClient.models import StudentScore, Exercise, StatGroupStudentScore
 from hallOfFameClient.models import Subject, Student
 from hallOfFameClient.stats.utility import calc_all_stats, create_ranking_students
@@ -19,7 +19,7 @@ class UserLecturerTestMixinView(LoginRequiredMixin, UserPassesTestMixin, View):
     def test_func(self):
         flag = True
         user = self.request.user
-        flag = flag and isLecturer(user)
+        flag = flag and is_lecturer(user)
         return flag
 
 
@@ -31,8 +31,8 @@ class LecturerGroupTabView(UserLecturerTestMixinView):
         subject = Subject.objects.filter(pk=self.kwargs['pk']).first()
         if subject is None:
             return False
-        return super().test_func() and canAccessSubject(user, subject.pk) and canAccessGroup(user,
-                                                                                             self.kwargs['group_pk'])
+        return super().test_func() and can_access_subject(user, subject.pk) and can_access_group(user,
+                                                                                                 self.kwargs['group_pk'])
 
     def get_ctx(self):
         subject = Subject.objects.get(pk=self.kwargs['pk'])
@@ -105,7 +105,7 @@ class LecturerGroupTabView(UserLecturerTestMixinView):
 
         for score in update_scores:
             q = StudentScore.objects.get(pk=score["id"])
-            if canUpdateScore(request.user, q):
+            if can_update_score(request.user, q):
                 q.value = score.get("value")
                 q.date = timezone.now()
                 q.save()
@@ -115,7 +115,7 @@ class LecturerGroupTabView(UserLecturerTestMixinView):
         for score in create_scores:
             student = Student.objects.get(pk=score.get("student"))
             exercise = Exercise.objects.get(pk=score.get("exercise"))
-            if canInsertScore(request.user, exercise):
+            if can_insert_score(request.user, exercise):
                 StudentScore.objects.create(student=student, exercise=exercise,
                                             value=score.get("value"))
                 saved_scores += 1

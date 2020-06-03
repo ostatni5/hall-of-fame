@@ -1,30 +1,30 @@
-def isInGroup(user, group):
+def is_in_group(user, group):
     return user.groups.filter(name=group).exists()
 
 
-def isAdmin(user):
-    return isInGroup(user, "admins")
+def is_admin(user):
+    return is_in_group(user, "admins")
 
 
-def isLecturer(user):
-    return isInGroup(user, "lecturers")
+def is_lecturer(user):
+    return is_in_group(user, "lecturers")
 
 
-def isStudent(user):
-    return isInGroup(user, "students")
+def is_student(user):
+    return is_in_group(user, "students")
 
 
-def canAccessSubject(user, subject_pk):
+def can_access_subject(user, subject_pk):
     return user.lecturer.subjects.filter(pk=subject_pk).exists()
 
 
-def canAccessGroup(user, group_pk):
+def can_access_group(user, group_pk):
     return user.lecturer.groups.filter(pk=group_pk).exists()
 
 
-def canInsertScore(user, exercise):
+def can_insert_score(user, exercise):
     return exercise.group.lecturers.filter(pk=user.lecturer.pk).exists()
 
 
-def canUpdateScore(user, score):
-    return canInsertScore(user, score.exercise)
+def can_update_score(user, score):
+    return can_insert_score(user, score.exercise)
