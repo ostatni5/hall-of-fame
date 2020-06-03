@@ -110,7 +110,7 @@ class DashboardStudentView(StudentView, TemplateView):
 
     def get_context_data(self, **kwargs):
         student = self.request.user.student
-        
+
         scores = student.scores.all().order_by('-date')[:5][::-1]
         my_average = StatSubjectStudentScore.objects.filter(student=student).aggregate(avg=Avg('mean_value'))['avg']
         semester_average = StatSubjectStudentScore.objects.aggregate(avg=Avg('mean_value'))['avg']

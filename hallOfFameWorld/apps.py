@@ -1,7 +1,7 @@
 from django.apps import AppConfig
 
 
-class HalloffameworldConfig(AppConfig):
+class HallOfFameWorldConfig(AppConfig):
     name = 'hallOfFameWorld'
 
     def ready(self):

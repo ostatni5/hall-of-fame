@@ -31,7 +31,7 @@ ALLOWED_HOSTS = ['hall-of-fame-client.herokuapp.com']
 INSTALLED_APPS = [
     'hallOfFameClient.apps.HallOfFameClientConfig',
     'hallOfFameStudent.apps.HallOfFameStudentConfig',
-    'hallOfFameWorld.apps.HalloffameworldConfig',
+    'hallOfFameWorld.apps.HallOfFameWorldConfig',
     'polls.apps.PollsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
