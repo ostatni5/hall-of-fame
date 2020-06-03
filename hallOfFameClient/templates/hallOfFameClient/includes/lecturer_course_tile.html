@@ -44,7 +44,7 @@
         <p class="panel-block has-text-light" style="background: #15405C;">
         </p>
         {% if groups %}
-        {% include 'hallOfFameClient/includes/groups_comparation_chart.html' with chart_ID=sub.pk chart_data=chart_data|key:sub.pk  id_data=sub.pk|dataId %}
+        {% include 'hallOfFameClient/includes/groups_comparation_chart.html' with chart_ID=sub.pk chart_data=chart_data|key:sub.pk  id_data=sub.pk|data_id %}
         {% endif %}
         <div class="panel-block columns is-centered">
             <div class="column is-four-fifths is-flex" style="flex-wrap: wrap;">

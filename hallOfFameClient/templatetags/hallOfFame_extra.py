@@ -5,12 +5,12 @@ register = template.Library()
 
 
 @register.filter
-def scoreSearch(scores, student):
+def score_search(scores, student):
     return scores.get_or_create(student=student, defaults={'value': 0})[0]
 
 
 @register.filter
-def percentScore(scores, group):
+def percent_score(scores, group):
     score = list(scores.filter(exercise__group=group).aggregate(total=Sum('value')))[1]
     max_score = list(group.exercises.aggregate(total=Sum('max_score')))[1]
     return score / max_score
@@ -25,7 +25,7 @@ def key(h, k):
 
 
 @register.filter
-def keyS(h, k):
+def key_s(h, k):
     # silent
     try:
         return h[k]
@@ -41,9 +41,9 @@ def percent(value, full):
 
 
 @register.filter
-def roundTo(value, prec):
+def round_to(value, prec):
     return round(value, prec)
 
 @register.filter
-def dataId(value):
+def data_id(value):
     return "data-{0}".format(value)

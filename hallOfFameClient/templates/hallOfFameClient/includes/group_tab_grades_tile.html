@@ -34,10 +34,10 @@
                                     <td class="is-paddingless">
                                     <p class="control has-icons-right is-overlay is-marginless is-paddingless">
                                         <input class="input score_field is-medium" type="number" placeholder="{{ exercise.max_score }}"
-                                               name="ss-{{ group.scores|keyS:student.id|keyS:exercise.id|keyS:"id" }}-{{ student.id }}-{{ exercise.id }}"
-                                               value="{{ group.scores|keyS:student.id|keyS:exercise.id|keyS:"value" }}"
+                                               name="ss-{{ group.scores|key_s:student.id|key_s:exercise.id|key_s:"id" }}-{{ student.id }}-{{ exercise.id }}"
+                                               value="{{ group.scores|key_s:student.id|key_s:exercise.id|key_s:"value" }}"
                                                style="border: none; background: transparent;">
-                                        {% if group.scores|keyS:student.id|keyS:exercise.id|keyS:"value" %}
+                                        {% if group.scores|key_s:student.id|key_s:exercise.id|key_s:"value" %}
                                         <span class="icon is-small is-right">
                                             <i class="fas fa-check"></i>
                                         </span>
@@ -45,7 +45,7 @@
                                     </p>
                                     </td>
                                 {% endfor %}
-                                <td>{{ group.scores|key:"sum"|key:student.id|percent:group.max_score|roundTo:2 }}</td>
+                                <td>{{ group.scores|key:"sum"|key:student.id|percent:group.max_score|round_to:2 }}</td>
                             </tr>
                         {% endfor %}
                     </tbody>

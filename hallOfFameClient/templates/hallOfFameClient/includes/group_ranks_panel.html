@@ -54,7 +54,7 @@
                             </span>
                                 {% endif %}
                             </td>
-                            <td>{{ ranking.mean_value|roundTo:2 }}%</td>
+                            <td>{{ ranking.mean_value|round_to:2 }}%</td>
                         </tr>
                     {% endwith %}
                 {% empty %}
