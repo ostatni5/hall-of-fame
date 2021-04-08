@@ -3,7 +3,7 @@ asgiref==3.2.7
 autopep8==1.5.2
 cycler==0.10.0
 dj-database-url==0.5.0
-Django==3.0.5
+Django==3.0.14
 django-appconf==1.0.4
 django-bulma==0.6.0
 django-compressor==2.4
